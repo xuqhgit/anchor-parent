@@ -12,6 +12,6 @@ import com.anchor.ms.auth.model.User;
  */
 public interface IUserService extends BaseService<User,Long> {
 
-
+    public User findUserByUsername(String username);
 
 }

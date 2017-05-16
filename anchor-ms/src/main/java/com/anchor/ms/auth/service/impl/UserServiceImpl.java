@@ -22,4 +22,7 @@ public class UserServiceImpl extends BaseServiceImpl<User,Long> implements IUser
 	private UserMapper userMapper;
 
 
+	public User findUserByUsername(String username) {
+		return userMapper.findUserByUsername(username);
+	}
 }
