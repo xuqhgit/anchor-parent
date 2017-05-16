@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.anchor.ms.auth.mapper.UserMapper">
+
+	<sql id="userColumns">
+        user.CREATE_TIME as createTime,user.CREATOR_ID as creatorId,user.EMAIL as email,user.ID as id,user.NAME as name,user.PASSWORD as password,user.PHONE as phone,user.QQ as qq,user.UPDATE_TIME as updateTime,user.USERNAME as username
+	</sql>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="user">
+		update SYS_USER
+		<set>
+			
+			<if test="createTime != null">
+				CREATE_TIME = #{ createTime },
+			</if>
+			<if test="creatorId != null">
+				CREATOR_ID = #{ creatorId },
+			</if>
+			<if test="email != null">
+				EMAIL = #{ email },
+			</if>
+			<if test="id != null">
+				ID = #{ id },
+			</if>
+			<if test="name != null">
+				NAME = #{ name },
+			</if>
+			<if test="password != null">
+				PASSWORD = #{ password },
+			</if>
+			<if test="phone != null">
+				PHONE = #{ phone },
+			</if>
+			<if test="qq != null">
+				QQ = #{ qq },
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME = #{ updateTime },
+			</if>
+			<if test="username != null">
+				USERNAME = #{ username },
+			</if>
+
+		</set>
+		where ID = #{id}
+	</update>
+
+
+	<insert id="insert" parameterType="user">
+		INSERT INTO SYS_USER(
+			CREATE_TIME,CREATOR_ID,EMAIL,ID,NAME,PASSWORD,PHONE,QQ,UPDATE_TIME,USERNAME
+		)
+		VALUES(
+			#{ createTime },#{ creatorId },#{ email },#{ id },#{ name },#{ password },#{ phone },#{ qq },#{ updateTime },#{ username }
+		)
+	</insert>
+
+
+	<delete id="delete" parameterType="java.lang.Long">
+			DELETE FROM SYS_USER where id = #{id}
+	</delete>
+
+
+	<!-- 根据主键获取 -->
+	<select id="get" parameterType="java.lang.Long" resultType="user">
+		SELECT
+		<include refid="userColumns" />
+		FROM  SYS_USER user
+		where id = #{ id }
+	</select>
+
+	<!-- 获取列表 -->
+	<select id="getList"  resultType="user">
+		select
+		<include refid="userColumns" />
+		from SYS_USER user
+	</select>
+
+	<select id="getListByFilter" parameterType="com.anchor.core.common.dto.QueryFilter"  resultType="user">
+		select
+		<include refid="userColumns" />
+		from SYS_USER user
+	</select>
+
+</mapper>

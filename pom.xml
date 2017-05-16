@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>anchor-core</module>
+        <module>anchor-ms</module>
     </modules>
 
     <name>anchor-parent</name>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc  
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd" default-autowire="byName">
+
+    <!--<context:component-scan base-package="com.hhly.api.server"/>-->
+
+    <!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+
+    <bean id="propertyConfigurer"
+          class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:jdbc.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass">
+            <value>${jdbc.driver}</value>
+        </property>
+        <property name="jdbcUrl">
+            <value>${jdbc.url}</value>
+        </property>
+        <property name="user">
+            <value>${jdbc.username}</value>
+        </property>
+        <property name="password">
+            <value>${jdbc.password}</value>
+        </property>
+        <!-- 连接池中保留的最小连接数。 -->
+        <property name="minPoolSize">
+            <value>${c3p0.minPoolSize}</value>
+        </property>
+        <!-- 连接池中保留的最大连接数。Default: 15 -->
+        <property name="maxPoolSize">
+            <value>20</value>
+        </property>
+        <!-- 初始化时获取的连接数，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
+        <property name="initialPoolSize">
+            <value>10</value>
+        </property>
+        <!-- 每30秒检查所有连接池中的空闲连接。Default: 0 -->
+        <property name="idleConnectionTestPeriod">
+            <value>${c3p0.idleConnectionTestPeriod}</value>
+        </property>
+    </bean>
+
+    <!-- 事务begin -->
+    <bean id="txManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <tx:annotation-driven transaction-manager="txManager"/>
+    <!-- 事务end -->
+    <!-- 定义事务传播属性 -->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <!-- 对add、update、delete的方法进行事务-->
+            <tx:method name="*InTrasaction" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="add*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="delete*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            <tx:method name="remove*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+            
+            <!-- 对剩余的方法进行事务-->
+            <tx:method name="*" propagation="NOT_SUPPORTED"
+                       read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config>
+    <aop:pointcut id="transactionPointCut" expression="execution(* com.anchor.base.service.impl.*.*(..))" />
+    <aop:advisor pointcut-ref="transactionPointCut" advice-ref="txAdvice" />
+    </aop:config>
+
+    <context:component-scan base-package="com.anchor.base.*"/>
+    <!-- 默认的注解映射的支持 -->
+    <mvc:annotation-driven/>
+        <!-- 静态资源-->
+	<mvc:default-servlet-handler/>
+
+    <mvc:view-controller path="/" view-name="redirect:/base"/>
+    <!-- spring view rule -->
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/page/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+
+    <bean id="applicationContext" class="com.anchor.base.utils.SpringApplicationContext"/>
+
+    <mvc:interceptors>
+	   <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+	   <mvc:interceptor>
+	       	<mvc:mapping path="/**" />
+		   	<mvc:exclude-mapping path="/" />
+		   	<mvc:exclude-mapping path="/exception" />
+		   	<mvc:exclude-mapping path="/user/login" />
+            <mvc:exclude-mapping path="/user/register" />
+		   	<mvc:exclude-mapping path="/static/**" />
+
+			<bean class="com.anchor.base.Interceptor.HandlerInterceptorAdapter"></bean>
+		</mvc:interceptor>
+
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/" />
+			<mvc:exclude-mapping path="/exception" />
+            <mvc:exclude-mapping path="/user/login" />
+            <mvc:exclude-mapping path="/user/register" />
+
+            <mvc:exclude-mapping path="/static/**" />
+			<bean class="com.anchor.base.Interceptor.PermissionHandlerInterceptor"/>
+		</mvc:interceptor>
+    </mvc:interceptors>
+    
+    
+    <bean class="com.anchor.base.handle.XmlHandle">
+		<constructor-arg index="0" value="sqlCfg"/>
+	</bean>
+</beans>
