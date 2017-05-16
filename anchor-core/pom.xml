@@ -9,8 +9,11 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-
+    <groupId>com.anchor</groupId>
     <artifactId>anchor-core</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>anchor-core</name>
 
 
 </project>
