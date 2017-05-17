@@ -84,4 +84,10 @@
 		from SYS_USER user
 	</select>
 
+	<select id="findUserByUsername" parameterType="java.lang.String" resultType="user">
+		SELECT
+		<include refid="userColumns" />
+		FROM  SYS_USER user
+		where username = #{username}
+	</select>
 </mapper>

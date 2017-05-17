@@ -15,5 +15,5 @@ import com.anchor.ms.auth.model.User;
 public interface UserMapper extends BaseMapper<User,Long> {
 
 
-
+    public User findUserByUsername(String username);
 }

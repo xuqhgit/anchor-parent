@@ -19,13 +19,13 @@
   <div class="login-box-body">
 
 
-    <form action="../../index2.html" method="post">
+    <form action="/user/login" method="post">
       <div class="form-group has-feedback">
-        <input type="email" class="form-control" placeholder="Email">
+        <input type="text" name="username" class="form-control" placeholder="用户名">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Password">
+        <input type="password" name="password" class="form-control" placeholder="密码">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
