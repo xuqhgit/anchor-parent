@@ -1,5 +1,6 @@
 package com.anchor.ms.auth.service.impl;
 
+import com.anchor.core.common.base.BaseMapper;
 import com.anchor.core.common.base.BaseServiceImpl;
 import com.anchor.ms.auth.service.IUserService;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.anchor.ms.auth.mapper.UserMapper;
 import com.anchor.ms.auth.model.User;
+
+import javax.annotation.Resource;
 
 /**
  * @ClassName: UserServiceImpl
@@ -24,5 +27,10 @@ public class UserServiceImpl extends BaseServiceImpl<User,Long> implements IUser
 
 	public User findUserByUsername(String username) {
 		return userMapper.findUserByUsername(username);
+	}
+
+	@Resource(name="userMapper")
+	public void setBaseMapper(BaseMapper baseMapper) {
+		this.baseMapper = baseMapper;
 	}
 }

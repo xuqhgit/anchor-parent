@@ -9,7 +9,8 @@ package com.anchor.core.common.dto;
  */
 public class QueryFilter {
     private int pageNum = 1;
-    private int pageSize = 0;
+    private int pageSize = 13;
+    private String order;
 
     public int getPageNum() {
         return pageNum;
@@ -25,5 +26,13 @@ public class QueryFilter {
 
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
     }
 }

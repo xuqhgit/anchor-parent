@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.anchor.ms.auth.mapper.DickItemMapper">
+<mapper namespace="com.anchor.ms.auth.mapper.DictItemMapper">
 
-	<sql id="dickItemColumns">
-        dickItem.CREATE_TIME as createTime,dickItem.CREATOR_ID as creatorId,dickItem.DICT_ID as dictId,dickItem.ID as id,dickItem.KEY as key,dickItem.STATE as state,dickItem.TEXT as text,dickItem.UPDATE_TIME as updateTime
+	<sql id="dictItemColumns">
+        dictItem.CREATE_TIME as createTime,dictItem.CREATOR_ID as creatorId,dictItem.DICT_ID as dictId,dictItem.ID as id,dictItem.KEY as key,dictItem.STATE as state,dictItem.TEXT as text,dictItem.UPDATE_TIME as updateTime
 	</sql>
 
 	<!-- 修改 -->
-	<update id="update" parameterType="dickItem">
+	<update id="update" parameterType="dictItem">
 		update SYS_DICT_ITEM
 		<set>
 			
@@ -42,7 +42,7 @@
 	</update>
 
 
-	<insert id="insert" parameterType="dickItem">
+	<insert id="insert" parameterType="dictItem">
 		INSERT INTO SYS_DICT_ITEM(
 			CREATE_TIME,CREATOR_ID,DICT_ID,ID,KEY,STATE,TEXT,UPDATE_TIME
 		)
@@ -58,24 +58,24 @@
 
 
 	<!-- 根据主键获取 -->
-	<select id="get" parameterType="java.lang.Long" resultType="dickItem">
+	<select id="get" parameterType="java.lang.Long" resultType="dictItem">
 		SELECT
-		<include refid="dickItemColumns" />
-		FROM  SYS_DICT_ITEM dickItem
+		<include refid="dictItemColumns" />
+		FROM  SYS_DICT_ITEM dictItem
 		where id = #{ id }
 	</select>
 
 	<!-- 获取列表 -->
-	<select id="getList"  resultType="dickItem">
+	<select id="getList"  resultType="dictItem">
 		select
-		<include refid="dickItemColumns" />
-		from SYS_DICT_ITEM dickItem
+		<include refid="dictItemColumns" />
+		from SYS_DICT_ITEM dictItem
 	</select>
 
-	<select id="getListByFilter" parameterType="com.anchor.core.common.dto.QueryFilter"  resultType="dickItem">
+	<select id="getListByFilter" parameterType="com.anchor.core.common.dto.QueryFilter"  resultType="dictItem">
 		select
-		<include refid="dickItemColumns" />
-		from SYS_DICT_ITEM dickItem
+		<include refid="dictItemColumns" />
+		from SYS_DICT_ITEM dictItem
 	</select>
 
 </mapper>

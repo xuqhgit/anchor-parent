@@ -10,7 +10,7 @@ import com.anchor.core.common.base.BaseModel;
  * @date 2017-05-14 19:25:09
  * @since version 1.0
  */
-public class DickItem extends BaseModel {
+public class DictItem extends BaseModel {
     
     /**
      * 字典ID

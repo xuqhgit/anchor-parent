@@ -17,7 +17,7 @@ import java.util.List;
  */
 public abstract class BaseServiceImpl<T extends BaseModel,PK extends Serializable> implements BaseService<T,PK>{
 
-    private BaseMapper<T,PK> baseMapper;
+    protected BaseMapper<T,PK> baseMapper;
 
 
     public void insert(T t) {

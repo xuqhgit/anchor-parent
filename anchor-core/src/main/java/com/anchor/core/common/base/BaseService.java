@@ -28,4 +28,6 @@ public interface BaseService<T extends BaseModel,PK extends Serializable> {
 
     public PageInfo<T> getPageInfo(QueryFilter queryFilter);
 
+    public void setBaseMapper(BaseMapper baseMapper);
+
 }

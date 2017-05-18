@@ -2,13 +2,21 @@ package com.anchor.ms.auth.controller;
 
 
 import com.anchor.core.common.base.BaseController;
+import com.anchor.core.common.dto.QueryFilter;
+import com.anchor.core.common.dto.Result;
+import com.anchor.core.common.dto.ResultGrid;
+import com.anchor.core.common.dto.ResultObject;
+import com.anchor.ms.auth.model.Role;
+import com.anchor.ms.auth.service.IRoleService;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.anchor.ms.auth.service.IRoleService;
+import java.util.List;
 
 /**
  * @ClassName: RoleController
@@ -21,7 +29,91 @@ import com.anchor.ms.auth.service.IRoleService;
 @RequestMapping("role")
 public class RoleController extends BaseController {
 
+    public final static String ROLE_INDEX="role/index";
+    public final static String ROLE_ADD_INDEX="role/add";
+    public final static String ROLE_EDIT_INDEX="role/edit";
+
     @Autowired
 	private IRoleService roleService;
+
+    /**
+     * 首页
+     * @return
+     */
+    @RequestMapping(value="",method = RequestMethod.GET)
+    public String index(){
+        return ROLE_INDEX;
+    }
+
+    @RequestMapping(value="add",method = RequestMethod.GET)
+    @ResponseBody
+    public String add(){
+
+        return ROLE_ADD_INDEX;
+    }
+    @RequestMapping(value="add",method = RequestMethod.POST)
+    @ResponseBody
+    public Result add(Role role){
+        try{
+            roleService.insert(role);
+        }catch (Exception e){
+            new Result().error("添加角色失败：" + e.getMessage());
+        }
+        return new Result().success("添加角色成功");
+    }
+
+
+    @RequestMapping(value="update/{id}",method = RequestMethod.GET)
+    @ResponseBody
+    public String edit(){
+        return ROLE_EDIT_INDEX;
+    }
+
+    @RequestMapping(value="update/{id}",method = RequestMethod.POST)
+    @ResponseBody
+    public Result edit(Role role){
+        try{
+            roleService.update(role);
+        }catch (Exception e){
+            new Result().error("修改角色失败：" + e.getMessage());
+        }
+        return new Result().success("修改角色成功");
+    }
+
+    @RequestMapping(value="get/{id}")
+    @ResponseBody
+    public Result get(@PathVariable("id") long id){
+        try{
+            return new ResultObject().setData(roleService.get(id));
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result().error("获取角色失败：" + e.getMessage());
+        }
+    }
+
+    @RequestMapping(value="list")
+    @ResponseBody
+    public Result list(){
+        try{
+            return new ResultObject().setData(roleService.getList());
+        }catch (Exception e){
+            return new Result().error("获取角色失败：" + e.getMessage());
+        }
+    }
+
+    @RequestMapping(value="grid")
+    @ResponseBody
+    public Result grid(QueryFilter queryFilter){
+        try{
+            PageInfo<Role> pageInfo = roleService.getPageInfo(queryFilter);
+            ResultGrid resultGrid = new ResultGrid<Role>();
+            resultGrid.setRows(pageInfo.getList());
+            resultGrid.setTotal(pageInfo.getTotal());
+            return resultGrid;
+        }catch (Exception e){
+            return new Result().error("获取角色列表失败：" + e.getMessage());
+        }
+    }
+
 
 }
