@@ -33,7 +33,7 @@ public class PackagesSqlSessionFactoryBean extends SqlSessionFactoryBean {
 	 * 
 	 * @category 重写以支持使用通配符
 	 * @since
-	 * @author lisl
+	 * @author xuqh
 	 * @date 2016年10月18日 上午9:42:35
 	 * @param typeAliasesPackage
 	 * @see org.mybatis.spring.SqlSessionFactoryBean#setTypeAliasesPackage(java.lang.String)

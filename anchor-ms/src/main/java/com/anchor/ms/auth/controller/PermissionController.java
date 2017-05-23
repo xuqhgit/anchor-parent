@@ -66,7 +66,7 @@ public class PermissionController extends BaseController{
         return PATH_EDIT_INDEX;
     }
 
-    @RequestMapping(value="update/{id}",method = RequestMethod.POST)
+    @RequestMapping(value="update",method = RequestMethod.POST)
     @ResponseBody
     public Result edit(Permission permission){
         try{

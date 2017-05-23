@@ -69,7 +69,7 @@ public class RoleController extends BaseController {
         return ROLE_EDIT_INDEX;
     }
 
-    @RequestMapping(value="update/{id}",method = RequestMethod.POST)
+    @RequestMapping(value="update",method = RequestMethod.POST)
     @ResponseBody
     public Result edit(Role role){
         try{
