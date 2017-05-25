@@ -11,10 +11,10 @@
 <!-- Theme style -->
 <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
 <!-- iCheck -->
-
 <link rel="stylesheet" href="/static/dist/css/skins/skin-blue.min.css">
-<link rel="stylesheet" href="/static/admin/css/contabs.css">
 <link rel="stylesheet" href="/static/plugins/iCheck/square/blue.css">
+
+
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>

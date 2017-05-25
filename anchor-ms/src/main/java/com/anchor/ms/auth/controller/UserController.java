@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.anchor.ms.auth.service.IUserService;
 import com.anchor.ms.auth.model.User;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @ClassName: UserController
@@ -30,9 +31,9 @@ public class UserController extends BaseController{
     @Autowired
 	private IUserService userService;
 
-	public final static String PATH_INDEX="user/index";
-    public final static String PATH_ADD_INDEX="user/add";
-    public final static String PATH_EDIT_INDEX="user/edit";
+	public final static String PATH_INDEX="auth/user/user";
+    public final static String PATH_ADD_INDEX="auth/user/add";
+    public final static String PATH_EDIT_INDEX="auth/user/edit";
 
      /**
      * @return
@@ -111,6 +112,27 @@ public class UserController extends BaseController{
             return new Result().error("获取列表失败：" + e.getMessage());
         }
     }
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
+    public String login(){
 
+        return "login";
+    }
+
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    @ResponseBody
+    public ModelAndView login(String username,String password){
+        userService.findUserByUsername(username);
+        ModelAndView modelAndView = new ModelAndView();
+        User user = userService.findUserByUsername(username);
+        if(user!=null&&user.getPassword().equals(password)){
+            modelAndView.setViewName("redirect:/index");
+            user.setPassword(null);
+            return modelAndView;
+        }
+        modelAndView.setViewName("login");
+        modelAndView.addObject("error","用户名或者密码错误");
+
+        return modelAndView;
+    }
 }
 

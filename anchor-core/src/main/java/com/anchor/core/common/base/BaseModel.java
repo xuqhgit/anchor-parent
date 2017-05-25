@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class BaseModel implements Serializable {
     /**
-     * 用户ID
+     * ID
      */
     private Long id;
     /**

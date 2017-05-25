@@ -12,6 +12,6 @@
 <script src="/static/bootstrap/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/static/dist/js/app.js"></script>
-<script src="/static/admin/js/contabs.js"></script>
 <script src="/static/plugins/iCheck/icheck.min.js"></script>
 
+<script src="/static/admin/js/common.js"></script>
