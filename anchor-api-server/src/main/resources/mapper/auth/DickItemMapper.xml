@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.anchor.ms.auth.mapper.DictItemMapper">
+
+	<sql id="dictItemColumns">
+        dictItem.CREATE_TIME as createTime,dictItem.CREATOR_ID as creatorId,dictItem.DICT_ID as dictId,dictItem.ID as id,dictItem.KEY as key,dictItem.STATE as state,dictItem.TEXT as text,dictItem.UPDATE_TIME as updateTime
+	</sql>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="dictItem">
+		update SYS_DICT_ITEM
+		<set>
+			
+			<if test="createTime != null">
+				CREATE_TIME = #{ createTime },
+			</if>
+			<if test="creatorId != null">
+				CREATOR_ID = #{ creatorId },
+			</if>
+			<if test="dictId != null">
+				DICT_ID = #{ dictId },
+			</if>
+			<if test="id != null">
+				ID = #{ id },
+			</if>
+			<if test="key != null">
+				KEY = #{ key },
+			</if>
+			<if test="state != null">
+				STATE = #{ state },
+			</if>
+			<if test="text != null">
+				TEXT = #{ text },
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME = #{ updateTime },
+			</if>
+
+		</set>
+		where ID = #{id}
+	</update>
+
+
+	<insert id="insert" parameterType="dictItem">
+		INSERT INTO SYS_DICT_ITEM(
+			CREATE_TIME,CREATOR_ID,DICT_ID,ID,KEY,STATE,TEXT,UPDATE_TIME
+		)
+		VALUES(
+			#{ createTime },#{ creatorId },#{ dictId },#{ id },#{ key },#{ state },#{ text },#{ updateTime }
+		)
+	</insert>
+
+
+	<delete id="delete" parameterType="java.lang.Long">
+			DELETE FROM SYS_DICT_ITEM where id = #{id}
+	</delete>
+
+
+	<!-- 根据主键获取 -->
+	<select id="get" parameterType="java.lang.Long" resultType="dictItem">
+		SELECT
+		<include refid="dictItemColumns" />
+		FROM  SYS_DICT_ITEM dictItem
+		where id = #{ id }
+	</select>
+
+	<!-- 获取列表 -->
+	<select id="getList"  resultType="dictItem">
+		select
+		<include refid="dictItemColumns" />
+		from SYS_DICT_ITEM dictItem
+	</select>
+
+	<select id="getListByFilter" parameterType="com.anchor.core.common.dto.QueryFilter"  resultType="dictItem">
+		select
+		<include refid="dictItemColumns" />
+		from SYS_DICT_ITEM dictItem
+	</select>
+
+</mapper>
