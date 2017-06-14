@@ -117,6 +117,10 @@ public class UserController extends BaseController{
 
         return "login";
     }
+    @RequestMapping(value = "/logout",method = RequestMethod.GET)
+    public String logout(){
+        return "login";
+    }
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody

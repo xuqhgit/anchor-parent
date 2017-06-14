@@ -132,7 +132,7 @@
             </li>
           </ul>
         </div>
-        <a href="user/loginout" class="roll-nav roll-right T_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
+        <a href="/user/logout" class="roll-nav roll-right T_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
       </div>
     </section>
 
