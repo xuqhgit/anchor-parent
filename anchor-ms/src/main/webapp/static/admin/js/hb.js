@@ -229,10 +229,13 @@ $(function () {
         if ($.isEmptyObject(matchData["all"]) && $.isEmptyObject(matchData['half'])) {
             return;
         }
+        if(matchData['minute']=='-'){
+            return ;
+        }
         //红牌下注
-
+        redBet(matchData, matchInfo);
         //比分下注
-
+        scoreBet(matchData, matchInfo);
 
 
 
@@ -382,11 +385,43 @@ $(function () {
         submitOrder(trid, submitMoney, point, orderKey);
 
     }
-
+    //根据时间推移 进球困难系数
+    var timeScore=[[0,5,9],[6,10,8],[11,15,7],[16,20,6],[21,25,5],[26,30,4],[31,35,3],[36,40,2],[41,50,1]];
+    //进球数 难易程度 体现出 进球越多 就比赛越容易进去 但是 对于
+    var scorePro = [[1,1],[2,3],[3,6],[4,10],[5,20],[6,30],[7,50],[8,100]];
+    //21 为 一方吃两个红牌 3 为 一方 一个 一方两个 2 为 一边一个 4 一边两个 1其中一个吃一个
+    var redPro = [[1,50],[2,25],[3,75],[21,100],[4,50]];
     function redBet(matchData,matchInfo){
+        if(matchInfo["homeRed"]==0&&matchInfo["guestRed"]==0){
+            return;
+        }
+        var startMinute = matchData['minute'].split(" ")[1];
+        if(matchData['minute'].indexOf("1H")>0){
+
+        }
+        else if(matchData['minute'].indexOf("2H")>0){
+
+        }
+
+
+        if(redTime.indexOf("1H")>-1){
+
+        }
+        else if(redTime.indexOf("2H")>-1){
+
+        }
+        if(matchInfo["homeRed"]>matchInfo["guestRed"]){
+            var redTime = matchInfo["homeRedTime"];
+
+
+
+        }
+        else if(matchInfo["homeRed"]<matchInfo["guestRed"]){
+
+        }
 
     }
-    function scoreBet(){
+    function scoreBet(matchData,matchInfo){
 
     }
 
