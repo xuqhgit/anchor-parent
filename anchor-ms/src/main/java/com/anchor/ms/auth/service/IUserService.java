@@ -2,6 +2,7 @@ package com.anchor.ms.auth.service;
 
 import com.anchor.core.common.base.BaseService;
 import com.anchor.ms.auth.model.User;
+import com.github.pagehelper.PageInfo;
 
 /**
  * @ClassName: IUserService
@@ -13,5 +14,8 @@ import com.anchor.ms.auth.model.User;
 public interface IUserService extends BaseService<User,Long> {
 
     public User findUserByUsername(String username);
+
+    public User login(String username,String password);
+
 
 }

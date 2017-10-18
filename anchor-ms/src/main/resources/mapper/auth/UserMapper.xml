@@ -4,9 +4,19 @@
 <mapper namespace="com.anchor.ms.auth.mapper.UserMapper">
 
 	<sql id="userColumns">
-        user.CREATE_TIME as createTime,user.CREATOR_ID as creatorId,user.EMAIL as email,user.ID as id,user.NAME as name,user.PASSWORD as password,user.PHONE as phone,user.QQ as qq,user.UPDATE_TIME as updateTime,user.USERNAME as username
+        user.CREATE_TIME as createTime,user.CREATOR_ID as creatorId,user.EMAIL as email,
+        user.ID as id,user.NAME as name,user.PASSWORD as password,user.PHONE as phone,
+        user.QQ as qq,user.UPDATE_TIME as updateTime,user.USERNAME as username,user.state as state
 	</sql>
+	<sql id="userDtoColumns">
 
+		DATE_FORMAT(user.CREATE_TIME,'%Y-%c-%d %H:%i:%s')  as createTime,user.CREATOR_ID as creatorId,
+		user.EMAIL as email,user.ID as id,
+		user.NAME as name,user.STATE as state,
+		user.PHONE as phone,user.QQ as qq,
+		DATE_FORMAT(user.UPDATE_TIME,'%Y-%c-%d %H:%i:%s') as updateTime,
+		user.USERNAME as username
+	</sql>
 	<!-- 修改 -->
 	<update id="update" parameterType="user">
 		update SYS_USER
@@ -48,7 +58,7 @@
 	</update>
 
 
-	<insert id="insert" parameterType="user">
+	<insert id="insert" parameterType="user" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO SYS_USER(
 			CREATE_TIME,CREATOR_ID,EMAIL,ID,NAME,PASSWORD,PHONE,QQ,UPDATE_TIME,USERNAME
 		)
@@ -78,10 +88,29 @@
 		from SYS_USER user
 	</select>
 
-	<select id="getListByFilter" parameterType="com.anchor.core.common.dto.QueryFilter"  resultType="user">
+	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage" resultType="com.anchor.ms.auth.dto.UserDto">
 		select
-		<include refid="userColumns" />
+		<include refid="userDtoColumns" />
 		from SYS_USER user
+		<where>
+			<if test="t.username!=null">
+				and instr(user.username,#{t.username})>0
+			</if>
+			<if test="t.name!=null">
+				and instr(user.name,#{t.name})>0
+			</if>
+		</where>
+
+		<choose>
+			<when test="sort!=null and sortOrder!=null">
+				order by user.${sort} ${sortOrder}
+			</when>
+			<otherwise>
+				order by user.CREATE_TIME DESC
+			</otherwise>
+		</choose>
+
+
 	</select>
 
 	<select id="findUserByUsername" parameterType="java.lang.String" resultType="user">
@@ -90,4 +119,11 @@
 		FROM  SYS_USER user
 		where username = #{username}
 	</select>
+	<select id="login"  resultType="user">
+		SELECT
+		<include refid="userColumns" />
+		FROM  SYS_USER user
+		where username = #{username} and password = #{password}
+	</select>
+
 </mapper>

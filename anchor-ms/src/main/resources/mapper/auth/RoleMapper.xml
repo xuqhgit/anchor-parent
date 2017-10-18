@@ -69,7 +69,7 @@
 		from SYS_ROLE role
 	</select>
 
-	<select id="getListByFilter" parameterType="com.anchor.core.common.dto.QueryFilter"  resultType="role">
+	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage" resultType="role">
 		select
 		<include refid="roleColumns" />
 		from SYS_ROLE role

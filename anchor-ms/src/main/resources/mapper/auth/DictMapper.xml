@@ -69,7 +69,7 @@
 		from SYS_DICT dict
 	</select>
 
-	<select id="getListByFilter" parameterType="com.anchor.core.common.dto.QueryFilter"  resultType="dict">
+	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage" resultType="dict">
 		select
 		<include refid="dictColumns" />
 		from SYS_DICT dict

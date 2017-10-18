@@ -1,21 +1,36 @@
 package com.anchor.ms.auth.controller;
 
-import com.anchor.core.common.base.BaseController;
-import com.anchor.core.common.dto.QueryFilter;
+import com.alibaba.fastjson.JSONObject;
+import com.anchor.core.common.query.QueryPage;
 import com.anchor.core.common.dto.Result;
 import com.anchor.core.common.dto.ResultGrid;
 import com.anchor.core.common.dto.ResultObject;
+import com.anchor.core.common.utils.JsonUtils;
+import com.anchor.ms.auth.dto.UserDto;
+import com.anchor.ms.auth.model.User;
+import com.anchor.ms.auth.service.IUserService;
+import com.anchor.ms.common.controller.BaseController;
+import com.anchor.ms.common.utils.EncoderUtil;
+import com.anchor.ms.common.utils.LoggerUtils;
+import com.anchor.ms.common.utils.StringUtils;
+import com.anchor.ms.core.shiro.token.manager.TokenManager;
+import com.anchor.ms.core.statics.Constant;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.authc.DisabledAccountException;
+import org.apache.shiro.web.util.SavedRequest;
+import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.anchor.ms.auth.service.IUserService;
-import com.anchor.ms.auth.model.User;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 /**
  * @ClassName: UserController
@@ -44,36 +59,44 @@ public class UserController extends BaseController{
     }
 
     @RequestMapping(value="add",method = RequestMethod.GET)
-    @ResponseBody
     public String add(){
 
         return PATH_ADD_INDEX;
     }
     @RequestMapping(value="add",method = RequestMethod.POST)
     @ResponseBody
-    public Result add(User user){
+    public Result add(@Validated User user, Errors errors){
         try{
+            if(errors.hasErrors()){
+                return new Result().error("添加失败：" + errors.getFieldError().getDefaultMessage());
+            }
+            user.setCreateTime(new Date());
+            user.setUpdateTime(new Date());
+            user.setPassword(EncoderUtil.EncoderByMd5(Constant.DEAFULT_PASSWORD));
             userService.insert(user);
         }catch (Exception e){
-            new Result().error("添加失败：" + e.getMessage());
+            e.printStackTrace();
+            return new Result().error("添加失败：" + e.getMessage());
         }
         return new Result().success("添加成功");
     }
 
 
-    @RequestMapping(value="update/{id}",method = RequestMethod.GET)
-    @ResponseBody
-    public String edit(@PathVariable("id") long id){
-        return PATH_EDIT_INDEX;
+    @RequestMapping(value="edit/{id}",method = RequestMethod.GET)
+    public ModelAndView edit(@PathVariable("id") long id){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(PATH_EDIT_INDEX);
+        modelAndView.getModelMap().put("user",userService.get(id));
+        return modelAndView;
     }
 
-    @RequestMapping(value="update",method = RequestMethod.POST)
+    @RequestMapping(value="edit",method = RequestMethod.POST)
     @ResponseBody
     public Result edit(User user){
         try{
             userService.update(user);
         }catch (Exception e){
-            new Result().error("修改失败：" + e.getMessage());
+            return new Result().error("修改失败：" + e.getMessage());
         }
         return new Result().success("修改成功");
     }
@@ -101,20 +124,24 @@ public class UserController extends BaseController{
 
     @RequestMapping(value="grid")
     @ResponseBody
-    public Result grid(QueryFilter queryFilter){
+    public Result grid(QueryPage<User> queryPage,User user){
         try{
-            PageInfo<User> pageInfo = userService.getPageInfo(queryFilter);
+            queryPage.setT(user);
+            PageInfo<UserDto> pageInfo = userService.getPageInfo(queryPage);
             ResultGrid resultGrid = new ResultGrid<User>();
             resultGrid.setRows(pageInfo.getList());
             resultGrid.setTotal(pageInfo.getTotal());
             return resultGrid;
         }catch (Exception e){
+            e.printStackTrace();
             return new Result().error("获取列表失败：" + e.getMessage());
         }
     }
     @RequestMapping(value = "/login",method = RequestMethod.GET)
-    public String login(){
+    public String login(HttpServletRequest request){
 
+        User user = TokenManager.getToken();
+        System.out.println(JSONObject.toJSONString(user));
         return "login";
     }
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
@@ -123,18 +150,47 @@ public class UserController extends BaseController{
     }
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    @ResponseBody
-    public ModelAndView login(String username,String password){
-        userService.findUserByUsername(username);
+    public ModelAndView login(User user,Boolean rememberMe,HttpServletRequest request){
+
         ModelAndView modelAndView = new ModelAndView();
-        User user = userService.findUserByUsername(username);
-        if(user!=null&&user.getPassword().equals(password)){
+        try {
+            user = TokenManager.login(user,true);
+            resultMap.put("status", 200);
+            resultMap.put("message", "登录成功");
+            /**
+             * shiro 获取登录之前的地址
+             * 之前0.1版本这个没判断空。
+             */
+            SavedRequest savedRequest = WebUtils.getSavedRequest(request);
+            String url = null ;
+            if(null != savedRequest){
+                url = savedRequest.getRequestUrl();
+            }
+            /**
+             * 我们平常用的获取上一个请求的方式，在Session不一致的情况下是获取不到的
+             * String url = (String) request.getAttribute(WebUtils.FORWARD_REQUEST_URI_ATTRIBUTE);
+             */
+            LoggerUtils.fmtDebug(getClass(), "获取登录之前的URL:[%s]",url);
+            //如果登录之前没有地址，那么就跳转到首页。
+            if(StringUtils.isBlank(url)){
+
+//                url = request.getContextPath() + "/user/index.shtml";
+            }
             modelAndView.setViewName("redirect:/index");
-            user.setPassword(null);
+            //跳转地址
+//            resultMap.put("back_url", url);
+            /**
+             * 这里其实可以直接catch Exception，然后抛出 message即可，但是最好还是各种明细catch 好点。。
+             */
             return modelAndView;
+        } catch (DisabledAccountException e) {
+            modelAndView.addObject("errorMsg","帐号已经禁用");
+        } catch (Exception e) {
+            e.printStackTrace();
+            modelAndView.addObject("errorMsg","帐号或密码错误");
         }
+
         modelAndView.setViewName("login");
-        modelAndView.addObject("error","用户名或者密码错误");
 
         return modelAndView;
     }

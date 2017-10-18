@@ -4,7 +4,10 @@
 <mapper namespace="com.anchor.ms.auth.mapper.PermissionMapper">
 
 	<sql id="permissionColumns">
-        permission.CODE as code,permission.CREATE_TIME as createTime,permission.CREATOR_ID as creatorId,permission.ID as id,permission.NAME as name,permission.PID as pid,permission.RANK as rank,permission.STATE as state,permission.TYPE as type,permission.UPDATE_TIME as updateTime,permission.URL as url
+        permission.CODE as code,permission.CREATE_TIME as createTime,permission.CREATOR_ID as creatorId,
+        permission.ID as id,permission.NAME as name,permission.PID as pid,permission.RANK as rank,
+        permission.STATE as state,permission.TYPE as type,permission.UPDATE_TIME as updateTime,
+        permission.URL as url,permission.icon as icon
 	</sql>
 
 	<!-- 修改 -->
@@ -45,6 +48,9 @@
 			<if test="url != null">
 				URL = #{ url },
 			</if>
+			<if test="icon != null">
+				ICON = #{ icon },
+			</if>
 
 		</set>
 		where ID = #{id}
@@ -81,10 +87,21 @@
 		from SYS_PERMISSION permission
 	</select>
 
-	<select id="getListByFilter" parameterType="com.anchor.core.common.dto.QueryFilter"  resultType="permission">
+	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage" resultType="permission">
 		select
 		<include refid="permissionColumns" />
 		from SYS_PERMISSION permission
+	</select>
+	<!-- 获取列表 -->
+	<select id="getPermissionByUserId"  resultType="permission">
+		select
+		<include refid="permissionColumns" />
+		from SYS_PERMISSION permission
+		join SYS_ROLE_PERMISSION rp on rp.PERMISSION_ID = permission=id
+		join SYS_ROLE r on r.ID = rp.ROLE_id
+		join SYS_USER_ROLE ur on r.ID =ur.ROLE_ID
+		where ur.USER_ID=#{userId} and permission.state='1' and role.state='1'
+		order by permission.RANK asc
 	</select>
 
 </mapper>

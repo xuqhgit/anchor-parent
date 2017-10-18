@@ -1,5 +1,7 @@
 package com.anchor.core.common.base;
 
+import com.anchor.core.common.utils.SortFieldConvertUtil;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -27,7 +29,12 @@ public class BaseModel implements Serializable {
      * 创建者ID
      */
     private Long creatorId;
-
+    static {
+        SortFieldConvertUtil.setSortField("createTime","create_time");
+        SortFieldConvertUtil.setSortField("updateTime","update_time");
+        SortFieldConvertUtil.setSortField("creatorId","creator_id");
+        SortFieldConvertUtil.setSortField("id","id");
+    }
 
     public Long getId() {
         return id;
@@ -60,4 +67,6 @@ public class BaseModel implements Serializable {
     public void setCreatorId(Long creatorId) {
         this.creatorId = creatorId;
     }
+
+
 }

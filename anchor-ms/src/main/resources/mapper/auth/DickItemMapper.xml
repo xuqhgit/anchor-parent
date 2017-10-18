@@ -72,7 +72,7 @@
 		from SYS_DICT_ITEM dictItem
 	</select>
 
-	<select id="getListByFilter" parameterType="com.anchor.core.common.dto.QueryFilter"  resultType="dictItem">
+	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage" resultType="dictItem">
 		select
 		<include refid="dictItemColumns" />
 		from SYS_DICT_ITEM dictItem

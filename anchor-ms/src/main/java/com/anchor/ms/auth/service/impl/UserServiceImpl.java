@@ -33,4 +33,10 @@ public class UserServiceImpl extends BaseServiceImpl<User,Long> implements IUser
 	public void setBaseMapper(BaseMapper baseMapper) {
 		this.baseMapper = baseMapper;
 	}
+
+	public User login(String username, String password) {
+		return userMapper.login(username,password);
+	}
+
+
 }

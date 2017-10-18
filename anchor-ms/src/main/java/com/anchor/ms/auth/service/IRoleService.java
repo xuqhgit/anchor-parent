@@ -3,6 +3,8 @@ package com.anchor.ms.auth.service;
 import com.anchor.core.common.base.BaseService;
 import com.anchor.ms.auth.model.Role;
 
+import java.util.Set;
+
 /**
  * @ClassName: IRoleService
  * @Description: 
@@ -13,5 +15,5 @@ import com.anchor.ms.auth.model.Role;
 public interface IRoleService extends BaseService<Role,Long> {
 
 
-
+    public Set<String> findRoleByUserId(long userId);
 }

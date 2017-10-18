@@ -11,13 +11,13 @@
                         http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 
     <!-- 引入属性配置文件 -->
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<bean class="com.anchor.core.common.ext.PropertyConfig">
 		<property name="locations">
 			<list>
 <!-- 				<value>classpath:config/mq.properties</value> -->
 				<value>classpath:config/jdbc.properties</value>
-<!-- 				<value>classpath:config/redis.properties</value> -->
-<!-- 				<value>classpath:config/dubbo.properties</value> -->
+ 				<value>classpath:config/redis.properties</value>
+ 				<value>classpath:config/shiro-config.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -27,14 +27,14 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 		<context:exclude-filter type="annotation" expression="org.springframework.cache.annotation.EnableCaching" />
 	</context:component-scan>
-	
-	
-	
+
+
+	<bean name="springContextUtil" class="com.anchor.core.common.utils.SpringContextUtil" scope="singleton"></bean>
 	<!-- 引入SPRING配置文件 -->
 	<!--<import resource="spring/dataSource.xml"/>-->
 	<import resource="spring/mybatis.xml"/>
-	<!--<import resource="spring/spring-shiro.xml"/>-->
+	<import resource="spring/redis.xml"/>
+	<import resource="spring/spring-shiro.xml"/>
 	<!--<import resource="spring/session.xml"/>-->
-
 
 </beans>

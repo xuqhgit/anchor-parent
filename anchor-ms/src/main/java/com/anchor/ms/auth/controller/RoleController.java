@@ -1,13 +1,13 @@
 package com.anchor.ms.auth.controller;
 
 
-import com.anchor.core.common.base.BaseController;
-import com.anchor.core.common.dto.QueryFilter;
+import com.anchor.core.common.query.QueryPage;
 import com.anchor.core.common.dto.Result;
 import com.anchor.core.common.dto.ResultGrid;
 import com.anchor.core.common.dto.ResultObject;
 import com.anchor.ms.auth.model.Role;
 import com.anchor.ms.auth.service.IRoleService;
+import com.anchor.ms.common.controller.BaseController;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
 
 /**
  * @ClassName: RoleController
@@ -103,9 +101,9 @@ public class RoleController extends BaseController {
 
     @RequestMapping(value="grid")
     @ResponseBody
-    public Result grid(QueryFilter queryFilter){
+    public Result grid(QueryPage queryPage){
         try{
-            PageInfo<Role> pageInfo = roleService.getPageInfo(queryFilter);
+            PageInfo<Role> pageInfo = roleService.getPageInfo(queryPage);
             ResultGrid resultGrid = new ResultGrid<Role>();
             resultGrid.setRows(pageInfo.getList());
             resultGrid.setTotal(pageInfo.getTotal());

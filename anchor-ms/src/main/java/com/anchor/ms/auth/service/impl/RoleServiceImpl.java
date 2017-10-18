@@ -10,6 +10,7 @@ import com.anchor.ms.auth.mapper.RoleMapper;
 import com.anchor.ms.auth.model.Role;
 
 import javax.annotation.Resource;
+import java.util.Set;
 
 /**
  * @ClassName: RoleServiceImpl
@@ -27,5 +28,9 @@ public class RoleServiceImpl extends BaseServiceImpl<Role,Long> implements IRole
 	@Resource(name="roleMapper")
 	public void setBaseMapper(BaseMapper baseMapper) {
 		this.baseMapper = baseMapper;
+	}
+
+	public Set<String> findRoleByUserId(long userId) {
+		return null;
 	}
 }

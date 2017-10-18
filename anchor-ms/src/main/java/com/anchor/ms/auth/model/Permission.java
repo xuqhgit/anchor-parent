@@ -41,7 +41,11 @@ public class Permission extends BaseModel {
      */
     private String url;
 
-    
+    /**
+     * 图标
+     */
+    private String icon;
+
     public void setCode(String code){
         this.code = code;
     }
@@ -83,5 +87,24 @@ public class Permission extends BaseModel {
     }
     public String getUrl(){
         return this.url;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public enum PermissionType{
+        menu("0"),func("1");
+        PermissionType(String code){
+            this.code = code;
+        }
+        private String code;
+        public String getCode(){
+            return this.code;
+        }
     }
 }

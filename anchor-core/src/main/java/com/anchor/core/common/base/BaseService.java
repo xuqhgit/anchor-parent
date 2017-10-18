@@ -1,6 +1,6 @@
 package com.anchor.core.common.base;
 
-import com.anchor.core.common.dto.QueryFilter;
+import com.anchor.core.common.query.QueryPage;
 import com.github.pagehelper.PageInfo;
 
 import java.io.Serializable;
@@ -24,9 +24,9 @@ public interface BaseService<T extends BaseModel,PK extends Serializable> {
 
     public List<T> getList();
 
-    public List<T> getListByFilter(QueryFilter queryFilter);
+    public <D> List<D> getListByPage(QueryPage queryPage);
 
-    public PageInfo<T> getPageInfo(QueryFilter queryFilter);
+    public <D>PageInfo<D> getPageInfo(QueryPage queryPage);
 
     public void setBaseMapper(BaseMapper baseMapper);
 

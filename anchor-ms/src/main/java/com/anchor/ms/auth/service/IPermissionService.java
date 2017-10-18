@@ -1,7 +1,11 @@
 package com.anchor.ms.auth.service;
 
 import com.anchor.core.common.base.BaseService;
+import com.anchor.ms.auth.dto.Menu;
 import com.anchor.ms.auth.model.Permission;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @ClassName: IPermissionService
@@ -12,6 +16,10 @@ import com.anchor.ms.auth.model.Permission;
  */
 public interface IPermissionService extends BaseService<Permission,Long> {
 
+    public Set<String> findPermissionCodeByUserId(Long userId);
 
+    public List<Permission> findPermissionByUserId(Long userId);
+
+    public List<Menu> findMenu(Long userId);
 
 }

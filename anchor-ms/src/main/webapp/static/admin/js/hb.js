@@ -2,6 +2,8 @@
  * Created by Administrator on 2017/8/3.
  */
 var s = undefined;
+var rule = undefined;
+var alertFlag = true;
 $(function () {
     var allCode = {"1": "all", "2": "half"};
     var standard="1",letScore="2",bigSmall="3";
@@ -22,16 +24,20 @@ $(function () {
         return 1;
 
     }
-
+    var allMatchHb = undefined;
     function getAllMatchHb() {
+        if(allMatchHb){
+            return allMatchHb
+        }
         var allMatch = localStorage.getItem("allMatch");
         if (!allMatch) {
             return {};
         }
-        return JSON.parse(allMatch);
+        allMatchHb = JSON.parse(allMatch);
+        return allMatchHb;
     }
-
     function saveAllMatchHb(allMatch) {
+        allMatchHb = allMatch;
         localStorage.setItem("allMatch", JSON.stringify(allMatch));
     }
 
@@ -39,7 +45,9 @@ $(function () {
         return true;
     }
 
+    var allMatchOrderHb = undefined;
     function saveMatchOrder(order) {
+        allMatchOrderHb  = order;
         localStorage.setItem("order", order);
     }
 
@@ -48,6 +56,9 @@ $(function () {
     }
 
     function getMatchOrder() {
+        if(allMatchOrderHb){
+            return allMatchOrderHb;
+        }
         var allOrder = localStorage.getItem("order");
         if (!allOrder) {
             return {};
@@ -57,6 +68,7 @@ $(function () {
 
     function saveMatchInfo(matchData) {
         var data = {};
+        var change = false;
         var allMatch = getAllMatchHb();
         if (!allMatch[matchData["id"]]) {
             data["all"] = matchData["all"];
@@ -75,17 +87,20 @@ $(function () {
             data["score"] = [[0, 0, "0"]];
             data["id"] = matchData["id"];
             allMatch[matchData["id"]] = data;
+            alertInfo("开启新赛事:"+data["homeName"]+" vs "+data["guestName"]);
+            change = true;
         }
         else {
             data = allMatch[matchData["id"]];
         }
         var logStr = data["homeName"] + " vs " + data["guestName"];
-        var change = false;
+
         if (data["homeRed"] != matchData["homeRed"]) {
             data["homeRedTime"] = matchData["minute"];
             data["homeRed"] = matchData["homeRed"];
             if (matchData["homeRed"] == 1) {
                 console.info(logStr + " 主队红牌 " + matchData["minute"]);
+                alert(logStr + " 客队红牌 " + matchData["minute"]);
             }
             change = true;
         }
@@ -94,8 +109,10 @@ $(function () {
             data["guestRed"] = matchData["guestRed"];
             if (matchData["guestRed"] == 1) {
                 console.info(logStr + " 客队红牌 " + matchData["minute"]);
+                alertInfo(logStr + " 客队红牌 " + matchData["minute"]);
             }
             change = true;
+
         }
 
         var score = data["score"][data["score"].length - 1];
@@ -106,15 +123,18 @@ $(function () {
                 printStr += "   " + data["score"][i][0] + ":" + data["score"][i][1] + " 时间：" + data["score"][i][2];
             }
             console.info(logStr + " 比分数据更新：" + printStr);
+            alertInfo(logStr + " 比分数据更新：" + printStr);
             change = true;
         }
         if (change) {
             saveAllMatchHb(allMatch);
         }
         //下单
-        order(matchData, data);
+        //order(matchData, data);
     }
-
+    function alertInfo(text){
+        if(alertFlag)alert(text);
+    }
     //获取某一场比赛 赔率数据
     function matchData(matchId, leagueId, leagueName) {
         var trs = $(".wind-lm-" + matchId);
@@ -232,6 +252,22 @@ $(function () {
         if(matchData['minute']=='-'){
             return ;
         }
+        var scoreCount = matchInfo["homeScore"]+matchInfo["guestScore"];
+        var scoreStr =  matchInfo["homeScore"]+":"+matchInfo["guestScore"];
+        var bsPoint = matchInfo["all"]["3"]["point"];
+        var minute = parseInt(matchData['minute'].split(" ")[1]);
+        var minuteStr = "";
+        if(minute<=35){
+            minuteStr = (parseInt(minute/5)*5+1)+":"+(parseInt(minute/5)*5+5)
+        }
+        else if(minute<39){
+            minuteStr = "36:39"
+        }
+        else{
+            minuteStr = "40:43"
+        }
+        var halfPoint = "";
+        var allPoint = "";
         //红牌下注
         redBet(matchData, matchInfo);
         //比分下注
@@ -385,6 +421,18 @@ $(function () {
         submitOrder(trid, submitMoney, point, orderKey);
 
     }
+
+    function getRule(){
+        if(!rule){
+            return rule;
+        }
+        var ruleStr = localStorage.getItem("rule");
+        if (!ruleStr) {
+            return {};
+        }
+        rule = JSON.parse(ruleStr);
+        return  rule;
+    }
     //根据时间推移 进球困难系数
     var timeScore=[[0,5,9],[6,10,8],[11,15,7],[16,20,6],[21,25,5],[26,30,4],[31,35,3],[36,40,2],[41,50,1]];
     //进球数 难易程度 体现出 进球越多 就比赛越容易进去 但是 对于
@@ -422,6 +470,10 @@ $(function () {
 
     }
     function scoreBet(matchData,matchInfo){
+
+    }
+
+    function sleep(){
 
     }
 

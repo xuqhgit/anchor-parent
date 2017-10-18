@@ -1,7 +1,6 @@
 package com.anchor.core.common.base;
 
-import com.anchor.core.common.dto.QueryFilter;
-import com.github.pagehelper.Page;
+import com.anchor.core.common.query.QueryPage;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -40,13 +39,13 @@ public abstract class BaseServiceImpl<T extends BaseModel,PK extends Serializabl
         return baseMapper.getList();
     }
 
-    public List<T> getListByFilter(QueryFilter queryFilter) {
-        return baseMapper.getListByFilter(queryFilter);
+    public <D> List<D> getListByPage(QueryPage queryPage) {
+        return baseMapper.getListByPage(queryPage);
     }
 
-    public PageInfo<T> getPageInfo(QueryFilter queryFilter){
-        PageHelper.startPage(queryFilter.getPageNum(), queryFilter.getPageSize());
-        List<T> list = getListByFilter(queryFilter);
-        return new PageInfo<T>(list);
+    public <D>PageInfo<D> getPageInfo(QueryPage queryPage){
+        PageHelper.startPage(queryPage.getPageNum(), queryPage.getPageSize());
+        List<D> list = getListByPage(queryPage);
+        return new PageInfo<D>(list);
     }
 }

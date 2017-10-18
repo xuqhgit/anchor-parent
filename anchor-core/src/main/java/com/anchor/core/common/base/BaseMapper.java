@@ -1,6 +1,6 @@
 package com.anchor.core.common.base;
 
-import com.anchor.core.common.dto.QueryFilter;
+import com.anchor.core.common.query.QueryPage;
 
 import java.io.Serializable;
 import java.util.List;
@@ -53,9 +53,9 @@ public interface BaseMapper<T extends BaseModel,PK extends Serializable> {
 
     /**
      * 根据过滤器 获取数据列表
-     * @param queryFilter
+     * @param queryPage
      * @return
      */
-    public List<T> getListByFilter(QueryFilter queryFilter);
+    public <D> List<D> getListByPage(QueryPage queryPage);
 
 }

@@ -3,6 +3,9 @@ package com.anchor.ms.auth.mapper;
 
 import com.anchor.core.common.base.BaseMapper;
 import com.anchor.ms.auth.model.Permission;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 
 /**
@@ -14,6 +17,6 @@ import com.anchor.ms.auth.model.Permission;
  */
 public interface PermissionMapper extends BaseMapper<Permission,Long> {
 
-
+    public List<Permission> getPermissionByUserId(@Param("userId") Long userId);
 
 }

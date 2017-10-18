@@ -1,10 +1,13 @@
 package com.anchor.ms.auth.controller;
 
-import com.anchor.core.common.base.BaseController;
-import com.anchor.core.common.dto.QueryFilter;
+
+import com.anchor.core.common.query.QueryPage;
 import com.anchor.core.common.dto.Result;
 import com.anchor.core.common.dto.ResultGrid;
 import com.anchor.core.common.dto.ResultObject;
+import com.anchor.ms.auth.model.Permission;
+import com.anchor.ms.auth.service.IPermissionService;
+import com.anchor.ms.common.controller.BaseController;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,9 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.anchor.ms.auth.service.IPermissionService;
-import com.anchor.ms.auth.model.Permission;
 
 /**
  * @ClassName: PermissionController
@@ -88,6 +88,16 @@ public class PermissionController extends BaseController{
         }
     }
 
+    @RequestMapping(value="menu")
+    @ResponseBody
+    public Result menu(){
+        try{
+            return new ResultObject().setData(permissionService.getList());
+        }catch (Exception e){
+            return new Result().error("获取失败：" + e.getMessage());
+        }
+    }
+
     @RequestMapping(value="list")
     @ResponseBody
     public Result list(){
@@ -100,9 +110,9 @@ public class PermissionController extends BaseController{
 
     @RequestMapping(value="grid")
     @ResponseBody
-    public Result grid(QueryFilter queryFilter){
+    public Result grid(QueryPage queryPage){
         try{
-            PageInfo<Permission> pageInfo = permissionService.getPageInfo(queryFilter);
+            PageInfo<Permission> pageInfo = permissionService.getPageInfo(queryPage);
             ResultGrid resultGrid = new ResultGrid<Permission>();
             resultGrid.setRows(pageInfo.getList());
             resultGrid.setTotal(pageInfo.getTotal());
