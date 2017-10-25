@@ -4,14 +4,14 @@
 <mapper namespace="com.anchor.ms.auth.mapper.RoleMapper">
 
 	<sql id="roleColumns">
-        role.CODE as code,role.CREATE_TIME as createTime,role.CREATOR_ID as creatorId,role.ID as id,role.NAME as name,role.STATE as state,role.UPDATE_TIME as updateTime
+            r.CODE as code,r.CREATE_TIME as createTime,r.CREATOR_ID as creatorId,r.ID as id,r.NAME as name,r.STATE as state,r.UPDATE_TIME as updateTime
 	</sql>
 
 	<!-- 修改 -->
 	<update id="update" parameterType="role">
 		update SYS_ROLE
 		<set>
-			
+
 			<if test="code != null">
 				CODE = #{ code },
 			</if>
@@ -31,7 +31,7 @@
 				STATE = #{ state },
 			</if>
 			<if test="updateTime != null">
-				UPDATE_TIME = #{ updateTime },
+				UPDATE_TIME = now(),
 			</if>
 
 		</set>
@@ -39,26 +39,21 @@
 	</update>
 
 
-	<insert id="insert" parameterType="role">
+	<insert id="insert" parameterType="role"    >
 		INSERT INTO SYS_ROLE(
-			CODE,CREATE_TIME,CREATOR_ID,ID,NAME,STATE,UPDATE_TIME
+		CODE,CREATE_TIME,CREATOR_ID,NAME,STATE,UPDATE_TIME
 		)
 		VALUES(
-			#{ code },#{ createTime },#{ creatorId },#{ id },#{ name },#{ state },#{ updateTime }
+		#{ code } ,  now() ,  #{ creatorId } ,   #{ name } ,  #{ state } ,  now()
 		)
 	</insert>
-
-
-	<delete id="delete" parameterType="java.lang.Long">
-			DELETE FROM SYS_ROLE where id = #{id}
-	</delete>
 
 
 	<!-- 根据主键获取 -->
 	<select id="get" parameterType="java.lang.Long" resultType="role">
 		SELECT
 		<include refid="roleColumns" />
-		FROM  SYS_ROLE role
+		FROM  SYS_ROLE r
 		where id = #{ id }
 	</select>
 
@@ -66,13 +61,29 @@
 	<select id="getList"  resultType="role">
 		select
 		<include refid="roleColumns" />
-		from SYS_ROLE role
+		from SYS_ROLE r
 	</select>
 
-	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage" resultType="role">
+	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage"  resultType="role">
 		select
 		<include refid="roleColumns" />
-		from SYS_ROLE role
+		from SYS_ROLE r
+		<where>
+			<if test="t.code!=null and t.code!=''">
+				and instr(r.CODE,#{ t.code })>0
+			</if>
+			<if test="t.name!=null and t.name!=''">
+				and instr(r.NAME,#{ t.name })>0
+			</if>
+		</where>
+		<choose>
+			<when test="sort!=null and sortOrder!=null">
+				order by r.${sort} ${sortOrder}
+			</when>
+			<otherwise>
+				order by r.CREATE_TIME DESC
+			</otherwise>
+		</choose>
 	</select>
 
 </mapper>

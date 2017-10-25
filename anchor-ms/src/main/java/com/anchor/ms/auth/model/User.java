@@ -2,9 +2,11 @@ package com.anchor.ms.auth.model;
 
 
 import com.anchor.core.common.base.BaseModel;
+import com.anchor.core.common.utils.SortFieldConvertUtil;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -25,6 +27,7 @@ public class User extends BaseModel {
     /**
      * 用户名称
      */
+
     @NotBlank@Size(min=2,max=10,message="名称只允许2到10个字符")
     private String name;
     /**
@@ -59,7 +62,9 @@ public class User extends BaseModel {
 
     }
 
-
+    static {
+        SortFieldConvertUtil.setSortField("state","state");
+    }
     public void setEmail(String email){
         this.email = email;
     }

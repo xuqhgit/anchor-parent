@@ -2,6 +2,7 @@ package com.anchor.ms.auth.model;
 
 
 import com.anchor.core.common.base.BaseModel;
+import com.anchor.core.common.utils.SortFieldConvertUtil;
 
 /**
  * @ClassName: Role
@@ -25,7 +26,10 @@ public class Role extends BaseModel {
      */
     private String state;
 
-    
+    static {
+        SortFieldConvertUtil.setSortField("state","state");
+        SortFieldConvertUtil.setSortField("code","code");
+    }
     public void setCode(String code){
         this.code = code;
     }

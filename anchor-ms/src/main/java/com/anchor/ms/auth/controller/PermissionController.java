@@ -30,9 +30,9 @@ public class PermissionController extends BaseController{
     @Autowired
 	private IPermissionService permissionService;
 
-	public final static String PATH_INDEX="permission/index";
-    public final static String PATH_ADD_INDEX="permission/add";
-    public final static String PATH_EDIT_INDEX="permission/edit";
+	public final static String PATH_INDEX="auth/permission/index";
+    public final static String PATH_ADD_INDEX="auth/permission/add";
+    public final static String PATH_EDIT_INDEX="auth/permission/edit";
 
      /**
      * @return

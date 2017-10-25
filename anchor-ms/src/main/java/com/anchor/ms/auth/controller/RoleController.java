@@ -6,8 +6,10 @@ import com.anchor.core.common.dto.Result;
 import com.anchor.core.common.dto.ResultGrid;
 import com.anchor.core.common.dto.ResultObject;
 import com.anchor.ms.auth.model.Role;
+import com.anchor.ms.auth.model.User;
 import com.anchor.ms.auth.service.IRoleService;
 import com.anchor.ms.common.controller.BaseController;
+import com.anchor.ms.core.shiro.token.manager.TokenManager;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @ClassName: RoleController
@@ -27,9 +30,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("role")
 public class RoleController extends BaseController {
 
-    public final static String ROLE_INDEX="role/index";
-    public final static String ROLE_ADD_INDEX="role/add";
-    public final static String ROLE_EDIT_INDEX="role/edit";
+    public final static String ROLE_INDEX="auth/role/index";
+    public final static String ROLE_ADD_INDEX="auth/role/add";
+    public final static String ROLE_EDIT_INDEX="auth/role/edit";
 
     @Autowired
 	private IRoleService roleService;
@@ -44,7 +47,6 @@ public class RoleController extends BaseController {
     }
 
     @RequestMapping(value="add",method = RequestMethod.GET)
-    @ResponseBody
     public String add(){
 
         return ROLE_ADD_INDEX;
@@ -53,21 +55,25 @@ public class RoleController extends BaseController {
     @ResponseBody
     public Result add(Role role){
         try{
+            role.setCreatorId(TokenManager.getToken().getId());
+            role.setState("0");
             roleService.insert(role);
         }catch (Exception e){
-            new Result().error("添加角色失败：" + e.getMessage());
+            return new Result().error("添加角色失败：" + e.getMessage());
         }
         return new Result().success("添加角色成功");
     }
 
 
-    @RequestMapping(value="update/{id}",method = RequestMethod.GET)
-    @ResponseBody
-    public String edit(){
-        return ROLE_EDIT_INDEX;
+    @RequestMapping(value="edit/{id}",method = RequestMethod.GET)
+    public ModelAndView edit(@PathVariable("id") long id){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(ROLE_EDIT_INDEX);
+        modelAndView.getModelMap().put("role",roleService.get(id));
+        return modelAndView;
     }
 
-    @RequestMapping(value="update",method = RequestMethod.POST)
+    @RequestMapping(value="edit",method = RequestMethod.POST)
     @ResponseBody
     public Result edit(Role role){
         try{
@@ -101,14 +107,16 @@ public class RoleController extends BaseController {
 
     @RequestMapping(value="grid")
     @ResponseBody
-    public Result grid(QueryPage queryPage){
+    public Result grid(QueryPage<Role> queryPage,Role role){
         try{
+            queryPage.setT(role);
             PageInfo<Role> pageInfo = roleService.getPageInfo(queryPage);
             ResultGrid resultGrid = new ResultGrid<Role>();
             resultGrid.setRows(pageInfo.getList());
             resultGrid.setTotal(pageInfo.getTotal());
             return resultGrid;
         }catch (Exception e){
+            e.printStackTrace();
             return new Result().error("获取角色列表失败：" + e.getMessage());
         }
     }

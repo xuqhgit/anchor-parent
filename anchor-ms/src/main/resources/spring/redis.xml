@@ -33,7 +33,7 @@
 	
 	<!--连接工厂-->
 	<bean id="jedisConnectionFactory"  class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-	p:password="${redis.password}">
+	>
 		<constructor-arg name="sentinelConfig" ref="redisSentinelConfiguration"/>
 		<constructor-arg name="poolConfig" ref="poolConfig" />
 		<property name="database" value="${redis.database}"></property>

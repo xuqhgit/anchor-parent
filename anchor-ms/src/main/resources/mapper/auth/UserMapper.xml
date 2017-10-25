@@ -93,10 +93,10 @@
 		<include refid="userDtoColumns" />
 		from SYS_USER user
 		<where>
-			<if test="t.username!=null">
+			<if test="t.username!=null and t.username!=''">
 				and instr(user.username,#{t.username})>0
 			</if>
-			<if test="t.name!=null">
+			<if test="t.name!=null and t.name!=''">
 				and instr(user.name,#{t.name})>0
 			</if>
 		</where>

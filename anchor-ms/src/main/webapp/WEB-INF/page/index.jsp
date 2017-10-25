@@ -97,6 +97,8 @@
           <a href="#"><i class="fa fa-link"></i> <span>系统管理</span> <i class="fa fa-angle-left pull-right"></i></a>
           <ul class="treeview-menu">
             <li><a href="/user" class="T_menuItem"><i class="fa fa-circle-o"></i>用户管理</a></li>
+            <li><a href="/role" class="T_menuItem"><i class="fa fa-circle-o"></i>角色管理</a></li>
+            <li><a href="/permission" class="T_menuItem"><i class="fa fa-circle-o"></i>权限管理</a></li>
           </ul>
         </li>
         <%--<li class="treeview">--%>
