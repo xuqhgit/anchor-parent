@@ -5,6 +5,7 @@
 <head>
     <title>角色管理</title>
     <%@include file="../../common.jsp" %>
+    <link rel="stylesheet" href="/static/bootstrap/ext/treeview/bootstrap-treeview.css">
 </head>
 <body>
 
@@ -57,6 +58,7 @@
 
 
 <%@include file="../../common_script.jsp" %>
+<script src="/static/bootstrap/ext/treeview/bootstrap-treeview.js"></script>
 <script>
 
     var bt;
@@ -129,7 +131,10 @@
                     </shiro:hasPermission>
                     <shiro:hasPermission name="role:delete">
                         opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"deleteRole(\'" + row.id + "\')\">删除</a>";
+                        opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"deleteRole(\'" + row.id + "\')\">删除</a>";
                     </shiro:hasPermission>
+                    opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"setRolePermission(\'" + row.id + "\')\">权限设置</a>";
+
                     return opts;
                 }
                 }
@@ -248,6 +253,17 @@
                         }, null);
                     }
                 });
+            }
+        });
+    }
+
+    function setRolePermission(roleId){
+        var dialog = $.dialog({
+            title: '',
+            content: 'url:/role/permission/'+roleId,
+            columnClass:'medium',
+            onContentReady:function(){
+
             }
         });
     }

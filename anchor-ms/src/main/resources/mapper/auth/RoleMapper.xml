@@ -4,7 +4,7 @@
 <mapper namespace="com.anchor.ms.auth.mapper.RoleMapper">
 
 	<sql id="roleColumns">
-            r.CODE as code,r.CREATE_TIME as createTime,r.CREATOR_ID as creatorId,r.ID as id,r.NAME as name,r.STATE as state,r.UPDATE_TIME as updateTime
+            r.CODE as code,r.CREATE_TIME as createTime,r.CREATOR_ID as creatorId,r.ID as id,r.NAME as name,r.STATUS as status,r.UPDATE_TIME as updateTime
 	</sql>
 
 	<!-- 修改 -->
@@ -27,8 +27,8 @@
 			<if test="name != null">
 				NAME = #{ name },
 			</if>
-			<if test="state != null">
-				STATE = #{ state },
+			<if test="status != null">
+				STATUS = #{ status },
 			</if>
 			<if test="updateTime != null">
 				UPDATE_TIME = now(),
@@ -41,10 +41,10 @@
 
 	<insert id="insert" parameterType="role"    >
 		INSERT INTO SYS_ROLE(
-		CODE,CREATE_TIME,CREATOR_ID,NAME,STATE,UPDATE_TIME
+		CODE,CREATE_TIME,CREATOR_ID,NAME,STATUS,UPDATE_TIME
 		)
 		VALUES(
-		#{ code } ,  now() ,  #{ creatorId } ,   #{ name } ,  #{ state } ,  now()
+		#{ code } ,  now() ,  #{ creatorId } ,   #{ name } ,  #{ status } ,  now()
 		)
 	</insert>
 

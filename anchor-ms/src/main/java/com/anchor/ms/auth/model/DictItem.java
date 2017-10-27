@@ -42,10 +42,10 @@ public class DictItem extends BaseModel {
     public String getKey(){
         return this.key;
     }
-    public void setState(String state){
+    public void setStatus(String state){
         this.state = state;
     }
-    public String getState(){
+    public String getStatus(){
         return this.state;
     }
     public void setText(String text){

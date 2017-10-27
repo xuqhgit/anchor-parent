@@ -14,9 +14,9 @@ import java.util.List;
  */
 public class PermissionTree extends Permission{
     private boolean expandAble = true;
-    private List<Permission> child = new LinkedList<>();
+    private List<PermissionTree> child = new LinkedList<>();
 
-    public boolean isExpandAble() {
+    public boolean getExpandAble() {
         return expandAble;
     }
 
@@ -24,11 +24,11 @@ public class PermissionTree extends Permission{
         this.expandAble = expandAble;
     }
 
-    public List<Permission> getChild() {
+    public List<PermissionTree> getChild() {
         return child;
     }
 
-    public void setChild(List<Permission> child) {
+    public void setChild(List<PermissionTree> child) {
         this.child = child;
     }
 }

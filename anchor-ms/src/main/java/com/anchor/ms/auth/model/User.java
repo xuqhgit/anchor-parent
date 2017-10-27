@@ -52,7 +52,7 @@ public class User extends BaseModel {
     /**
      * 状态
      */
-    private Integer state;
+    private String status;
 
 
     public User(){
@@ -102,11 +102,11 @@ public class User extends BaseModel {
         return this.username;
     }
 
-    public Integer getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(Integer state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

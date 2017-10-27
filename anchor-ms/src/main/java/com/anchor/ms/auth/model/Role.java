@@ -24,7 +24,7 @@ public class Role extends BaseModel {
     /**
      * 角色状态 0无效 1 有效
      */
-    private String state;
+    private String status;
 
     static {
         SortFieldConvertUtil.setSortField("state","state");
@@ -42,10 +42,12 @@ public class Role extends BaseModel {
     public String getName(){
         return this.name;
     }
-    public void setState(String state){
-        this.state = state;
+
+    public String getStatus() {
+        return status;
     }
-    public String getState(){
-        return this.state;
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

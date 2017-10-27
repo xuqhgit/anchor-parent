@@ -48,6 +48,36 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission,Long> impl
 	}
 
 
+	@Override
+	public List<PermissionTree> findPermissionTreeAll(QueryPage<Permission> queryPage) {
+		List<PermissionTree> list = permissionMapper.getPermissionTree(queryPage);
+		List<PermissionTree> resultList = new LinkedList<>();
+		Map<Long,List<PermissionTree>> map = new HashMap<>((int)Math.ceil(list.size()/0.75)+1);
+		list.stream().forEach(p->{
+			List<PermissionTree> child = map.get(p.getId());
+			if(p.getExpandAble()&&child==null){
+				child = p.getChild();
+				map.put(p.getId(),child);
+			}
+			if(p.getChild().size()==0&&CollectionUtils.isNotEmpty(child)){
+				p.setChild(child);
+			}
+			if(p.getPid()==null){
+				resultList.add(p);
+			}
+			else{
+				List<PermissionTree> parentChild = map.get(p.getPid());
+				if(parentChild==null){
+					parentChild = new LinkedList<>();
+					map.put(p.getPid(), parentChild);
+				}
+				parentChild.add(p);
+			}
+
+		});
+		return resultList;
+	}
+
 	public List<Menu> findMenu(Long userId) {
 		List<Permission> list = findPermissionByUserId(userId);
 		List<Menu> menuList = new LinkedList<>();

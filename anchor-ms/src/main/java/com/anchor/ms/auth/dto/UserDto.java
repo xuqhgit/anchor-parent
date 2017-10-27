@@ -55,11 +55,11 @@ public class UserDto {
         return this.name;
     }
 
-    public int getState() {
+    public int getStatus() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setStatus(int state) {
         this.state = state;
     }
 

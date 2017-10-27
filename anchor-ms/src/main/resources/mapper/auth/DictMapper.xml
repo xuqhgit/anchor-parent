@@ -4,7 +4,7 @@
 <mapper namespace="com.anchor.ms.auth.mapper.DictMapper">
 
 	<sql id="dictColumns">
-        dict.CODE as code,dict.CREATE_TIME as createTime,dict.CREATOR_ID as creatorId,dict.ID as id,dict.NAME as name,dict.STATE as state,dict.UPDATE_TIME as updateTime
+        dict.CODE as code,dict.CREATE_TIME as createTime,dict.CREATOR_ID as creatorId,dict.ID as id,dict.NAME as name,dict.STATUS as status,dict.UPDATE_TIME as updateTime
 	</sql>
 
 	<!-- 修改 -->
@@ -27,8 +27,8 @@
 			<if test="name != null">
 				NAME = #{ name },
 			</if>
-			<if test="state != null">
-				STATE = #{ state },
+			<if test="status != null">
+				STATUS = #{ status },
 			</if>
 			<if test="updateTime != null">
 				UPDATE_TIME = #{ updateTime },
@@ -41,10 +41,10 @@
 
 	<insert id="insert" parameterType="dict">
 		INSERT INTO SYS_DICT(
-			CODE,CREATE_TIME,CREATOR_ID,ID,NAME,STATE,UPDATE_TIME
+			CODE,CREATE_TIME,CREATOR_ID,ID,NAME,STATUS,UPDATE_TIME
 		)
 		VALUES(
-			#{ code },#{ createTime },#{ creatorId },#{ id },#{ name },#{ state },#{ updateTime }
+			#{ code },#{ createTime },#{ creatorId },#{ id },#{ name },#{ status },#{ updateTime }
 		)
 	</insert>
 

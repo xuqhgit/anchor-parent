@@ -26,4 +26,5 @@ public interface IPermissionService extends BaseService<Permission,Long> {
 
     public List<PermissionTree> findPermissionTree(QueryPage<Permission> queryPage);
 
+    public List<PermissionTree> findPermissionTreeAll(QueryPage<Permission> queryPage);
 }

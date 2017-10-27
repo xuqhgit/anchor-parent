@@ -38,10 +38,10 @@ public class Dict extends BaseModel {
     public String getName(){
         return this.name;
     }
-    public void setState(String state){
+    public void setStatus(String state){
         this.state = state;
     }
-    public String getState(){
+    public String getStatus(){
         return this.state;
     }
 }

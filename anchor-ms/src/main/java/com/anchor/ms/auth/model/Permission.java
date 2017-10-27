@@ -61,7 +61,7 @@ public class Permission extends BaseModel {
     /**
      * 权限状态 0 无效 1有效
      */
-    private String state;
+    private String status;
 
     /**
      * 权限类型 0 为菜单 1 为功能
@@ -125,12 +125,12 @@ public class Permission extends BaseModel {
         return this.rank;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public String getStatus() {
+        return status;
     }
 
-    public String getState() {
-        return this.state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public void setType(String type) {

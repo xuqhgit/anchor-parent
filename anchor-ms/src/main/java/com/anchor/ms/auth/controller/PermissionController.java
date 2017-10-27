@@ -58,7 +58,7 @@ public class PermissionController extends BaseController{
     public Result add(Permission permission){
         try{
             permission.setCreatorId(TokenManager.getToken().getId());
-            permission.setState("1");
+            permission.setStatus("1");
             permissionService.insert(permission);
         }catch (Exception e){
             return new Result().error("添加失败：" + e.getMessage());
@@ -131,6 +131,26 @@ public class PermissionController extends BaseController{
         try{
             queryPage.setT(permission);
             List<PermissionTree> list = permissionService.findPermissionTree(queryPage);
+            ResultGrid resultGrid = new ResultGrid<Permission>();
+            resultGrid.setRows(list);
+            resultGrid.setTotal(list.size());
+            return resultGrid;
+        }catch (Exception e){
+            return new Result().error("获取列表失败：" + e.getMessage());
+        }
+    }
+
+    @RequestMapping(value="tree")
+    @ResponseBody
+    public Result tree(){
+        try{
+            QueryPage<Permission> queryPage = new QueryPage<>();
+            Permission permission = new Permission();
+            queryPage.setT(permission);
+            queryPage.setSortOrder("asc");
+            queryPage.setSort("rank");
+            permission.setStatus("1");
+            List<PermissionTree> list = permissionService.findPermissionTreeAll(queryPage);
             ResultGrid resultGrid = new ResultGrid<Permission>();
             resultGrid.setRows(list);
             resultGrid.setTotal(list.size());

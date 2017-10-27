@@ -4,7 +4,7 @@
 <mapper namespace="com.anchor.ms.auth.mapper.DictItemMapper">
 
 	<sql id="dictItemColumns">
-        dictItem.CREATE_TIME as createTime,dictItem.CREATOR_ID as creatorId,dictItem.DICT_ID as dictId,dictItem.ID as id,dictItem.KEY as key,dictItem.STATE as state,dictItem.TEXT as text,dictItem.UPDATE_TIME as updateTime
+        dictItem.CREATE_TIME as createTime,dictItem.CREATOR_ID as creatorId,dictItem.DICT_ID as dictId,dictItem.ID as id,dictItem.KEY as key,dictItem.STATUS as status,dictItem.TEXT as text,dictItem.UPDATE_TIME as updateTime
 	</sql>
 
 	<!-- 修改 -->
@@ -27,8 +27,8 @@
 			<if test="key != null">
 				KEY = #{ key },
 			</if>
-			<if test="state != null">
-				STATE = #{ state },
+			<if test="status != null">
+				STATUS = #{ status },
 			</if>
 			<if test="text != null">
 				TEXT = #{ text },
@@ -44,10 +44,10 @@
 
 	<insert id="insert" parameterType="dictItem">
 		INSERT INTO SYS_DICT_ITEM(
-			CREATE_TIME,CREATOR_ID,DICT_ID,ID,KEY,STATE,TEXT,UPDATE_TIME
+			CREATE_TIME,CREATOR_ID,DICT_ID,ID,KEY,STATUS,TEXT,UPDATE_TIME
 		)
 		VALUES(
-			#{ createTime },#{ creatorId },#{ dictId },#{ id },#{ key },#{ state },#{ text },#{ updateTime }
+			#{ createTime },#{ creatorId },#{ dictId },#{ id },#{ key },#{ status },#{ text },#{ updateTime }
 		)
 	</insert>
 

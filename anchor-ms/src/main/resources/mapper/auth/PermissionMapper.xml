@@ -6,7 +6,7 @@
 	<sql id="permissionColumns">
         p.CODE as code,p.CREATE_TIME as createTime,p.CREATOR_ID as creatorId,
         p.ID as id,p.NAME as name,p.PID as pid,p.RANK as rank,
-        p.STATE as state,p.TYPE as type,p.UPDATE_TIME as updateTime,
+        p.STATUS as status,p.TYPE as type,p.UPDATE_TIME as updateTime,
         p.URL as url,p.icon as icon
 	</sql>
 
@@ -36,8 +36,8 @@
 			<if test="rank != null">
 				RANK = #{ rank },
 			</if>
-			<if test="state != null">
-				STATE = #{ state },
+			<if test="status != null">
+				STATUS = #{ status },
 			</if>
 			<if test="type != null">
 				TYPE = #{ type },
@@ -59,10 +59,10 @@
 
 	<insert id="insert" parameterType="permission">
 		INSERT INTO SYS_PERMISSION(
-			CODE,CREATE_TIME,CREATOR_ID,NAME,PID,RANK,STATE,TYPE,UPDATE_TIME,URL
+			CODE,CREATE_TIME,CREATOR_ID,NAME,PID,RANK,STATUS,TYPE,UPDATE_TIME,URL
 		)
 		VALUES(
-			#{ code },now(),#{ creatorId },#{ name },#{ pid },#{ rank },#{ state },#{ type },now(),#{ url }
+			#{ code },now(),#{ creatorId },#{ name },#{ pid },#{ rank },#{ status },#{ type },now(),#{ url }
 		)
 	</insert>
 
@@ -100,7 +100,7 @@
 		join SYS_ROLE_PERMISSION rp on rp.PERMISSION_ID = p.id
 		join SYS_ROLE r on r.ID = rp.ROLE_id
 		join SYS_USER_ROLE ur on r.ID =ur.ROLE_ID
-		where ur.USER_ID=#{userId} and p.state='1' and r.state='1'
+		where ur.USER_ID=#{userId} and p.status='1' and r.status='1'
 		order by p.RANK asc
 	</select>
 	<!-- 获取列表 -->
@@ -111,7 +111,7 @@
 		join SYS_ROLE_PERMISSION rp on rp.PERMISSION_ID = p.id
 		join SYS_ROLE r on r.ID = rp.ROLE_id
 		join SYS_USER_ROLE ur on r.ID =ur.ROLE_ID
-		where ur.USER_ID=#{userId} and p.state='1' and r.state='1'
+		where ur.USER_ID=#{userId} and p.status='1' and r.status='1'
 		order by p.RANK asc
 	</select>
 
@@ -133,11 +133,15 @@
 			<if test="t.type!=null and t.type!=''">
 				and p.TYPE = #{t.type}
 			</if>
+			<if test="t.status!=null and t.status!=''">
+				and p.status = #{t.status}
+			</if>
 			<choose>
 				<when test="t.id!=null">
 					and p.pid = #{t.id}
 				</when>
-				<when test="(t.name!=null and t.name!='') or (t.code!=null and t.code!='') or (t.type!=null and t.type!='')">
+				<when test="(t.name!=null and t.name!='') or (t.code!=null and t.code!='')
+				or (t.type!=null and t.type!='')or (t.status!=null and t.status!='')">
 					and 1=1
 				</when>
 				<otherwise>
@@ -156,4 +160,7 @@
 			</otherwise>
 		</choose>
 	</select>
+
+
+
 </mapper>

@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 /**
  * @ClassName: RoleController
  * @Description: 
@@ -33,6 +35,7 @@ public class RoleController extends BaseController {
     public final static String ROLE_INDEX="auth/role/index";
     public final static String ROLE_ADD_INDEX="auth/role/add";
     public final static String ROLE_EDIT_INDEX="auth/role/edit";
+    public final static String ROLE_PERMISSION_INDEX="auth/role/permission";
 
     @Autowired
 	private IRoleService roleService;
@@ -56,7 +59,7 @@ public class RoleController extends BaseController {
     public Result add(Role role){
         try{
             role.setCreatorId(TokenManager.getToken().getId());
-            role.setState("0");
+            role.setStatus("0");
             roleService.insert(role);
         }catch (Exception e){
             return new Result().error("添加角色失败：" + e.getMessage());
@@ -73,11 +76,35 @@ public class RoleController extends BaseController {
         return modelAndView;
     }
 
+
+
     @RequestMapping(value="edit",method = RequestMethod.POST)
     @ResponseBody
     public Result edit(Role role){
         try{
             roleService.update(role);
+        }catch (Exception e){
+            new Result().error("修改角色失败：" + e.getMessage());
+        }
+        return new Result().success("修改角色成功");
+    }
+
+
+    @RequestMapping(value="permission/{id}",method = RequestMethod.GET)
+    public ModelAndView permission(@PathVariable("id") long id){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(ROLE_PERMISSION_INDEX);
+        modelAndView.getModelMap().put("role",roleService.get(id));
+        return modelAndView;
+    }
+
+
+
+    @RequestMapping(value="permission/{id}",method = RequestMethod.POST)
+    @ResponseBody
+    public Result permission(@PathVariable("id") long id,List<Long> permissionIds){
+        try{
+//            roleService.update(role);
         }catch (Exception e){
             new Result().error("修改角色失败：" + e.getMessage());
         }

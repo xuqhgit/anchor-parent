@@ -6,13 +6,13 @@
 	<sql id="userColumns">
         user.CREATE_TIME as createTime,user.CREATOR_ID as creatorId,user.EMAIL as email,
         user.ID as id,user.NAME as name,user.PASSWORD as password,user.PHONE as phone,
-        user.QQ as qq,user.UPDATE_TIME as updateTime,user.USERNAME as username,user.state as state
+        user.QQ as qq,user.UPDATE_TIME as updateTime,user.USERNAME as username,user.status as status
 	</sql>
 	<sql id="userDtoColumns">
 
 		DATE_FORMAT(user.CREATE_TIME,'%Y-%c-%d %H:%i:%s')  as createTime,user.CREATOR_ID as creatorId,
 		user.EMAIL as email,user.ID as id,
-		user.NAME as name,user.STATE as state,
+		user.NAME as name,user.STATUS as status,
 		user.PHONE as phone,user.QQ as qq,
 		DATE_FORMAT(user.UPDATE_TIME,'%Y-%c-%d %H:%i:%s') as updateTime,
 		user.USERNAME as username
