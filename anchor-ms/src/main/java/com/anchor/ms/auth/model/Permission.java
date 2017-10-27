@@ -3,98 +3,150 @@ package com.anchor.ms.auth.model;
 
 import com.anchor.core.common.base.BaseModel;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 /**
+ * @author xuqh
  * @ClassName: Permission
- * @Description: 
- * @author anchor
- * @date 2017-05-14 19:25:09
+ * @Description:
+ * @date 2017-10-26 09:33:23
  * @since version 1.0
  */
 public class Permission extends BaseModel {
-    
+    public static final String CODE_PATTERN = "^[a-zA-Z0-9_/-:]{1,32}$";
+    public static final String CODE_PATTERN_MESSAGE = "请输入格式为:字母、数字、下划线、减号、冒号，1至32位字符";
+    public static final String CODE_REQUIRED_MESSAGE = "必填项";
+    public static final String NAME_PATTERN = ".{1,16}$";
+    public static final String NAME_PATTERN_MESSAGE = "长度1至16位字符";
+    public static final String URL_PATTERN = "^[a-zA-Z0-9_/-//]{1,128}$";
+    public static final String URL_PATTERN_MESSAGE = "格式为a-zA-Z0-9_-/长度不能超过128个字符";
+    public static final String URL_REQUIRED_MESSAGE = "请填写URL";
+
     /**
      * 权限编码
      */
+    @NotNull
+    @Pattern(regexp = CODE_PATTERN, message = CODE_PATTERN_MESSAGE)
     private String code;
+
+
     /**
-     * 权限名称
+     * 创建者ID
      */
-    private String name;
-    /**
-     * 权限父ID
-     */
-    private Long pid;
-    /**
-     * 排序 默认为1
-     */
-    private int rank;
-    /**
-     * 权限状态 0 无效 1有效
-     */
-    private String state;
-    /**
-     * 权限类型 0 为菜单 1 为功能
-     */
-    private String type;
-    /**
-     * 权限路径
-     */
-    private String url;
+    private Long creatorId;
 
     /**
      * 图标
      */
     private String icon;
 
-    public void setCode(String code){
+
+    /**
+     * 权限名称
+     */
+    @Pattern(regexp = NAME_PATTERN, message = NAME_PATTERN_MESSAGE)
+    private String name;
+
+    /**
+     * 权限父ID
+     */
+    private Long pid;
+
+    /**
+     * 排序 默认为1
+     */
+    private int rank;
+
+    /**
+     * 权限状态 0 无效 1有效
+     */
+    private String state;
+
+    /**
+     * 权限类型 0 为菜单 1 为功能
+     */
+    private String type;
+
+
+    /**
+     * 权限路径
+     */
+    @NotNull
+    @Pattern(regexp = URL_PATTERN, message = URL_PATTERN_MESSAGE)
+    private String url;
+
+
+    public void setCode(String code) {
         this.code = code;
     }
-    public String getCode(){
+
+    public String getCode() {
         return this.code;
     }
-    public void setName(String name){
-        this.name = name;
-    }
-    public String getName(){
-        return this.name;
-    }
-    public void setPid(Long pid){
-        this.pid = pid;
-    }
-    public Long getPid(){
-        return this.pid;
-    }
-    public void setRank(int rank){
-        this.rank = rank;
-    }
-    public int getRank(){
-        return this.rank;
-    }
-    public void setState(String state){
-        this.state = state;
-    }
-    public String getState(){
-        return this.state;
-    }
-    public void setType(String type){
-        this.type = type;
-    }
-    public String getType(){
-        return this.type;
-    }
-    public void setUrl(String url){
-        this.url = url;
-    }
-    public String getUrl(){
-        return this.url;
+
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
     }
 
-    public String getIcon() {
-        return icon;
+    public Long getCreatorId() {
+        return this.creatorId;
     }
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getIcon() {
+        return this.icon;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setPid(Long pid) {
+        this.pid = pid;
+    }
+
+    public Long getPid() {
+        return this.pid;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    public int getRank() {
+        return this.rank;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getState() {
+        return this.state;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return this.url;
     }
 
     public enum PermissionType{

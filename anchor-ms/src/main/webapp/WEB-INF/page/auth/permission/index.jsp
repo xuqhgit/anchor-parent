@@ -1,22 +1,38 @@
 
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" import="com.anchor.ms.auth.model.Permission" language="java" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <html>
 <head>
-    <title>权限管理</title>
+    <title>管理</title>
     <%@include file="../../common.jsp" %>
+    <%--<link rel="stylesheet" href="/static/plugins/jquery-treegrid/css/jquery.treegrid.css">--%>
 </head>
 <body>
 
 
 <div class="container-fluid ">
-    <h3>权限列表</h3>
+    <h3>列表</h3>
 
     <div class="row-fluid ">
         <div class="span12 search-form">
             <form id="form" class="form-horizontal" role="form">
                 <div class="form-group">
-                            
+                
+                    <label class="col-sm-1 control-label" for="code">权限编码：</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" id="code" name="code" type="text" placeholder="权限编码"/>
+                    </div>
+                     
+                    <label class="col-sm-1 control-label" for="name">名称：</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" id="name" name="name" type="text" placeholder="名称"/>
+                    </div>
+                    
+                    <label class="col-sm-1 control-label" for="type">类型：</label>
+                    <div class="col-sm-2">
+                        <input class="form-control" id="type" name="type" type="text" placeholder="类型"/>
+                    </div>
+                   
                     <div class="col-sm-1">
                             <button type="button" class="btn btn-primary" id="search"
                                     data-toggle="button"><span class="glyphicon glyphicon-search"></span>搜索
@@ -27,19 +43,20 @@
         </div>
         <div class="span12">
             <div id="toolbar" class="btn-group">
-                <shiro:hasPermission name="permission:add:index">
+                <shiro:hasPermission name="auth:permission:add:index">
                     <a role="button" id="addPermission" class="btn btn-default">
-                        <i class="glyphicon glyphicon-plus"></i>添加权限
+                        <i class="glyphicon glyphicon-plus"></i>添加
                     </a>
                 </shiro:hasPermission>
 
-                <shiro:hasPermission name="permission:deleteBatch">
+                <shiro:hasPermission name="auth:permission:deleteBatch">
                     <a href="#addPermissionModal" role="button" class="btn btn-default" id="deleteBatchButton">
                         <i class="glyphicon glyphicon-trash"></i>批量删除
                     </a>
                 </shiro:hasPermission>
             </div>
-            <table id="permissionTable"></table>
+
+            <table id="permissionTree"></table>
         </div>
     </div>
 </div>
@@ -49,6 +66,8 @@
 
 
 <%@include file="../../common_script.jsp" %>
+<script src="/static/bootstrap/ext/table/ext/treegrid.js"></script>
+<%--<script src="/static/plugins/jquery-treegrid/js/jquery.treegrid.bootstrap3.js"></script>--%>
 <script>
 
     var bt;
@@ -56,7 +75,6 @@
     
         code:{
             rule:{
-                required:True,
                 codeValid:true 
             },
             message:{
@@ -65,82 +83,83 @@
         },
         name:{
             rule:{
-                required:true,
-                
+
+                nameValid:true 
             },
             message:{
-                required:'必填项'
+
             }
         },
-        type:{
+        url:{
             rule:{
-                required:true,
-                
+                required:false,
+                urlValid:true 
             },
             message:{
-                required:'必填项'
+
             }
-        },
+        }
     };
     $(function () {
     
     jQuery.validator.addMethod("codeValid", function(value,element) {
-        var p = /[a-zA-Z0-9_-:]{1,32}$/;
+        var p =/<%=Permission.CODE_PATTERN%>/;
         return p.test(value);
-    }, "请输入英文大小写、数字、下划线、减号、冒号1到32位字符");
+    }, "<%=Permission.CODE_PATTERN_MESSAGE%>");
+    jQuery.validator.addMethod("nameValid", function(value,element) {
+        var p =/<%=Permission.NAME_PATTERN%>/;
+        return p.test(value);
+    }, "<%=Permission.NAME_PATTERN_MESSAGE%>");
+    jQuery.validator.addMethod("urlValid", function(value,element) {
+        if(value){
+            var p =/<%=Permission.URL_PATTERN%>/;
+            return p.test(value);
+        }
+        return true;
+    }, "<%=Permission.URL_PATTERN_MESSAGE%>");
 
     var params = {
-            url: '/permission/grid',
+            url: '/permission/treegrid',
+            pagination: false,
+            treeView: true,
+            treeId: "id",
+            treeField: "name",
+            treeRootLevel: 1,
+            clickToSelect: true,
             queryParams: function (params) {
                 var temp = {
-                    pageSize: params.limit,   //页面大小
-                    pageNum: params.offset / params.limit + 1,  //页码
+                    pageSize: 13,   //页面大小
+                    pageNum: 0,  //页码
                     sort: params.sort,  //排序列名
                     sortOrder: params.order//排位命令（desc，asc）
                 };
                 return $.extend(temp, $('#form').serializeObject());
             },
             columns: [
-                {checkbox: true},
-                 
-                {title: '', field: 'code', align: 'center', width: '100'},
-                
-                {title: '', field: 'createTime', align: 'center', width: '100'},
-                
-                {title: '', field: 'icon', align: 'center', width: '100'},
-                
-                {title: '', field: 'id', align: 'center', width: '100'},
-                
-                {title: '', field: 'name', align: 'center', width: '100'},
-                
-                {title: '', field: 'rank', align: 'center', width: '100'},
-                
-                {title: '', field: 'state', align: 'center', width: '100'},
-                
-                {title: '', field: 'type', align: 'center', width: '100'},
-                
-                {title: '', field: 'updateTime', align: 'center', width: '100'},
-                
-                {title: '', field: 'url', align: 'center', width: '100'},
-                
-                {
-                    title: '操作', field: 'opt', align: 'center', width: '120', formatter: function (index, row) {
-                    var opts = "";
-                    <shiro:hasPermission name="permission:get">
-                        opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"detailPermission(\'" + row.id + "\')\">查看</a>|";
+                {title: '名称', field: 'name', align: 'left', width: '150',formatter:function(index,row){
+                    var opts = row['name']+"<div style='float:right;margin-right: 5px;'>";
+                    <shiro:hasPermission name="auth:permission:add:index">
+                    opts += " <a href='javascript:void(0);' class='glyphicon glyphicon-plus' onclick=\"addPermission(\'" + row.id + "\')\"></a> ";
                     </shiro:hasPermission>
-                    <shiro:hasPermission name="permission:edit:index">
-                        opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"editPermission(\'" + row.id + "\')\">编辑</a>|";
+                    <shiro:hasPermission name="auth:permission:edit:index">
+                    opts += " <a href='javascript:void(0);' class='glyphicon glyphicon-pencil' onclick=\"editPermission(\'" + row.id + "\',\'" + row.pid + "\')\"></a> ";
                     </shiro:hasPermission>
-                    <shiro:hasPermission name="permission:delete">
-                        opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"deletePermission(\'" + row.id + "\')\">删除</a>";
+                    <shiro:hasPermission name="auth:permission:delete">
+                    opts += " <a href='javascript:void(0);' class='glyphicon glyphicon-trash' onclick=\"deletePermission(\'" + row.id + "\')\"></a> ";
                     </shiro:hasPermission>
-                    return opts;
-                }
-                }
+                    opts+="</div>";
+                    return opts
+                }},
+                {title: '编码', field: 'code', align: 'left', width: '120'},
+                {title: '路径', field: 'url', align: 'left', width: '120'},
+                {title: '排序', field: 'rank', align: 'center', width: '50'},
+                {title: '图标', field: 'icon', align: 'left', width: '100',formatter:function(index,row){
+                    if(!row.icon)return "";
+                    return "<i class='"+row.icon+"'></i>"+row.icon;
+                }}
             ]
         };
-        bt = anchor.bootstrapTable("permissionTable", params);
+        bt = anchor.bootstrapTable("permissionTree", params);
         $('#search').click(function () {
             bt.bootstrapTable('refresh');
         });
@@ -153,35 +172,7 @@
         };
 
         $('#addPermission').click(function () {
-            var addFormId = "addPermissionForm";
-            var addDialog = $.dialog({
-                title: '',
-                content: 'url:/permission/add',
-                columnClass:'medium',
-                onContentReady:function(){
-                    var validateConfig =anchor.validFieldConfig(permissionValidConfig,anchor.formField(addFormId));
-                    validateConfig['id']= addFormId;
-                    var valid = anchor.validate(validateConfig);
-                    $('#savePermission').click(function () {
-                        if(valid.form()){
-                            <shiro:hasPermission name="auth:permission:add">
-                                anchor.request("/permission/add", $('#'+addFormId).serializeObject(), function (data) {
-                                if(data.code==1){
-                                    bt.bootstrapTable('refresh');
-                                    anchor.alert("保存成功");
-                                    addDialog.close();
-                                }
-                                else{
-                                    anchor.alert(data.message);
-                                }
-                            }, null);
-                            </shiro:hasPermission>
-
-                        }
-                    });
-                }
-
-            });
+            addPermission(null);
         });
 
         /**
@@ -234,7 +225,7 @@
     /**
      * 编辑
      */
-    function editPermission(permissionId) {
+    function editPermission(permissionId,pid) {
         var editFormId = "editPermissionForm";
         var dialog = $.dialog({
             title: '',
@@ -247,13 +238,55 @@
                 $('#editPermission').click(function () {
                     if(valid.form()){
                         anchor.request("/permission/edit", $('#'+editFormId).serializeObject(), function (data) {
-                            bt.bootstrapTable('refresh');
+                            if(pid&&pid!='null'){
+                                bt.bootstrapTable('loadNodeChild',pid);
+                            }
+                            else{
+                                bt.bootstrapTable('refresh');
+                            }
                             anchor.alert("保存成功");
                             dialog.close();
                         }, null);
                     }
                 });
             }
+        });
+    }
+    function addPermission(pid){
+        var url = "/permission/add"+(pid?"?pid="+pid:"");
+        var addFormId = "addPermissionForm";
+        var addDialog = $.dialog({
+            title: '',
+            content: 'url:'+url,
+            columnClass:'medium',
+            onContentReady:function(){
+                var validateConfig =anchor.validFieldConfig(permissionValidConfig,anchor.formField(addFormId));
+                validateConfig['id']= addFormId;
+                var valid = anchor.validate(validateConfig);
+                $('#savePermission').click(function () {
+                    if(valid.form()){
+                        <shiro:hasPermission name="auth:permission:add">
+                        anchor.request("/permission/add", $('#'+addFormId).serializeObject(), function (data) {
+                            if(data.code==1){
+                                if(!pid){
+                                    bt.bootstrapTable('refresh');
+                                }
+                                else{
+                                    bt.bootstrapTable('loadNodeChild',pid);
+                                }
+                                anchor.alert("保存成功");
+                                addDialog.close();
+                            }
+                            else{
+                                anchor.alert(data.message);
+                            }
+                        }, null);
+                        </shiro:hasPermission>
+
+                    }
+                });
+            }
+
         });
     }
 </script>

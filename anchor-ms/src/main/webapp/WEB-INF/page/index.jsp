@@ -90,24 +90,7 @@
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu">
         <li class="header">HEADER</li>
-        <!-- Optionally, you can add icons to the links -->
-        <%--<li class="active"><a href="#"><i class="fa fa-link"></i> <span>Link</span></a></li>--%>
-        <%--<li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>--%>
-        <li class="treeview">
-          <a href="#"><i class="fa fa-link"></i> <span>系统管理</span> <i class="fa fa-angle-left pull-right"></i></a>
-          <ul class="treeview-menu">
-            <li><a href="/user" class="T_menuItem"><i class="fa fa-circle-o"></i>用户管理</a></li>
-            <li><a href="/role" class="T_menuItem"><i class="fa fa-circle-o"></i>角色管理</a></li>
-            <li><a href="/permission" class="T_menuItem"><i class="fa fa-circle-o"></i>权限管理</a></li>
-          </ul>
-        </li>
-        <%--<li class="treeview">--%>
-          <%--<a href="#"><i class="fa fa-link"></i> <span>Multilevel</span> <i class="fa fa-angle-left pull-right"></i></a>--%>
-          <%--<ul class="treeview-menu">--%>
-            <%--<li><a href="http://www.baidu.com" class="T_menuItem">百度</a></li>--%>
-          <%--</ul>--%>
-        <%--</li>--%>
-      <%--</ul>--%>
+      </ul>
 
 
       <!-- /.sidebar-menu -->
@@ -159,46 +142,5 @@
 <!-- ./wrapper -->
 <%@include file="common_script.jsp"%>
 <script src="/static/admin/js/contabs.js"></script>
-<script>
-  $(function(){
-    anchor.request("/permission/menu",null,function(data){
-      if(data.code==1){
-        tree({'data':data.data});
-      }
-    });
-
-    function tree(options){
-      var DEFAULT_CONFIG={
-        menuIcon:'fa-navicon',
-        urlIcon:'fa-circle-o'
-      };
-      var data = options.data;
-      var lis = "";
-      data.forEach(function(row){
-        lis +="<li class='treeview'>"+createTree(row)+"</li>"
-
-      });
-      $(".sidebar-menu").append(lis);
-      function createTree(d){
-        var url = '#'|d.url;
-        var name = d.name;
-        var child = d.child;
-        var menuIcon = DEFAULT_CONFIG[url=='#'?'fa-navicon':'fa-circle-o']|d.icon;
-        var str = "<a href='"+url+"'><i class='fa "+menuIcon+"'></i> <span>"+name+"</span>"+(child&&child.length>0?"<i class='fa fa-angle-left pull-right'></i>":"")+" </a>";
-        if(child&&child.length>0){
-          str +="<ul class='treeview-menu'>";
-          child.forEach(function(r){
-            str += createTree(r);
-          });
-          str +='</ul>';
-        }
-        return str;
-      }
-    }
-
-  });
-
-
-</script>
 </body>
 </html>

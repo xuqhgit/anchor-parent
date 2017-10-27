@@ -1,8 +1,10 @@
 package com.anchor.ms.auth.service;
 
 import com.anchor.core.common.base.BaseService;
+import com.anchor.core.common.query.QueryPage;
 import com.anchor.ms.auth.dto.Menu;
 import com.anchor.ms.auth.model.Permission;
+import com.anchor.ms.auth.model.PermissionTree;
 
 import java.util.List;
 import java.util.Set;
@@ -21,5 +23,7 @@ public interface IPermissionService extends BaseService<Permission,Long> {
     public List<Permission> findPermissionByUserId(Long userId);
 
     public List<Menu> findMenu(Long userId);
+
+    public List<PermissionTree> findPermissionTree(QueryPage<Permission> queryPage);
 
 }

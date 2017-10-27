@@ -2,7 +2,9 @@ package com.anchor.ms.auth.service.impl;
 
 import com.anchor.core.common.base.BaseMapper;
 import com.anchor.core.common.base.BaseServiceImpl;
+import com.anchor.core.common.query.QueryPage;
 import com.anchor.ms.auth.dto.Menu;
+import com.anchor.ms.auth.model.PermissionTree;
 import com.anchor.ms.auth.service.IPermissionService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -33,12 +35,18 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission,Long> impl
 	}
 
 	public Set<String> findPermissionCodeByUserId(Long userId) {
-		return null;
+		return permissionMapper.getPermissionCodeByUserId(userId);
 	}
 
 	public List<Permission> findPermissionByUserId(Long userId) {
 		return permissionMapper.getPermissionByUserId(userId);
 	}
+
+	@Override
+	public List<PermissionTree> findPermissionTree(QueryPage<Permission> queryPage) {
+		return permissionMapper.getPermissionTree(queryPage);
+	}
+
 
 	public List<Menu> findMenu(Long userId) {
 		List<Permission> list = findPermissionByUserId(userId);
@@ -48,12 +56,22 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission,Long> impl
 		list.stream().forEach(p->{
 			if(Permission.PermissionType.menu.getCode().equals(p.getType())){
 				Menu menu = permissin2Menu(p);
-				menuList.add(menu);
+				if(p.getPid()==null)menuList.add(menu);
 				if(p.getPid()!=null){
-					List<Menu> pList = map.putIfAbsent(p.getPid(),new LinkedList<>());
+
+					List<Menu> pList = map.get(p.getPid());
+					if(pList==null){
+						pList = new LinkedList<>();
+						map.put(p.getPid(),pList);
+					}
 					pList.add(menu);
 				}
-				menu.setChild(map.putIfAbsent(p.getId(), menu.getChild()));
+				List<Menu> mList = map.get(p.getId());
+				if(mList==null){
+					mList =  menu.getChild();
+					map.put(p.getId(),mList);
+				}
+				menu.setChild(mList);
 			}
 		});
 		return menuList;
@@ -65,4 +83,6 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission,Long> impl
 		menu.setUrl(permission.getUrl());
 		return menu;
 	}
+
+
 }

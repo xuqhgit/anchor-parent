@@ -1,4 +1,40 @@
 $(function() {
+    anchor.request("/permission/menu",null,function(data){
+        if(data.code==1){
+            tree({'data':data.data});
+        }
+    });
+
+    function tree(options){
+        var DEFAULT_CONFIG={
+            menuIcon:'fa-navicon',
+            urlIcon:'fa-circle-o'
+        };
+        var data = options.data;
+        var lis = "";
+        data.forEach(function(row){
+            lis +="<li class='treeview'>"+createTree(row)+"</li>"
+
+        });
+        $(".sidebar-menu").append(lis);
+        menuEvents();
+        function createTree(d){
+            var url = d.url||'#';
+            var name = d.text;
+            var child = d.child;
+            var menuIcon = d.icon||DEFAULT_CONFIG[url=='#'?'menuIcon':'urlIcon'];
+            var className = url=="#"?"":"T_menuItem";
+            var str = "<a href='"+url+"' class='"+className+"'><i class='fa "+menuIcon+"'></i> <span>"+name+"</span>"+(child&&child.length>0?"<i class='fa fa-angle-left pull-right'></i>":"")+" </a>";
+            if(child&&child.length>0){
+                str +="<ul class='treeview-menu'>";
+                child.forEach(function(r){
+                    str += "<li>"+createTree(r)+"</li>";
+                });
+                str +='</ul>';
+            }
+            return str;
+        }
+    }
     function f(l) {
         var k = 0;
         $(l).each(function() {
@@ -91,11 +127,7 @@ $(function() {
             }
         }
     }
-    $(".T_menuItem").each(function(k) {
-        if (!$(this).attr("data-index")) {
-            $(this).attr("data-index", k)
-        }
-    });
+
     function c() {
         var o = $(this).attr("href"),
         m = $(this).data("index"),
@@ -131,7 +163,7 @@ $(function() {
         }
         return false
     }
-    $(".T_menuItem").on("click", c);
+
     function h() {
         var m = $(this).parents(".T_menuTab").data("id");
         var l = $(this).parents(".T_menuTab").width();
@@ -189,7 +221,7 @@ $(function() {
         }
         return false
     }
-    $(".T_menuTabs").on("click", ".T_menuTab i", h);
+
     function i() {
         $(".page-tabs-content").children("[data-id]").not(":first").not(".active").each(function() {
             $('.T_iframe[data-id="' + $(this).data("id") + '"]').remove();
@@ -197,11 +229,11 @@ $(function() {
         });
         $(".page-tabs-content").css("margin-left", "0")
     }
-    $(".T_tabCloseOther").on("click", i);
+
     function j() {
         g($(".T_menuTab.active"))
     }
-    $(".T_tabShowActive").on("click", j);
+
     function e() {
         if (!$(this).hasClass("active")) {
             var k = $(this).data("id");
@@ -215,24 +247,37 @@ $(function() {
             g(this)
         }
     }
-    $(".T_menuTabs").on("click", ".T_menuTab", e);
+
     function d() {
         var l = $('.T_iframe[data-id="' + $(this).data("id") + '"]');
         var k = l.attr("src")
     }
-    $(".T_menuTabs").on("dblclick", ".T_menuTab", d);
-    $(".T_tabLeft").on("click", a);
-    $(".T_tabRight").on("click", b);
-    $(".T_tabCloseAll").on("click",
-    function() {
-        $(".page-tabs-content").children("[data-id]").not(":first").each(function() {
-            $('.T_iframe[data-id="' + $(this).data("id") + '"]').remove();
-            $(this).remove()
-        });
-        $(".page-tabs-content").children("[data-id]:first").each(function() {
-            $('.T_iframe[data-id="' + $(this).data("id") + '"]').show();
-            $(this).addClass("active")
-        });
-        $(".page-tabs-content").css("margin-left", "0")
-    })
+    $(".T_menuItem").each(function(k) {
+        if (!$(this).attr("data-index")) {
+            $(this).attr("data-index", k)
+        }
+    });
+    function menuEvents(){
+        $(".T_menuItem").on("click", c);
+        $(".T_menuTabs").on("click", ".T_menuTab i", h);
+        $(".T_tabCloseOther").on("click", i);
+        $(".T_tabShowActive").on("click", j);
+        $(".T_menuTabs").on("click", ".T_menuTab", e);
+        $(".T_menuTabs").on("dblclick", ".T_menuTab", d);
+        $(".T_tabLeft").on("click", a);
+        $(".T_tabRight").on("click", b);
+        $(".T_tabCloseAll").on("click",
+            function() {
+                $(".page-tabs-content").children("[data-id]").not(":first").each(function() {
+                    $('.T_iframe[data-id="' + $(this).data("id") + '"]').remove();
+                    $(this).remove()
+                });
+                $(".page-tabs-content").children("[data-id]:first").each(function() {
+                    $('.T_iframe[data-id="' + $(this).data("id") + '"]').show();
+                    $(this).addClass("active")
+                });
+                $(".page-tabs-content").css("margin-left", "0")
+            })
+    }
+
 });
