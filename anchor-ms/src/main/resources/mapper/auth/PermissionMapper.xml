@@ -141,15 +141,13 @@
 					and p.pid = #{t.id}
 				</when>
 				<when test="(t.name!=null and t.name!='') or (t.code!=null and t.code!='')
-				or (t.type!=null and t.type!='')or (t.status!=null and t.status!='')">
-					and 1=1
+				or (t.type!=null and t.type!='') or (t.status!=null and t.status!='') ">
+
 				</when>
 				<otherwise>
 					and p.pid is null
 				</otherwise>
 			</choose>
-
-
 		</where>
 		<choose>
 			<when test="sort!=null and sortOrder!=null">
@@ -160,7 +158,24 @@
 			</otherwise>
 		</choose>
 	</select>
-
+	<!-- 获取列表 -->
+	<select id="getRolePermissionTree"  resultType="permissionTree">
+		select
+		<include refid="permissionColumns" />
+		,IF(p.TYPE='0', true,false) as expandAble
+		,IF(rp.role_id is null, false,true) as checked
+		from SYS_PERMISSION p
+		left join  SYS_ROLE_PERMISSION rp on rp.role_id = #{t.roleId} and rp.PERMISSION_ID = p.id
+		where  p.status = '1'
+		<choose>
+			<when test="sort!=null and sortOrder!=null">
+				order by p.${sort} ${sortOrder}
+			</when>
+			<otherwise>
+				order by p.CREATE_TIME DESC
+			</otherwise>
+		</choose>
+	</select>
 
 
 </mapper>

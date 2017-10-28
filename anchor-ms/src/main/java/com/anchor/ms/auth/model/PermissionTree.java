@@ -14,9 +14,21 @@ import java.util.List;
  */
 public class PermissionTree extends Permission{
     private boolean expandAble = true;
+    private boolean checked = false;
     private List<PermissionTree> child = new LinkedList<>();
 
-    public boolean getExpandAble() {
+
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
+
+    public boolean isExpandAble() {
+
         return expandAble;
     }
 

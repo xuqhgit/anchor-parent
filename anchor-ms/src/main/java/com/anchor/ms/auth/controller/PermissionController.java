@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @ClassName: PermissionController
@@ -130,6 +132,8 @@ public class PermissionController extends BaseController{
     public Result treegrid(QueryPage<Permission> queryPage,Permission permission){
         try{
             queryPage.setT(permission);
+            queryPage.setSort("rank");
+            queryPage.setSortOrder("asc");
             List<PermissionTree> list = permissionService.findPermissionTree(queryPage);
             ResultGrid resultGrid = new ResultGrid<Permission>();
             resultGrid.setRows(list);
@@ -140,22 +144,24 @@ public class PermissionController extends BaseController{
         }
     }
 
-    @RequestMapping(value="tree")
+    @RequestMapping(value="tree/{roleId}")
     @ResponseBody
-    public Result tree(){
+    public Result tree(QueryPage<Map> queryPage,@PathVariable Long roleId){
         try{
-            QueryPage<Permission> queryPage = new QueryPage<>();
-            Permission permission = new Permission();
-            queryPage.setT(permission);
+
+            Map<String,Object> map = new HashMap<>();
+            queryPage.setT(map);
             queryPage.setSortOrder("asc");
             queryPage.setSort("rank");
-            permission.setStatus("1");
+            map.put("state","1");
+            map.put("roleId",roleId);
             List<PermissionTree> list = permissionService.findPermissionTreeAll(queryPage);
             ResultGrid resultGrid = new ResultGrid<Permission>();
             resultGrid.setRows(list);
             resultGrid.setTotal(list.size());
             return resultGrid;
         }catch (Exception e){
+            e.printStackTrace();
             return new Result().error("获取列表失败：" + e.getMessage());
         }
     }

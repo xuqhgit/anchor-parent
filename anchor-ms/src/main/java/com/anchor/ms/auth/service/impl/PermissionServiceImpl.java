@@ -4,14 +4,13 @@ import com.anchor.core.common.base.BaseMapper;
 import com.anchor.core.common.base.BaseServiceImpl;
 import com.anchor.core.common.query.QueryPage;
 import com.anchor.ms.auth.dto.Menu;
+import com.anchor.ms.auth.mapper.PermissionMapper;
+import com.anchor.ms.auth.model.Permission;
 import com.anchor.ms.auth.model.PermissionTree;
 import com.anchor.ms.auth.service.IPermissionService;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import com.anchor.ms.auth.mapper.PermissionMapper;
-import com.anchor.ms.auth.model.Permission;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -49,13 +48,13 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission,Long> impl
 
 
 	@Override
-	public List<PermissionTree> findPermissionTreeAll(QueryPage<Permission> queryPage) {
-		List<PermissionTree> list = permissionMapper.getPermissionTree(queryPage);
+	public List<PermissionTree> findPermissionTreeAll(QueryPage<Map> queryPage) {
+		List<PermissionTree> list = permissionMapper.getRolePermissionTree(queryPage);
 		List<PermissionTree> resultList = new LinkedList<>();
 		Map<Long,List<PermissionTree>> map = new HashMap<>((int)Math.ceil(list.size()/0.75)+1);
 		list.stream().forEach(p->{
 			List<PermissionTree> child = map.get(p.getId());
-			if(p.getExpandAble()&&child==null){
+			if(p.isExpandAble()&&child==null){
 				child = p.getChild();
 				map.put(p.getId(),child);
 			}

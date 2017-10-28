@@ -7,6 +7,7 @@ import com.anchor.ms.auth.model.Permission;
 import com.anchor.ms.auth.model.PermissionTree;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -26,5 +27,5 @@ public interface IPermissionService extends BaseService<Permission,Long> {
 
     public List<PermissionTree> findPermissionTree(QueryPage<Permission> queryPage);
 
-    public List<PermissionTree> findPermissionTreeAll(QueryPage<Permission> queryPage);
+    public List<PermissionTree> findPermissionTreeAll(QueryPage<Map> queryPage);
 }

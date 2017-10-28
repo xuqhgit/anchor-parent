@@ -48,6 +48,18 @@
 		)
 	</insert>
 
+	<insert id="insertRolePermissionBatch">
+
+		INSERT INTO SYS_ROLE_PERMISSION(ROLE_ID,PERMISSION_ID,CREATE_TIME,CREATOR_ID)
+		VALUES
+		<foreach collection="permissionIds" item="permissionId" index="index" separator="," >
+			(#{ roleId } ,  #{permissionId},  now(),#{ creatorId })
+		</foreach>
+	</insert>
+	<delete id="deleteRolePermission">
+		delete from SYS_ROLE_PERMISSION where role_id = #{roleId}
+	</delete>
+
 
 	<!-- 根据主键获取 -->
 	<select id="get" parameterType="java.lang.Long" resultType="role">

@@ -8,6 +8,7 @@ import com.anchor.ms.auth.model.PermissionTree;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -23,5 +24,6 @@ public interface PermissionMapper extends BaseMapper<Permission,Long> {
     public List<Permission> getPermissionByUserId(@Param("userId") Long userId);
     public Set<String> getPermissionCodeByUserId(@Param("userId") Long userId);
     public List<PermissionTree> getPermissionTree(QueryPage<Permission> queryPage);
+    public List<PermissionTree> getRolePermissionTree(QueryPage<Map> queryPage);
 
 }

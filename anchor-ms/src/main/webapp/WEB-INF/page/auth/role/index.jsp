@@ -158,6 +158,7 @@
                 title: '',
                 content: 'url:/role/add',
                 columnClass:'medium',
+                draggable: true,
                 onContentReady:function(){
                     var validateConfig =anchor.validFieldConfig(roleValidConfig,anchor.formField(addFormId));
                     validateConfig['id']= addFormId;
@@ -215,6 +216,7 @@
             content: 'url:/role/edit/'+roleId,
             type:'blue',
             columnClass:'medium',
+            draggable: true,
             onContentReady:function(){
 
             }
@@ -240,6 +242,7 @@
             title: '',
             content: 'url:/role/edit/'+roleId,
             columnClass:'medium',
+            draggable: true,
             onContentReady:function(){
                 var validateConfig =anchor.validFieldConfig(roleValidConfig,anchor.formField(editFormId));
                 validateConfig['id']= editFormId;
@@ -259,9 +262,10 @@
 
     function setRolePermission(roleId){
         var dialog = $.dialog({
-            title: '',
+            title: '权限设置',
             content: 'url:/role/permission/'+roleId,
             columnClass:'medium',
+            draggable: true,
             onContentReady:function(){
 
             }

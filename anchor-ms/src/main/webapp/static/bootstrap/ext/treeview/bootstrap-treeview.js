@@ -274,6 +274,11 @@
 				node.selectable = true;
 			}
 
+			// if not provided set selectable default value
+			if (!node.hasOwnProperty('expandAble')) {
+				node.expandAble = true;
+			}
+
 			// where provided we should preserve states
 			node.state = node.state || {};
 
@@ -527,8 +532,9 @@
 
 			// Add expand, collapse or empty spacer icons
 			var classList = [];
-			if (node.nodes) {
+			if (node.nodes&&node.expandAble) {
 				classList.push('expand-icon');
+				
 				if (node.state.expanded) {
 					classList.push(_this.options.collapseIcon);
 				}

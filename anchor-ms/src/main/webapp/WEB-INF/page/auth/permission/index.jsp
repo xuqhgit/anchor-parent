@@ -153,7 +153,7 @@
                 {title: '编码', field: 'code', align: 'left', width: '120'},
                 {title: '路径', field: 'url', align: 'left', width: '120'},
                 {title: '排序', field: 'rank', align: 'center', width: '50'},
-                {title: '图标', field: 'icon', align: 'left', width: '100',formatter:function(index,row){
+                {title: '图标', field: 'icon', align: 'left', width: '80',formatter:function(index,row){
                     if(!row.icon)return "";
                     return "<i class='"+row.icon+"'></i>"+row.icon;
                 }}
@@ -206,6 +206,7 @@
             content: 'url:/permission/edit/'+permissionId,
             type:'blue',
             columnClass:'medium',
+            draggable: true,
             onContentReady:function(){
 
             }
@@ -231,6 +232,7 @@
             title: '',
             content: 'url:/permission/edit/'+permissionId,
             columnClass:'medium',
+            draggable: true,
             onContentReady:function(){
                 var validateConfig =anchor.validFieldConfig(permissionValidConfig,anchor.formField(editFormId));
                 validateConfig['id']= editFormId;
@@ -259,6 +261,7 @@
             title: '',
             content: 'url:'+url,
             columnClass:'medium',
+            draggable: true,
             onContentReady:function(){
                 var validateConfig =anchor.validFieldConfig(permissionValidConfig,anchor.formField(addFormId));
                 validateConfig['id']= addFormId;

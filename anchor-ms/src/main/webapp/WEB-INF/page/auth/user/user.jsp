@@ -161,6 +161,7 @@
                 title: '',
                 content: 'url:/user/add',
                 columnClass:'medium',
+                draggable: true,
                 onContentReady:function(){
                     var validateConfig =anchor.validFieldConfig(userValidConfig,anchor.formField(addFormId));
                     validateConfig['id']= addFormId;
