@@ -7,7 +7,7 @@
         p.CODE as code,p.CREATE_TIME as createTime,p.CREATOR_ID as creatorId,
         p.ID as id,p.NAME as name,p.PID as pid,p.RANK as rank,
         p.STATUS as status,p.TYPE as type,p.UPDATE_TIME as updateTime,
-        p.URL as url,p.icon as icon
+        p.URL as url,p.icon as icon,p.target_type as targetType
 	</sql>
 
 	<!-- 修改 -->
@@ -51,7 +51,9 @@
 			<if test="icon != null">
 				ICON = #{ icon },
 			</if>
-
+			<if test="targetType != null">
+				TARGET_TYPE = #{ targetType },
+			</if>
 		</set>
 		where ID = #{id}
 	</update>
@@ -59,10 +61,10 @@
 
 	<insert id="insert" parameterType="permission">
 		INSERT INTO SYS_PERMISSION(
-			CODE,CREATE_TIME,CREATOR_ID,NAME,PID,RANK,STATUS,TYPE,UPDATE_TIME,URL
+			CODE,CREATE_TIME,CREATOR_ID,NAME,PID,RANK,STATUS,TYPE,UPDATE_TIME,URL,TARGET_TYPE
 		)
 		VALUES(
-			#{ code },now(),#{ creatorId },#{ name },#{ pid },#{ rank },#{ status },#{ type },now(),#{ url }
+			#{ code },now(),#{ creatorId },#{ name },#{ pid },#{ rank },#{ status },#{ type },now(),#{ url },#{ targetType }
 		)
 	</insert>
 

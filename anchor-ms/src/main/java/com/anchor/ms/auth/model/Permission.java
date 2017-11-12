@@ -68,7 +68,10 @@ public class Permission extends BaseModel {
      */
     private String type;
 
-
+    /**
+     * 打开方式类型 href a标签属性默认在content iframe打开
+     */
+    private String targetType;
     /**
      * 权限路径
      */
@@ -147,6 +150,14 @@ public class Permission extends BaseModel {
 
     public String getUrl() {
         return this.url;
+    }
+
+    public String getTargetType() {
+        return targetType;
+    }
+
+    public void setTargetType(String targetType) {
+        this.targetType = targetType;
     }
 
     public enum PermissionType{
