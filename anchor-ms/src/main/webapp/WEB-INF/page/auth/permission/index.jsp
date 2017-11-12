@@ -153,6 +153,7 @@
                 {title: '编码', field: 'code', align: 'left', width: '120'},
                 {title: '路径', field: 'url', align: 'left', width: '120'},
                 {title: '排序', field: 'rank', align: 'center', width: '50'},
+                {title: 'Target', field: 'targetType', align: 'center', width: '50'},
                 {title: '图标', field: 'icon', align: 'left', width: '80',formatter:function(index,row){
                     if(!row.icon)return "";
                     return "<i class='"+row.icon+"'></i>"+row.icon;

@@ -39,11 +39,18 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-sm-3 control-label">Target：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="targetType" class="form-control " placeholder="">
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-sm-3 control-label">图标：</label>
                     <div class="col-sm-9">
                         <input type="text" name="icon" class="form-control " placeholder="">
                     </div>
                 </div>
+
             </div>
             <div class="box-footer">
                 <a id="savePermission" class="btn btn-info pull-right">保存</a>
