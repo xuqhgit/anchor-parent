@@ -108,8 +108,8 @@
             data.forEach(function(val,i){
                 if(val['hidden']==undefined)val.hidden = false;
                 val._index = index++;
-                if(val['expandAble']==undefined) val.expandAble = true;
                 if(val.child&&val.child.length>0){
+                    val.expandAble = true;
                     initData(val.child);
                 }
             });
@@ -145,6 +145,7 @@
             success: function (data) {
                 if(data.rows.length>0){
                     nodeData.child = data.rows;
+                    nodeData.expandAble=true;
                     initData(that.getData());
                     that.initSort();
                     that.initBody(true);
@@ -162,8 +163,6 @@
 
     //重写bootstrapTable的initPagination方法
     BootstrapTable.prototype.initPagination = function () {
-        //理论情况下，treegrid是不支持分页的，所以默认分页参数为false
-        this.options.pagination = false;
         //调用“父类”的“虚方法”
         _initPagination.apply(this, Array.prototype.slice.apply(arguments));
     };
@@ -326,6 +325,7 @@
                         if (that.options.treeView && column.field == that.options.treeField) {
                             indent = sprintf('<span style="margin-left: %spx;"></span>', layerCount * indentSize);
                             var expandFlag = item.child.length > 0?!item.child[0].hidden:false;
+                            console.info(item.expandAble);
                             icon = sprintf('<span class="tree-icon %s" data-id="%s" style="cursor: pointer; margin: 0px 5px;"></span>',
                                 item.expandAble?(expandFlag ? that.options.expandIcon : that.options.collapseIcon):"",item.id);
                         }
@@ -351,7 +351,8 @@
                     html.push('</td>');
                 }
                 html.push('</tr>');
-                if(val.child){
+                if(val.child&&val.child.length>0){
+                    val.expandAble =true;
                     val.child.forEach(function(cVal,cIndex){
                         createHtml(cVal,cIndex,layerCount+1);
                     })
@@ -434,26 +435,6 @@
             }
             else{
                 that.loadNodeChild(id);
-                // $.ajax({
-                //     url:that.options.url,
-                //     data: {"id":id},
-                //     dataType: "json",
-                //     type: "POST",
-                //     traditional: true,
-                //     success: function (data) {
-                //         if(data.rows.length>0){
-                //             nodeData.child = data.rows;
-                //             initData(that.getData());
-                //             that.initSort();
-                //             that.initBody(true);
-                //         }
-                //         else{
-                //             nodeData.expandAble=false;
-                //             $this.removeClass(that.options.collapseIcon);
-                //             $this.unbind();
-                //         }
-                //     }
-                // });
             }
         });
 

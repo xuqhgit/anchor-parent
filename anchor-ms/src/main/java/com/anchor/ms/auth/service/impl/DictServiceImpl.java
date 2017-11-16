@@ -13,13 +13,13 @@ import javax.annotation.Resource;
 
 /**
  * @ClassName: DictServiceImpl
- * @Description: 
- * @author anchor
- * @date 2017-05-14 19:25:09
+ * @Description: 字典
+ * @author xuqh
+ * @date 2017-11-13 18:10:30
  * @since version 1.0
  */
 @Service
-public class DictServiceImpl extends BaseServiceImpl<Dict,Long> implements IDictService {
+public class DictServiceImpl extends BaseServiceImpl<Dict,Long> implements IDictService{
 
 	@Autowired
 	private DictMapper dictMapper;

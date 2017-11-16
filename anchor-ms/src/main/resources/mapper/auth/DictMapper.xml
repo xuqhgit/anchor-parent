@@ -4,7 +4,7 @@
 <mapper namespace="com.anchor.ms.auth.mapper.DictMapper">
 
 	<sql id="dictColumns">
-        dict.CODE as code,dict.CREATE_TIME as createTime,dict.CREATOR_ID as creatorId,dict.ID as id,dict.NAME as name,dict.STATUS as status,dict.UPDATE_TIME as updateTime
+        d.CODE as code,d.CREATE_TIME as createTime,d.CREATOR_ID as creatorId,d.ID as id,d.NAME as name,d.STATUS as status,d.UPDATE_TIME as updateTime
 	</sql>
 
 	<!-- 修改 -->
@@ -39,26 +39,21 @@
 	</update>
 
 
-	<insert id="insert" parameterType="dict">
+	<insert id="insert" parameterType="dict" useGeneratedKeys="true" keyProperty="id"   >
 		INSERT INTO SYS_DICT(
 			CODE,CREATE_TIME,CREATOR_ID,ID,NAME,STATUS,UPDATE_TIME
 		)
 		VALUES(
-			#{ code },#{ createTime },#{ creatorId },#{ id },#{ name },#{ status },#{ updateTime }
+			  #{ code } ,  #{ createTime } ,  #{ creatorId } ,  #{ id } ,  #{ name } ,  #{ status } ,  now() 
 		)
 	</insert>
-
-
-	<delete id="delete" parameterType="java.lang.Long">
-			DELETE FROM SYS_DICT where id = #{id}
-	</delete>
 
 
 	<!-- 根据主键获取 -->
 	<select id="get" parameterType="java.lang.Long" resultType="dict">
 		SELECT
 		<include refid="dictColumns" />
-		FROM  SYS_DICT dict
+		FROM  SYS_DICT d
 		where id = #{ id }
 	</select>
 
@@ -66,13 +61,32 @@
 	<select id="getList"  resultType="dict">
 		select
 		<include refid="dictColumns" />
-		from SYS_DICT dict
+		from SYS_DICT d
 	</select>
 
-	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage" resultType="dict">
+	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage"  resultType="dict">
 		select
 		<include refid="dictColumns" />
-		from SYS_DICT dict
+		from SYS_DICT d
+        <where>
+
+			<if test="t.code!=null and t.code!=''">
+				and d.CODE=#{ t.code }
+			</if>
+			<if test="t.name!=null and t.name!=''">
+				and instr(d.NAME,#{ t.name })>0
+			</if>
+
+
+			</where>
+		<choose>
+			<when test="sort!=null and sortOrder!=null">
+				order by d.${sort} ${sortOrder}
+			</when>
+			<otherwise>
+				order by d.CREATE_TIME DESC
+			</otherwise>
+		</choose>
 	</select>
 
 </mapper>

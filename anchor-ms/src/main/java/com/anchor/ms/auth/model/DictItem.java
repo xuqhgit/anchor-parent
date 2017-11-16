@@ -3,55 +3,116 @@ package com.anchor.ms.auth.model;
 
 import com.anchor.core.common.base.BaseModel;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 /**
- * @ClassName: DickItem
- * @Description: 
- * @author anchor
- * @date 2017-05-14 19:25:09
+ * @author xuqh
+ * @ClassName: DictItem
+ * @Description: 字典元素
+ * @date 2017-11-13 18:10:30
  * @since version 1.0
  */
 public class DictItem extends BaseModel {
-    
+    public static final String KEY_PATTERN = "^[a-zA-Z0-9_/-]{1,32}";
+    public static final String KEY_PATTERN_MESSAGE = "只能包含数字、字母、下划线、减号长度不能超过32个字符";
+    public static final String KEY_REQUIRED_MESSAGE = "必填项";
+    public static final String TEXT_PATTERN = ".{1,32}";
+    public static final String TEXT_PATTERN_MESSAGE = "长度不超过32个字符";
+
+
+    /**
+     * 创建者ID
+     */
+    private Long creatorId;
+
     /**
      * 字典ID
      */
     private Long dictId;
+
+    /**
+     * 父元素ID
+     */
+    private Long pid;
+
     /**
      * 字典键
      */
-    private String key;
+    @NotNull
+    @Pattern(regexp = KEY_PATTERN, message = KEY_PATTERN_MESSAGE)
+    private String code;
+
     /**
      * 状态 1 有效 0 无效
      */
-    private String state;
+    private String status;
+
     /**
      * 字典文本
      */
+    @Pattern(regexp = TEXT_PATTERN, message = TEXT_PATTERN_MESSAGE)
     private String text;
 
-    
-    public void setDictId(Long dictId){
+    /**
+     * 字典排名
+     */
+    private int rank;
+
+
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
+    }
+
+    public Long getCreatorId() {
+        return this.creatorId;
+    }
+
+    public void setDictId(Long dictId) {
         this.dictId = dictId;
     }
-    public Long getDictId(){
+
+    public Long getDictId() {
         return this.dictId;
     }
-    public void setKey(String key){
-        this.key = key;
+
+    public String getCode() {
+        return code;
     }
-    public String getKey(){
-        return this.key;
+
+    public void setCode(String code) {
+        this.code = code;
     }
-    public void setStatus(String state){
-        this.state = state;
+
+    public void setStatus(String status) {
+        this.status = status;
     }
-    public String getStatus(){
-        return this.state;
+
+    public String getStatus() {
+        return this.status;
     }
-    public void setText(String text){
+
+    public void setText(String text) {
         this.text = text;
     }
-    public String getText(){
+
+    public String getText() {
         return this.text;
+    }
+
+    public Long getPid() {
+        return pid;
+    }
+
+    public void setPid(Long pid) {
+        this.pid = pid;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
     }
 }

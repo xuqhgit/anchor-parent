@@ -120,7 +120,6 @@
 
     var params = {
             url: '/permission/treegrid',
-            pagination: false,
             treeView: true,
             treeId: "id",
             treeField: "name",

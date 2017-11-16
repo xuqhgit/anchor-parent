@@ -5,6 +5,9 @@ import com.anchor.core.common.dto.Result;
 import com.anchor.core.common.dto.ResultGrid;
 import com.anchor.core.common.dto.ResultObject;
 import com.anchor.core.common.query.QueryPage;
+import com.anchor.ms.auth.model.DictItemTree;
+import com.anchor.ms.auth.model.Permission;
+import com.anchor.ms.auth.model.PermissionTree;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,26 +17,28 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.anchor.ms.auth.service.IDictService;
-import com.anchor.ms.auth.model.Dict;
+import com.anchor.ms.auth.service.IDictItemService;
+import com.anchor.ms.auth.model.DictItem;
+
+import java.util.List;
 
 /**
- * @ClassName: DictController
- * @Description: 字典
+ * @ClassName: DictItemController
+ * @Description: 字典元素
  * @author xuqh
  * @date 2017-11-13 18:10:30
  * @since version 1.0
  */
 @Controller
-@RequestMapping("dict")
-public class DictController extends BaseController{
+@RequestMapping("dictItem")
+public class DictItemController extends BaseController{
 
     @Autowired
-	private IDictService dictService;
+	private IDictItemService dictItemService;
 
-	public final static String PATH_INDEX="auth/dict/index";
-    public final static String PATH_ADD_INDEX="auth/dict/add";
-    public final static String PATH_EDIT_INDEX="auth/dict/edit";
+	public final static String PATH_INDEX="auth/dictItem/index";
+    public final static String PATH_ADD_INDEX="auth/dictItem/add";
+    public final static String PATH_EDIT_INDEX="auth/dictItem/edit";
 
      /**
      * @return
@@ -50,9 +55,9 @@ public class DictController extends BaseController{
     }
     @RequestMapping(value="add",method = RequestMethod.POST)
     @ResponseBody
-    public Result add(Dict dict){
+    public Result add(DictItem dictItem){
         try{
-            dictService.insert(dict);
+            dictItemService.insert(dictItem);
         }catch (Exception e){
            return new Result().error("添加失败：" + e.getMessage());
         }
@@ -65,15 +70,15 @@ public class DictController extends BaseController{
     public ModelAndView edit(@PathVariable("id") long id){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(PATH_EDIT_INDEX);
-        modelAndView.getModelMap().put("dict",dictService.get(id));
+        modelAndView.getModelMap().put("dictItem",dictItemService.get(id));
         return modelAndView;
     }
 
     @RequestMapping(value="edit",method = RequestMethod.POST)
     @ResponseBody
-    public Result edit(Dict dict){
+    public Result edit(DictItem dictItem){
         try{
-            dictService.update(dict);
+            dictItemService.update(dictItem);
         }catch (Exception e){
            return new Result().error("修改失败：" + e.getMessage());
         }
@@ -84,7 +89,7 @@ public class DictController extends BaseController{
     @ResponseBody
     public Result get(@PathVariable("id") long id){
         try{
-            return new ResultObject().setData(dictService.get(id));
+            return new ResultObject().setData(dictItemService.get(id));
         }catch (Exception e){
             e.printStackTrace();
             return new Result().error("获取失败：" + e.getMessage());
@@ -95,7 +100,7 @@ public class DictController extends BaseController{
     @ResponseBody
     public Result list(){
         try{
-            return new ResultObject().setData(dictService.getList());
+            return new ResultObject().setData(dictItemService.getList());
         }catch (Exception e){
             return new Result().error("获取失败：" + e.getMessage());
         }
@@ -103,16 +108,33 @@ public class DictController extends BaseController{
 
     @RequestMapping(value="grid")
     @ResponseBody
-    public Result grid(QueryPage<Dict> queryFilter,Dict dict){
+    public Result grid(QueryPage<DictItem> queryFilter,DictItem dictItem){
         try{
-            queryFilter.setT(dict);
-
-            PageInfo<Dict> pageInfo = dictService.getPageInfo(queryFilter);
-            ResultGrid resultGrid = new ResultGrid<Dict>();
+            queryFilter.setT(dictItem);
+            PageInfo<DictItem> pageInfo = dictItemService.getPageInfo(queryFilter);
+            ResultGrid resultGrid = new ResultGrid<DictItem>();
             resultGrid.setRows(pageInfo.getList());
             resultGrid.setTotal(pageInfo.getTotal());
             return resultGrid;
         }catch (Exception e){
+            return new Result().error("获取列表失败：" + e.getMessage());
+        }
+    }
+
+    @RequestMapping(value="treegrid")
+    @ResponseBody
+    public Result treegrid(QueryPage<DictItem> queryPage, DictItem dictItem){
+        try{
+            queryPage.setT(dictItem);
+            queryPage.setSort("rank");
+            queryPage.setSortOrder("asc");
+            List<DictItemTree> list = dictItemService.getDictItemTree(queryPage);
+            ResultGrid resultGrid = new ResultGrid<DictItemTree>();
+            resultGrid.setRows(list);
+            resultGrid.setTotal(list.size());
+            return resultGrid;
+        }catch (Exception e){
+            e.printStackTrace();
             return new Result().error("获取列表失败：" + e.getMessage());
         }
     }

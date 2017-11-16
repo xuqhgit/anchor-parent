@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.anchor.ms.auth.mapper.DictItemMapper">
+
+	<sql id="dictItemColumns">
+        t.CREATE_TIME as createTime,t.CREATOR_ID as creatorId,t.DICT_ID as dictId,t.ID as id,t.RANK as rank,
+        t.pid as pid, t.CODE as code,t.STATUS as status,t.TEXT as text,t.UPDATE_TIME as updateTime
+	</sql>
+
+	<!-- 修改 -->
+	<update id="update" parameterType="dictItem">
+		update SYS_DICT_ITEM
+		<set>
+			
+			<if test="createTime != null">
+				CREATE_TIME = #{ createTime },
+			</if>
+			<if test="creatorId != null">
+				CREATOR_ID = #{ creatorId },
+			</if>
+			<if test="dictId != null">
+				DICT_ID = #{ dictId },
+			</if>
+			<if test="id != null">
+				ID = #{ id },
+			</if>
+			<if test="code != null">
+				CODE = #{ code },
+			</if>
+			<if test="status != null">
+				STATUS = #{ status },
+			</if>
+			<if test="text != null">
+				TEXT = #{ text },
+			</if>
+			<if test="updateTime != null">
+				UPDATE_TIME = #{ updateTime },
+			</if>
+
+		</set>
+		where ID = #{id}
+	</update>
+
+
+	<insert id="insert" parameterType="dictItem" useGeneratedKeys="true" keyProperty="id"   >
+		INSERT INTO SYS_DICT_ITEM(
+			CREATE_TIME,CREATOR_ID,DICT_ID,ID,CODE,STATUS,TEXT,UPDATE_TIME
+		)
+		VALUES(
+			  #{ createTime } ,  #{ creatorId } ,  #{ dictId } ,  #{ id } ,  #{ code } ,  #{ status } ,  #{ text } ,  now() 
+		)
+	</insert>
+
+
+	<!-- 根据主键获取 -->
+	<select id="get" parameterType="java.lang.Long" resultType="dictItem">
+		SELECT
+		<include refid="dictItemColumns" />
+		FROM  SYS_DICT_ITEM t
+		where id = #{ id }
+	</select>
+
+	<!-- 获取列表 -->
+	<select id="getList"  resultType="dictItem">
+		select
+		<include refid="dictItemColumns" />
+		from SYS_DICT_ITEM t
+	</select>
+
+	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage"  resultType="dictItem">
+		select
+		<include refid="dictItemColumns" />
+		from SYS_DICT_ITEM t
+        <where>
+            <if test="t.text!=null and t.text!=''">
+				and instr(t.TEXT,#{ t.text })>0
+			</if>
+
+			</where>
+		<choose>
+			<when test="sort!=null and sortOrder!=null">
+				order by t.${sort} ${sortOrder}
+			</when>
+			<otherwise>
+				order by t.CREATE_TIME DESC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="getDictItemTree" parameterType="com.anchor.core.common.query.QueryPage"  resultType="dictItemTree">
+		select
+		<include refid="dictItemColumns" />
+		from SYS_DICT_ITEM t
+		<where>
+			<if test="t.text!=null and t.text!=''">
+				and instr(t.TEXT,#{ t.text })>0
+			</if>
+			and t.DICT_ID=#{ t.dictId }
+		</where>
+		<choose>
+			<when test="sort!=null and sortOrder!=null">
+				order by t.${sort} ${sortOrder}
+			</when>
+			<otherwise>
+				order by t.CREATE_TIME DESC
+			</otherwise>
+		</choose>
+	</select>
+</mapper>
