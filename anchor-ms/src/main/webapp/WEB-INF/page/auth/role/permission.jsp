@@ -84,28 +84,28 @@
                                 });
 
                             }
-                            if(optionLevel>=node.level){
-                                //父节点判断是否不选中
-                                var siblings = $this.treeview('getSiblings', node.nodeId);
-                                var isUncheckParentNode = true;
-                                if(siblings&&siblings.length>0){
-                                    for(var i=0;i<siblings.length;i++){
-                                        if(siblings[i].state.checked){
-                                            isUncheckParentNode = false;
-                                            break;
-                                        }
-                                    }
-                                    if(isUncheckParentNode){
-                                        var parentNode = $this.treeview('getParent', siblings[0].nodeId);
-                                        if(parentNode.state&&parentNode.state.checked){
-                                            $this.treeview('uncheckNode',parentNode.nodeId, {
-                                                silent : true
-                                            });
-                                        }
-
-                                    }
-                                }
-                            }
+//                            if(optionLevel>=node.level){
+//                                //父节点判断是否不选中
+//                                var siblings = $this.treeview('getSiblings', node.nodeId);
+//                                var isUncheckParentNode = true;
+//                                if(siblings&&siblings.length>0){
+//                                    for(var i=0;i<siblings.length;i++){
+//                                        if(siblings[i].state.checked){
+//                                            isUncheckParentNode = false;
+//                                            break;
+//                                        }
+//                                    }
+//                                    if(isUncheckParentNode){
+//                                        var parentNode = $this.treeview('getParent', siblings[0].nodeId);
+//                                        if(parentNode.state&&parentNode.state.checked){
+//                                            $this.treeview('uncheckNode',parentNode.nodeId, {
+//                                                silent : true
+//                                            });
+//                                        }
+//
+//                                    }
+//                                }
+//                            }
                             if(optionLevel==node.level){
                                 optionLevel = -1;
                             }

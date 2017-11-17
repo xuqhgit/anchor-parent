@@ -31,7 +31,7 @@
 				STATUS = #{ status },
 			</if>
 			<if test="updateTime != null">
-				UPDATE_TIME = #{ updateTime },
+				UPDATE_TIME = now(),
 			</if>
 
 		</set>
@@ -44,7 +44,7 @@
 			CODE,CREATE_TIME,CREATOR_ID,ID,NAME,STATUS,UPDATE_TIME
 		)
 		VALUES(
-			  #{ code } ,  #{ createTime } ,  #{ creatorId } ,  #{ id } ,  #{ name } ,  #{ status } ,  now() 
+			  #{ code } ,  now() ,  #{ creatorId } ,  #{ id } ,  #{ name } ,  #{ status } ,  now()
 		)
 	</insert>
 

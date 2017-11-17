@@ -81,9 +81,9 @@
     $(function () {
     
     jQuery.validator.addMethod("keyValid", function(value,element) {
-        var p =/<%=DictItem.KEY_PATTERN%>/;
+        var p =/<%=DictItem.VALUE_PATTERN%>/;
         return p.test(value);
-    }, "<%=DictItem.KEY_PATTERN_MESSAGE%>");
+    }, "<%=DictItem.VALUE_PATTERN_MESSAGE%>");
     jQuery.validator.addMethod("textValid", function(value,element) {
         var p =/<%=DictItem.TEXT_PATTERN%>/;
         return p.test(value);
@@ -102,18 +102,9 @@
             },
             columns: [
                 {checkbox: true},
-                 
-                
-                
-                
-                
-                {title: 'Key', field: 'key', align: 'center', width: '100'},
-                
-                {title: '状态', field: 'status', align: 'center', width: '100'},
-                
                 {title: '名称', field: 'text', align: 'center', width: '100'},
-                
-                
+                {title: '值', field: 'value', align: 'center', width: '100'},
+                {title: '状态', field: 'status', align: 'center', width: '100'},
                 {
                     title: '操作', field: 'opt', align: 'center', width: '120', formatter: function (index, row) {
                     var opts = "";
@@ -222,31 +213,7 @@
             }, null);
         });
     }
-    /**
-     * 编辑
-     */
-    function editDictItem(dictItemId) {
-        var editFormId = "editDictItemForm";
-        var dialog = $.dialog({
-            title: '',
-            content: 'url:/dictItem/edit/'+dictItemId,
-            columnClass:'medium',
-            onContentReady:function(){
-                var validateConfig =anchor.validFieldConfig(dictItemValidConfig,anchor.formField(editFormId));
-                validateConfig['id']= editFormId;
-                var valid = anchor.validate(validateConfig);
-                $('#editDictItem').click(function () {
-                    if(valid.form()){
-                        anchor.request("/dictItem/edit", $('#'+editFormId).serializeObject(), function (data) {
-                            bt.bootstrapTable('refresh');
-                            anchor.alert("保存成功");
-                            dialog.close();
-                        }, null);
-                    }
-                });
-            }
-        });
-    }
+
 </script>
 </body>
 </html>

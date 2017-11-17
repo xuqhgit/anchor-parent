@@ -15,6 +15,7 @@ import com.anchor.ms.common.utils.StringUtils;
 import com.anchor.ms.core.shiro.token.manager.TokenManager;
 import com.anchor.ms.core.statics.Constant;
 import com.github.pagehelper.PageInfo;
+import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.web.util.SavedRequest;
 import org.apache.shiro.web.util.WebUtils;
@@ -48,6 +49,7 @@ public class UserController extends BaseController{
 	public final static String PATH_INDEX="auth/user/user";
     public final static String PATH_ADD_INDEX="auth/user/add";
     public final static String PATH_EDIT_INDEX="auth/user/edit";
+    public final static String PATH_SET_ROLE="auth/user/setRole";
 
      /**
      * @return
@@ -69,6 +71,9 @@ public class UserController extends BaseController{
             if(errors.hasErrors()){
                 return new Result().error("添加失败：" + errors.getFieldError().getDefaultMessage());
             }
+            if(userService.findUserByUsername(user.getUsername())!=null){
+                return new Result().error("添加失败：该账户已存在");
+            }
             user.setCreateTime(new Date());
             user.setUpdateTime(new Date());
             user.setPassword(EncoderUtil.EncoderByMd5(Constant.DEAFULT_PASSWORD));
@@ -80,6 +85,14 @@ public class UserController extends BaseController{
         return new Result().success("添加成功");
     }
 
+    @RequestMapping(value="usernameExist")
+    @ResponseBody
+    public Boolean usernameExist(String username){
+        if(userService.findUserByUsername(username)!=null){
+            return false;
+        }
+        return true;
+    }
 
     @RequestMapping(value="edit/{id}",method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable("id") long id){
@@ -184,14 +197,40 @@ public class UserController extends BaseController{
             return modelAndView;
         } catch (DisabledAccountException e) {
             modelAndView.addObject("errorMsg","帐号已经禁用");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (AccountException e) {
             modelAndView.addObject("errorMsg","帐号或密码错误");
         }
 
         modelAndView.setViewName("login");
 
         return modelAndView;
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value="setRole/{id}",method = RequestMethod.GET)
+    public ModelAndView setRole(@PathVariable("id") long id){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName(PATH_SET_ROLE);
+        modelAndView.getModelMap().put("user",userService.get(id));
+//        modelAndView.getModelMap().put("role",userService.get(id));
+        return modelAndView;
+    }
+
+    @RequestMapping(value="setRole",method = RequestMethod.POST)
+    @ResponseBody
+    public Result setRole(Long roleId,Long userId){
+        try{
+            userService.setRole(userId,roleId,TokenManager.getToken().getId());
+//            userService.update(user);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result().error("修改失败：" + e.getMessage());
+        }
+        return new Result().success("修改成功");
     }
 }
 

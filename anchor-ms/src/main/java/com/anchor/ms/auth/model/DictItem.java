@@ -14,8 +14,8 @@ import javax.validation.constraints.Pattern;
  * @since version 1.0
  */
 public class DictItem extends BaseModel {
-    public static final String KEY_PATTERN = "^[a-zA-Z0-9_/-]{1,32}";
-    public static final String KEY_PATTERN_MESSAGE = "只能包含数字、字母、下划线、减号长度不能超过32个字符";
+    public static final String VALUE_PATTERN = "^[a-zA-Z0-9_/-]{1,32}";
+    public static final String VALUE_PATTERN_MESSAGE = "只能包含数字、字母、下划线、减号长度不能超过32个字符";
     public static final String KEY_REQUIRED_MESSAGE = "必填项";
     public static final String TEXT_PATTERN = ".{1,32}";
     public static final String TEXT_PATTERN_MESSAGE = "长度不超过32个字符";
@@ -40,8 +40,8 @@ public class DictItem extends BaseModel {
      * 字典键
      */
     @NotNull
-    @Pattern(regexp = KEY_PATTERN, message = KEY_PATTERN_MESSAGE)
-    private String code;
+    @Pattern(regexp = VALUE_PATTERN, message = VALUE_PATTERN_MESSAGE)
+    private String value;
 
     /**
      * 状态 1 有效 0 无效
@@ -76,12 +76,12 @@ public class DictItem extends BaseModel {
         return this.dictId;
     }
 
-    public String getCode() {
-        return code;
+    public String getValue() {
+        return value;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public void setStatus(String status) {

@@ -36,4 +36,22 @@ public interface UserMapper extends BaseMapper<User,Long> {
      * @return
      */
     public User login(@Param("username") String username,@Param("password") String password);
+
+
+    /**
+     * 删除角色
+     * @param userId
+     * @return
+     */
+    Long deleteRole(@Param("userId")Long userId);
+
+
+    /**
+     * 设置角色
+     * @param userId
+     * @param roleId
+     * @param creatorId
+     * @return
+     */
+    void setRole(@Param("userId")Long userId,@Param("roleId")Long roleId,@Param("creatorId")Long creatorId);
 }

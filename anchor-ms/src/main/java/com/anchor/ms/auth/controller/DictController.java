@@ -5,6 +5,7 @@ import com.anchor.core.common.dto.Result;
 import com.anchor.core.common.dto.ResultGrid;
 import com.anchor.core.common.dto.ResultObject;
 import com.anchor.core.common.query.QueryPage;
+import com.anchor.ms.core.shiro.token.manager.TokenManager;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,6 +53,8 @@ public class DictController extends BaseController{
     @ResponseBody
     public Result add(Dict dict){
         try{
+            dict.setCreatorId(TokenManager.getToken().getId());
+            dict.setStatus("1");
             dictService.insert(dict);
         }catch (Exception e){
            return new Result().error("添加失败：" + e.getMessage());
@@ -73,6 +76,7 @@ public class DictController extends BaseController{
     @ResponseBody
     public Result edit(Dict dict){
         try{
+
             dictService.update(dict);
         }catch (Exception e){
            return new Result().error("修改失败：" + e.getMessage());

@@ -5,7 +5,7 @@
 
 	<sql id="dictItemColumns">
         t.CREATE_TIME as createTime,t.CREATOR_ID as creatorId,t.DICT_ID as dictId,t.ID as id,t.RANK as rank,
-        t.pid as pid, t.CODE as code,t.STATUS as status,t.TEXT as text,t.UPDATE_TIME as updateTime
+        t.pid as pid, t.VALUE as value,t.STATUS as status,t.TEXT as text,t.UPDATE_TIME as updateTime
 	</sql>
 
 	<!-- 修改 -->
@@ -25,8 +25,8 @@
 			<if test="id != null">
 				ID = #{ id },
 			</if>
-			<if test="code != null">
-				CODE = #{ code },
+			<if test="value != null">
+				VALUE = #{ value },
 			</if>
 			<if test="status != null">
 				STATUS = #{ status },
@@ -35,7 +35,7 @@
 				TEXT = #{ text },
 			</if>
 			<if test="updateTime != null">
-				UPDATE_TIME = #{ updateTime },
+				UPDATE_TIME = now(),
 			</if>
 
 		</set>
@@ -45,10 +45,10 @@
 
 	<insert id="insert" parameterType="dictItem" useGeneratedKeys="true" keyProperty="id"   >
 		INSERT INTO SYS_DICT_ITEM(
-			CREATE_TIME,CREATOR_ID,DICT_ID,ID,CODE,STATUS,TEXT,UPDATE_TIME
+			CREATE_TIME,CREATOR_ID,DICT_ID,PID,ID,VALUE,STATUS,TEXT,UPDATE_TIME
 		)
 		VALUES(
-			  #{ createTime } ,  #{ creatorId } ,  #{ dictId } ,  #{ id } ,  #{ code } ,  #{ status } ,  #{ text } ,  now() 
+			  now() ,  #{ creatorId } ,  #{ dictId } , #{ pid } , #{ id } ,  #{ value } ,  #{ status } ,  #{ text } ,  now()
 		)
 	</insert>
 

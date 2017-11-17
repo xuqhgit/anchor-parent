@@ -8,6 +8,7 @@ import com.anchor.core.common.query.QueryPage;
 import com.anchor.ms.auth.model.DictItemTree;
 import com.anchor.ms.auth.model.Permission;
 import com.anchor.ms.auth.model.PermissionTree;
+import com.anchor.ms.core.shiro.token.manager.TokenManager;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.anchor.ms.auth.service.IDictItemService;
 import com.anchor.ms.auth.model.DictItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,6 +59,8 @@ public class DictItemController extends BaseController{
     @ResponseBody
     public Result add(DictItem dictItem){
         try{
+            dictItem.setCreatorId(TokenManager.getToken().getId());
+            dictItem.setStatus("1");
             dictItemService.insert(dictItem);
         }catch (Exception e){
            return new Result().error("添加失败：" + e.getMessage());
@@ -125,11 +129,15 @@ public class DictItemController extends BaseController{
     @ResponseBody
     public Result treegrid(QueryPage<DictItem> queryPage, DictItem dictItem){
         try{
+
             queryPage.setT(dictItem);
             queryPage.setSort("rank");
             queryPage.setSortOrder("asc");
-            List<DictItemTree> list = dictItemService.getDictItemTree(queryPage);
             ResultGrid resultGrid = new ResultGrid<DictItemTree>();
+            List<DictItemTree> list = new ArrayList<>();
+            if(null!=dictItem.getDictId()){
+                list = dictItemService.getDictItemTree(queryPage);
+            }
             resultGrid.setRows(list);
             resultGrid.setTotal(list.size());
             return resultGrid;

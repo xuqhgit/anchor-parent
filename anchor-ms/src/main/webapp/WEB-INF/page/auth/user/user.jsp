@@ -72,10 +72,12 @@
         },
         username:{
             rule:{
-                required:true
+                required:true,
+                remote: "/user/usernameExist"
             },
             message:{
-                required:'请输入用户名'
+                required:'请输入用户名',
+                remote:'用户名已存在'
             }
         },
         email:{
@@ -111,7 +113,7 @@
                     sortable: true,
                     width: '120'
                 },
-                {title: '状态', field: 'state', align: 'center', sortable: true, width: '80',formatter:function(index,row,value){
+                {title: '状态', field: 'status', align: 'center', sortable: true, width: '80',formatter:function(index,row,value){
                         if(row.state==1){
                             return "<i class='fa  fa-check' style='color:lawngreen'></i>可用"
                         }
@@ -137,6 +139,9 @@
                     </shiro:hasPermission>
                     <shiro:hasPermission name="auth:user:delete">
                         opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"deleteUser(\'" + row.id + "\')\">删除</a>";
+                    </shiro:hasPermission>
+                    <shiro:hasPermission name="auth:user:setRole">
+                    opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"setRole(\'" + row.id + "\')\">设置角色</a>";
                     </shiro:hasPermission>
                     return opts;
                 }
@@ -251,6 +256,29 @@
                 $('#editUser').click(function () {
                     if(valid.form()){
                         anchor.request("/user/edit", $('#'+editFormId).serializeObject(), function (data) {
+                            bt.bootstrapTable('refresh');
+                            anchor.alert("保存成功");
+                            dialog.close();
+                        }, null);
+                    }
+                });
+            }
+        });
+    }
+
+    function setRole(userId){
+        var setRoleFormId = "setRoleForm";
+        var dialog = $.dialog({
+            title: '',
+            content: 'url:/user/setRole/'+userId,
+            columnClass:'medium',
+            onContentReady:function(){
+                var validateConfig =anchor.validFieldConfig(userValidConfig,anchor.formField(setRoleFormId));
+                validateConfig['id']= setRoleFormId;
+                var valid = anchor.validate(validateConfig);
+                $('#setRoleUser').click(function () {
+                    if(valid.form()){
+                        anchor.request("/user/setRole", $('#'+setRoleFormId).serializeObject(), function (data) {
                             bt.bootstrapTable('refresh');
                             anchor.alert("保存成功");
                             dialog.close();

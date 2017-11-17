@@ -17,5 +17,5 @@ public interface IUserService extends BaseService<User,Long> {
 
     public User login(String username,String password);
 
-
+    void setRole(Long userId,Long roleId,Long operatorId);
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.anchor.ms.auth.mapper.UserMapper;
 import com.anchor.ms.auth.model.User;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -39,4 +40,10 @@ public class UserServiceImpl extends BaseServiceImpl<User,Long> implements IUser
 	}
 
 
+	@Override
+	@Transactional
+	public void setRole(Long userId, Long roleId, Long creatorId) {
+		Long count = userMapper.deleteRole(userId);
+		userMapper.setRole(userId,roleId,creatorId);
+	}
 }

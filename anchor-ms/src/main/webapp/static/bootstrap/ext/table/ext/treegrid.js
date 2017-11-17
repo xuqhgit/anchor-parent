@@ -169,6 +169,10 @@
 
     //重写bootstrapTable的initBody方法
     BootstrapTable.prototype.initBody = function (fixedScroll) {
+        if(!this.options.treeView){
+            _initBody.apply(this, fixedScroll);
+            return ;
+        }
         var that = this,
             html = [],
             indentSize=18,
@@ -325,7 +329,6 @@
                         if (that.options.treeView && column.field == that.options.treeField) {
                             indent = sprintf('<span style="margin-left: %spx;"></span>', layerCount * indentSize);
                             var expandFlag = item.child.length > 0?!item.child[0].hidden:false;
-                            console.info(item.expandAble);
                             icon = sprintf('<span class="tree-icon %s" data-id="%s" style="cursor: pointer; margin: 0px 5px;"></span>',
                                 item.expandAble?(expandFlag ? that.options.expandIcon : that.options.collapseIcon):"",item.id);
                         }
@@ -371,7 +374,6 @@
             this.scrollTo(0);
         }
         this.$body.find('> tr[data-index] > td').off('click dblclick').on('click dblclick', function (e) {
-            return ;
             var $td = $(this),
                 $tr = $td.parent(),
                 item = that.data[$tr.data('index')],
