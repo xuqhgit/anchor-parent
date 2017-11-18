@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Tell the browser to be responsive to screen width -->
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -12,7 +11,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 <!-- Theme style -->
 <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
-<link rel="stylesheet" href="/static/plugins/iCheck/flat/blue.css"  rel="stylesheet">
+<link rel="stylesheet" href="/static/plugins/iCheck/flat/blue.css" rel="stylesheet">
 <link rel="stylesheet" href="/static/bootstrap/ext/table/bootstrap-table.min.css">
 <link rel="stylesheet" href="/static/plugins/jquery-comfirm/jquery-confirm.min.css">
 

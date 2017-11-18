@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" import="com.anchor.ms.auth.model.DictItem" language="java" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <html>
@@ -16,16 +15,16 @@
         <div class="span12 search-form">
             <form id="form" class="form-horizontal" role="form">
                 <div class="form-group">
-                      
+
                     <label class="col-sm-1 control-label" for="text">名称：</label>
                     <div class="col-sm-2">
                         <input class="form-control" id="text" name="text" type="text" placeholder="名称"/>
                     </div>
-                  
+
                     <div class="col-sm-1">
-                            <button type="button" class="btn btn-primary" id="search"
-                                    data-toggle="button"><span class="glyphicon glyphicon-search"></span>搜索
-                            </button>
+                        <button type="button" class="btn btn-primary" id="search"
+                                data-toggle="button"><span class="glyphicon glyphicon-search"></span>搜索
+                        </button>
                     </div>
                 </div>
             </form>
@@ -50,46 +49,43 @@
 </div>
 
 
-
-
-
 <%@include file="../../common_script.jsp" %>
 <script>
 
     var bt;
-    var dictItemValidConfig={
-    
-        key:{
-            rule:{
-                required:true,
-                keyValid:true 
+    var dictItemValidConfig = {
+
+        key: {
+            rule: {
+                required: true,
+                keyValid: true
             },
-            message:{
-                required:'必填项'
+            message: {
+                required: '必填项'
             }
         },
-        text:{
-            rule:{
-                required:false,
-                textValid:true 
+        text: {
+            rule: {
+                required: false,
+                textValid: true
             },
-            message:{
-                required:'必填项'
+            message: {
+                required: '必填项'
             }
         },
     };
     $(function () {
-    
-    jQuery.validator.addMethod("keyValid", function(value,element) {
-        var p =/<%=DictItem.VALUE_PATTERN%>/;
-        return p.test(value);
-    }, "<%=DictItem.VALUE_PATTERN_MESSAGE%>");
-    jQuery.validator.addMethod("textValid", function(value,element) {
-        var p =/<%=DictItem.TEXT_PATTERN%>/;
-        return p.test(value);
-    }, "<%=DictItem.TEXT_PATTERN_MESSAGE%>");
 
-    var params = {
+        jQuery.validator.addMethod("keyValid", function (value, element) {
+            var p =/<%=DictItem.VALUE_PATTERN%>/;
+            return p.test(value);
+        }, "<%=DictItem.VALUE_PATTERN_MESSAGE%>");
+        jQuery.validator.addMethod("textValid", function (value, element) {
+            var p =/<%=DictItem.TEXT_PATTERN%>/;
+            return p.test(value);
+        }, "<%=DictItem.TEXT_PATTERN_MESSAGE%>");
+
+        var params = {
             url: '/dictItem/grid',
             queryParams: function (params) {
                 var temp = {
@@ -109,13 +105,13 @@
                     title: '操作', field: 'opt', align: 'center', width: '120', formatter: function (index, row) {
                     var opts = "";
                     <shiro:hasPermission name=":get">
-                        opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"detailDictItem(\'" + row.id + "\')\">查看</a>|";
+                    opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"detailDictItem(\'" + row.id + "\')\">查看</a>|";
                     </shiro:hasPermission>
                     <shiro:hasPermission name=":edit:index">
-                        opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"editDictItem(\'" + row.id + "\')\">编辑</a>|";
+                    opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"editDictItem(\'" + row.id + "\')\">编辑</a>|";
                     </shiro:hasPermission>
                     <shiro:hasPermission name=":delete">
-                        opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"deleteDictItem(\'" + row.id + "\')\">删除</a>";
+                    opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"deleteDictItem(\'" + row.id + "\')\">删除</a>";
                     </shiro:hasPermission>
                     return opts;
                 }
@@ -139,21 +135,21 @@
             var addDialog = $.dialog({
                 title: '',
                 content: 'url:/dictItem/add',
-                columnClass:'medium',
-                onContentReady:function(){
-                    var validateConfig =anchor.validFieldConfig(dictItemValidConfig,anchor.formField(addFormId));
-                    validateConfig['id']= addFormId;
+                columnClass: 'medium',
+                onContentReady: function () {
+                    var validateConfig = anchor.validFieldConfig(dictItemValidConfig, anchor.formField(addFormId));
+                    validateConfig['id'] = addFormId;
                     var valid = anchor.validate(validateConfig);
                     $('#saveDictItem').click(function () {
-                        if(valid.form()){
+                        if (valid.form()) {
                             <shiro:hasPermission name="auth:dictItem:add">
-                                anchor.request("/dictItem/add", $('#'+addFormId).serializeObject(), function (data) {
-                                if(data.code==1){
+                            anchor.request("/dictItem/add", $('#' + addFormId).serializeObject(), function (data) {
+                                if (data.code == 1) {
                                     bt.bootstrapTable('refresh');
                                     anchor.alert("保存成功");
                                     addDialog.close();
                                 }
-                                else{
+                                else {
                                     anchor.alert(data.message);
                                 }
                             }, null);
@@ -194,10 +190,10 @@
     function detailDictItem(dictItemId) {
         $.dialog({
             title: '',
-            content: 'url:/dictItem/edit/'+dictItemId,
-            type:'blue',
-            columnClass:'medium',
-            onContentReady:function(){
+            content: 'url:/dictItem/edit/' + dictItemId,
+            type: 'blue',
+            columnClass: 'medium',
+            onContentReady: function () {
 
             }
         });
@@ -207,7 +203,7 @@
      */
     function deleteDictItem(dictItemId) {
         anchor.confirm("确认要删除该用户么?", function () {
-            anchor.request("/dictItem/delete/"+dictItemId, {}, function (data) {
+            anchor.request("/dictItem/delete/" + dictItemId, {}, function (data) {
                 anchor.alert(data.message);
                 bt.bootstrapTable('refresh');
             }, null);

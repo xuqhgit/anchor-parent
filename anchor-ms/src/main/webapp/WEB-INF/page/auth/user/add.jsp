@@ -26,6 +26,18 @@
                         <input type="text" name="email" class="form-control" placeholder="email">
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">QQ：</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="qq" class="form-control" >
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">手机号：</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="phone" class="form-control" >
+                    </div>
+                </div>
             </div>
             <div class="box-footer">
                 <%--<button type="submit" class="btn btn-default">Cancel</button>--%>

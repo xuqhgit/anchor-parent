@@ -110,6 +110,7 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission,Long> impl
 		menu.setIcon(permission.getIcon());
 		menu.setText(permission.getName());
 		menu.setUrl(permission.getUrl());
+		menu.setTarget(permission.getTargetType());
 		return menu;
 	}
 

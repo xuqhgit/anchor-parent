@@ -5,7 +5,7 @@
         <div class="box-header ">
             <h3 class="box-title">【${role.name}】权限设置</h3>
         </div>
-        <div class="box-body" >
+        <div class="box-body">
             <div id="rolePermissionTree">
 
             </div>
@@ -15,38 +15,38 @@
             <a id="saveRolePermission" class="btn btn-info pull-right">保存</a>
         </div>
         <script>
-            $(function(){
-                function handleRows(rows,level){
-                    var lev = level+1;
-                    rows.forEach(function(val,index){
+            $(function () {
+                function handleRows(rows, level) {
+                    var lev = level + 1;
+                    rows.forEach(function (val, index) {
                         val['text'] = val.name;
                         val['nodes'] = val.child;
                         val['icon'] = undefined;
                         val['level'] = lev;
                         val["state"] = {};
                         val["state"]["checked"] = val.checked;
-                        handleRows(val.child,lev);
+                        handleRows(val.child, lev);
                     });
                 }
 
-                anchor.request("/permission/tree/${role.id}",{},function(data){
-                    handleRows(data.rows,0);
+                anchor.request("/permission/tree/${role.id}", {}, function (data) {
+                    handleRows(data.rows, 0);
                     var tree = data.rows;
                     console.info(tree);
                     var optionLevel = -1;
                     var $this = $("#rolePermissionTree").treeview({
-                        data : tree,// 赋值
-                        highlightSelected : false,// 选中项不高亮，避免和上述制定的颜色变化规则冲突
-                        multiSelect : true,// 不允许多选，因为我们要通过check框来控制
-                        showCheckbox : true,// 展示checkbox
-                        onNodeChecked : function(event, node) {
+                        data: tree,// 赋值
+                        highlightSelected: false,// 选中项不高亮，避免和上述制定的颜色变化规则冲突
+                        multiSelect: true,// 不允许多选，因为我们要通过check框来控制
+                        showCheckbox: true,// 展示checkbox
+                        onNodeChecked: function (event, node) {
                             //当前节点选中的时候，子节点选中
-                            if(optionLevel==-1){
+                            if (optionLevel == -1) {
                                 optionLevel = node.level;
                             }
-                            if(optionLevel<=node.level){
-                                $.each(node.nodes, function(index, value) {
-                                    if(value.state&&!value.state.checked) {
+                            if (optionLevel <= node.level) {
+                                $.each(node.nodes, function (index, value) {
+                                    if (value.state && !value.state.checked) {
                                         $this.treeview('checkNode', value.nodeId, {
                                             silent: true
                                         });
@@ -54,30 +54,30 @@
                                 });
                             }
                             // 当前节点选中的时候，父节点选中
-                            if(optionLevel>=node.level){
-                                var parentNode = $this.treeview('getParent',node.nodeId);
-                                if(parentNode.state&&!parentNode.state.checked){
+                            if (optionLevel >= node.level) {
+                                var parentNode = $this.treeview('getParent', node.nodeId);
+                                if (parentNode.state && !parentNode.state.checked) {
                                     $this.treeview('checkNode', parentNode.nodeId, {
-                                        silent : true
+                                        silent: true
                                     });
                                 }
                             }
 
-                            if(optionLevel==node.level){
+                            if (optionLevel == node.level) {
                                 optionLevel = -1;
                             }
 
                         },
-                        onNodeUnchecked : function(event, node) {
-                            if(optionLevel==-1){
+                        onNodeUnchecked: function (event, node) {
+                            if (optionLevel == -1) {
                                 optionLevel = node.level;
                             }
-                            if(optionLevel<=node.level){
+                            if (optionLevel <= node.level) {
                                 //子不选中
-                                $.each(node.nodes, function(index, value) {
-                                    if(value.state&&value.state.checked){
+                                $.each(node.nodes, function (index, value) {
+                                    if (value.state && value.state.checked) {
                                         $this.treeview('uncheckNode', value.nodeId, {
-                                            silent : true
+                                            silent: true
                                         });
                                     }
 
@@ -106,24 +106,24 @@
 //                                    }
 //                                }
 //                            }
-                            if(optionLevel==node.level){
+                            if (optionLevel == node.level) {
                                 optionLevel = -1;
                             }
 
                         }
                     }).treeview('expandAll', {// 节点展开
-                        silent : false
+                        silent: false
                     });
 
-                    $("#saveRolePermission").click(function(){
-                        var permissionIds = $this.treeview("getChecked").map(function(node,index){
+                    $("#saveRolePermission").click(function () {
+                        var permissionIds = $this.treeview("getChecked").map(function (node, index) {
                             return node.id;
                         });
-                        anchor.request("/role/permission/${role.id}",{"permissionIds":permissionIds},function(data){
-                            if(data.code==1){
-                                anchor.alert("保存成功,共 "+data.data+" 条");
+                        anchor.request("/role/permission/${role.id}", {"permissionIds": permissionIds}, function (data) {
+                            if (data.code == 1) {
+                                anchor.alert("保存成功,共 " + data.data + " 条");
                             }
-                            else{
+                            else {
                                 anchor.alert(data.message);
                             }
                         });

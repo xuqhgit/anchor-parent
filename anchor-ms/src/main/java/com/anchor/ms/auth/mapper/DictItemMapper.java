@@ -26,4 +26,6 @@ public interface DictItemMapper extends BaseMapper<DictItem,Long> {
      */
     List<DictItemTree> getDictItemTree(QueryPage<DictItem> queryPage);
 
+
+
 }

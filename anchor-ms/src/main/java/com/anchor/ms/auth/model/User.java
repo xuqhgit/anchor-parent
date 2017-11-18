@@ -54,6 +54,10 @@ public class User extends BaseModel {
      */
     private String status;
 
+    /**
+     * 角色
+     */
+    private Role role;
 
     public User(){
 
@@ -62,9 +66,6 @@ public class User extends BaseModel {
 
     }
 
-    static {
-        SortFieldConvertUtil.setSortField("state","state");
-    }
     public void setEmail(String email){
         this.email = email;
     }
@@ -108,5 +109,13 @@ public class User extends BaseModel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

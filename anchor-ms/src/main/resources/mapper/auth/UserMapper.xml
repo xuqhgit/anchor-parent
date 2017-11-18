@@ -7,9 +7,14 @@
         user.CREATE_TIME as createTime,user.CREATOR_ID as creatorId,user.EMAIL as email,
         user.ID as id,user.NAME as name,user.PASSWORD as password,user.PHONE as phone,
         user.QQ as qq,user.UPDATE_TIME as updateTime,user.USERNAME as username,user.status as status
+
+	</sql>
+
+	<sql id="userRoleColumns">
+		r.CODE as roleCode,r.CREATE_TIME as roleCreateTime,r.CREATOR_ID as roleCreatorId,
+		r.ID as roleId,r.NAME as roleName,r.STATUS as roleStatus,r.UPDATE_TIME as roleUpdateTime
 	</sql>
 	<sql id="userDtoColumns">
-
 		DATE_FORMAT(user.CREATE_TIME,'%Y-%c-%d %H:%i:%s')  as createTime,user.CREATOR_ID as creatorId,
 		user.EMAIL as email,user.ID as id,
 		user.NAME as name,user.STATUS as status,
@@ -17,6 +22,51 @@
 		DATE_FORMAT(user.UPDATE_TIME,'%Y-%c-%d %H:%i:%s') as updateTime,
 		user.USERNAME as username
 	</sql>
+
+	<resultMap type="com.anchor.ms.auth.dto.UserDto" id="userDtoMap">
+		<id property="id" column="ID"/>
+		<result property="createTime" column="createTime"/>
+		<result property="name" column="name"/>
+		<result property="phone" column="phone"/>
+		<result property="qq" column="qq"/>
+		<result property="updateTime" column="updateTime"/>
+		<result property="email" column="email"/>
+		<result property="username" column="username"/>
+		<result property="status" column="status"/>
+		<association property="role" javaType="role">
+			<id property="id" column="roleId"/>
+			<result property="code" column="roleCode"/>
+			<result property="createTime" column="roleCreateTime"/>
+			<result property="creatorId" column="roleCreatorId"/>
+			<result property="name" column="roleName"/>
+			<result property="status" column="roleStatus"/>
+			<result property="updateTime" column="roleUpdateTime"/>
+		</association>
+	</resultMap>
+
+
+	<resultMap type="user" id="userMap">
+		<id property="id" column="ID"/>
+		<result property="createTime" column="createTime"/>
+		<result property="name" column="name"/>
+		<result property="phone" column="phone"/>
+		<result property="password" column="password"/>
+		<result property="creatorId" column="creatorId"/>
+		<result property="qq" column="qq"/>
+		<result property="email" column="email"/>
+		<result property="updateTime" column="updateTime"/>
+		<result property="username" column="username"/>
+		<result property="status" column="status"/>
+		<association property="role" javaType="role">
+			<id property="id" column="roleId"/>
+			<result property="code" column="roleCode"/>
+			<result property="createTime" column="roleCreateTime"/>
+			<result property="creatorId" column="roleCreatorId"/>
+			<result property="name" column="roleName"/>
+			<result property="status" column="roleStatus"/>
+			<result property="updateTime" column="roleUpdateTime"/>
+		</association>
+	</resultMap>
 	<!-- 修改 -->
 	<update id="update" parameterType="user">
 		update SYS_USER
@@ -74,11 +124,12 @@
 
 
 	<!-- 根据主键获取 -->
-	<select id="get" parameterType="java.lang.Long" resultType="user">
+	<select id="get" parameterType="java.lang.Long" resultMap="userMap">
 		SELECT
-		<include refid="userColumns" />
-		FROM  SYS_USER user
-		where id = #{ id }
+		<include refid="userColumns" />,
+		<include refid="userRoleColumns" />
+		FROM  SYS_USER user left join SYS_USER_ROLE ur on ur.user_id = user.id left join SYS_ROLE r on r.id = ur.role_id
+		where user.id = #{ id }
 	</select>
 
 	<!-- 获取列表 -->
@@ -88,16 +139,20 @@
 		from SYS_USER user
 	</select>
 
-	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage" resultType="com.anchor.ms.auth.dto.UserDto">
+	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage" resultMap="userDtoMap">
 		select
-		<include refid="userDtoColumns" />
-		from SYS_USER user
+		<include refid="userDtoColumns" />,
+		<include refid="userRoleColumns" />
+		from SYS_USER user left join SYS_USER_ROLE ur on ur.user_id = user.id left join SYS_ROLE r on r.id = ur.role_id
 		<where>
 			<if test="t.username!=null and t.username!=''">
 				and instr(user.username,#{t.username})>0
 			</if>
 			<if test="t.name!=null and t.name!=''">
 				and instr(user.name,#{t.name})>0
+			</if>
+			<if test="t.status!=null and t.status!=''">
+				user.status=#{ t.status }
 			</if>
 		</where>
 

@@ -10,7 +10,8 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">权限编码：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="code" class="form-control " placeholder="请输入格式为:字母、数字、下划线、减号、冒号，1至32位字符">
+                        <input type="text" name="code" class="form-control "
+                               placeholder="请输入格式为:字母、数字、下划线、减号、冒号，1至32位字符">
                     </div>
                 </div>
 
@@ -41,7 +42,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Target：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="targetType" class="form-control " placeholder="">
+                        <select name="targetType" class="form-control"></select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -57,5 +58,8 @@
             </div>
         </form>
     </div>
+    <script>
+
+    </script>
 </div>
 

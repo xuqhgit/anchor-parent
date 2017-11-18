@@ -87,6 +87,9 @@
 			<if test="t.name!=null and t.name!=''">
 				and instr(r.NAME,#{ t.name })>0
 			</if>
+			<if test="t.status!=null and t.status!=''">
+				r.status=#{ t.status }
+			</if>
 		</where>
 		<choose>
 			<when test="sort!=null and sortOrder!=null">

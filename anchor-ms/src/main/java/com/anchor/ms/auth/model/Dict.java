@@ -5,6 +5,7 @@ import com.anchor.core.common.base.BaseModel;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 /**
  * @author xuqh
@@ -49,6 +50,8 @@ public class Dict extends BaseModel {
     private String status;
 
 
+    private List<DictItemTree> list;
+
     public void setCode(String code) {
         this.code = code;
     }
@@ -79,5 +82,13 @@ public class Dict extends BaseModel {
 
     public String getStatus() {
         return this.status;
+    }
+
+    public List<DictItemTree> getList() {
+        return list;
+    }
+
+    public void setList(List<DictItemTree> list) {
+        this.list = list;
     }
 }

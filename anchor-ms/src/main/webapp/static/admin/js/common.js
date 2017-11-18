@@ -99,6 +99,20 @@ $.fn.serializeObject = function()
     return o;
 };
 var anchor = {};
+var _dictData;
+function loadDictData(){
+    if(!_dictData){
+        if(self.location!=top.location){
+            return window.parent.loadDictData();
+        }
+        else{
+            anchor.request("/dict/dictTree",{},function(data){
+                _dictData=data.data;
+            },{async:false})
+        }
+    }
+    return _dictData;
+}
 $(function() {
     var DEFAULT_TYPE = 'blue';
     var DEFAULT_BOOTSTRAP_TABLE_SETTING = {
@@ -116,10 +130,11 @@ $(function() {
         pagination:true
     };
 
-    anchor.defaultSettings={};
+    anchor.defaultSettings={async:true};
     anchor.request = function(url,param,func,settings){
         var defaultSettings = {
-            filter:false
+            filter:false,
+            async:true
         };
         var _settings = $.extend({},defaultSettings,settings);
         $.ajax({
@@ -128,7 +143,13 @@ $(function() {
             dataType: "json",
             type: "POST",
             traditional: true,
+            async: _settings.async,
             success: function (data) {
+                if(data['code']==300){
+                    anchor.alert(data['message']);
+                    parent.location.reload();
+                    return;
+                }
                 if(_settings['filter']&&data['code']!=1&&data['message']){
                     anchor.alert(data['message']);
                 }
@@ -136,6 +157,40 @@ $(function() {
             }
         });
 
+    };
+    anchor.getDict=function(dictCode){
+        var dictData = loadDictData();
+        if(!dictData)return;
+        for(var i=0;i<dictData.length;i++){
+            if(dictData[i].code==dictCode){
+                return dictData[i];
+            }
+        }
+    };
+
+    anchor.getDictItemTextByValue=function(dictItems,value){
+        for(var i=0;i<dictItems.length;i++){
+            if(dictItems[i].value==value){
+                return dictItems[i].text;
+            }
+            if(dictItems[i].child&&dictItems[i].child.length>0){
+                var text = anchor.getDictItemTextByValue(dictItems[i].child,value);
+                if(text){
+                    return text;
+                }
+            }
+        }
+    };
+    anchor.createFromGroupSelect=function(id,dict,selectValue,defaultShow){
+        var options="";
+        if(defaultShow){
+            options+="<option value='"+defaultShow[0]+"'>"+defaultShow[1]+"</option>"
+        }
+        selectValue = selectValue | $('#'+id).attr("data-value");
+        dict.list.forEach(function(val){
+            options+="<option value='"+val.value+"' "+(selectValue&&selectValue==val.value?"selected":"")+">"+val.text+"</option>"
+        })
+        $('#'+id).html(options);
     };
     anchor.bootstrapTable=function(id,setting){
         var $setting = $.extend({},DEFAULT_BOOTSTRAP_TABLE_SETTING,setting);

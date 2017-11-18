@@ -14,6 +14,7 @@ public class Menu {
     private String text;
     private String url;
     private String icon;
+    private String target;
     private List<Menu> child = new LinkedList<Menu>();
 
     public String getText() {
@@ -46,5 +47,13 @@ public class Menu {
 
     public void setChild(List<Menu> child) {
         this.child = child;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
     }
 }

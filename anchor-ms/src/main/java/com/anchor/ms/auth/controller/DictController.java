@@ -18,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.anchor.ms.auth.service.IDictService;
 import com.anchor.ms.auth.model.Dict;
 
+import java.util.List;
+
 /**
  * @ClassName: DictController
  * @Description: 字典
@@ -121,5 +123,16 @@ public class DictController extends BaseController{
         }
     }
 
+    @RequestMapping(value="dictTree")
+    @ResponseBody
+    public Result dictTree(){
+        try{
+            ResultObject<List<Dict>> resultObject = new ResultObject();
+            resultObject.setData(dictService.getDictMapList());
+            return resultObject;
+        }catch (Exception e){
+            return new Result().error("获取列表失败：" + e.getMessage());
+        }
+    }
 }
 

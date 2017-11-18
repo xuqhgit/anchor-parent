@@ -4,6 +4,8 @@ package com.anchor.ms.auth.mapper;
 import com.anchor.core.common.base.BaseMapper;
 import com.anchor.ms.auth.model.Dict;
 
+import java.util.List;
+
 
 /**
  * @ClassName: DictMapper
@@ -14,6 +16,6 @@ import com.anchor.ms.auth.model.Dict;
  */
 public interface DictMapper extends BaseMapper<Dict,Long> {
 
-
+    List<Dict> getDictMapList();
 
 }

@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <html>
@@ -17,19 +16,23 @@
         <div class="span12 search-form">
             <form id="form" class="form-horizontal" role="form">
                 <div class="form-group">
-                    <label class="col-sm-1 control-label" >角色编码：</label>
+                    <label class="col-sm-1 control-label">角色编码：</label>
                     <div class="col-sm-2">
                         <input class="form-control" id="code" name="code" type="text" placeholder="角色编码"/>
                     </div>
 
-                    <label class="col-sm-1 control-label" >名称：</label>
+                    <label class="col-sm-1 control-label">名称：</label>
                     <div class="col-sm-2">
                         <input class="form-control" id="name" name="name" type="text" placeholder="名称"/>
                     </div>
+                    <label class="col-sm-1 control-label" >状态：</label>
+                    <div class="col-sm-2">
+                        <select id="roleStatus" class="form-control" name="status"></select>
+                    </div>
                     <div class="col-sm-1">
-                            <button type="button" class="btn btn-primary" id="search"
-                                    data-toggle="button"><span class="glyphicon glyphicon-search"></span>搜索
-                            </button>
+                        <button type="button" class="btn btn-primary" id="search"
+                                data-toggle="button"><span class="glyphicon glyphicon-search"></span>搜索
+                        </button>
                     </div>
                 </div>
             </form>
@@ -37,9 +40,9 @@
         <div class="span12">
             <div id="toolbar" class="btn-group">
 
-                    <a role="button" id="addRole" class="btn btn-default">
-                        <i class="glyphicon glyphicon-plus"></i>添加角色
-                    </a>
+                <a role="button" id="addRole" class="btn btn-default">
+                    <i class="glyphicon glyphicon-plus"></i>添加角色
+                </a>
 
 
                 <shiro:hasPermission name="role:deleteBatch">
@@ -54,47 +57,45 @@
 </div>
 
 
-
-
-
 <%@include file="../../common_script.jsp" %>
 <script src="/static/bootstrap/ext/treeview/bootstrap-treeview.js"></script>
 <script>
 
     var bt;
-    var roleValidConfig={
-    
-        code:{
-            rule:{
-                required:true,
-                codeValid:true 
+    var roleValidConfig = {
+
+        code: {
+            rule: {
+                required: true,
+                codeValid: true
             },
-            message:{
-                required:'请输入角色编码'
+            message: {
+                required: '请输入角色编码'
             }
         },
-        name:{
-            rule:{
-                required:true,
-                nameValid:true 
+        name: {
+            rule: {
+                required: true,
+                nameValid: true
             },
-            message:{
-                required:'请输入名称'
+            message: {
+                required: '请输入名称'
             }
         }
     };
     $(function () {
-    
-    jQuery.validator.addMethod("codeValid", function(value,element) {
-        var p = /[a-zA-Z0-9_-]{1,16}$/;
-        return p.test(value);
-    }, "请输入英文大小写、数字、下划线、减号1到16位字符");
-    jQuery.validator.addMethod("nameValid", function(value,element) {
-        var p = /^.{1,16}$/;
-        return p.test(value);
-    }, "请输入1到16位字符");
 
-    var params = {
+        jQuery.validator.addMethod("codeValid", function (value, element) {
+            var p = /[a-zA-Z0-9_-]{1,16}$/;
+            return p.test(value);
+        }, "请输入英文大小写、数字、下划线、减号1到16位字符");
+        jQuery.validator.addMethod("nameValid", function (value, element) {
+            var p = /^.{1,16}$/;
+            return p.test(value);
+        }, "请输入1到16位字符");
+        var statusDict = anchor.getDict("STATUS");
+        anchor.createFromGroupSelect("roleStatus",statusDict,"",['','==选择状态==']);
+        var params = {
             url: '/role/grid',
             queryParams: function (params) {
                 var temp = {
@@ -107,33 +108,39 @@
             },
             columns: [
                 {checkbox: true},
-                 
-                {title: '角色编码', field: 'code', align: 'center',sortable: true, width: '100'},
-                
-                {title: '创建时间', field: 'createTime', align: 'center',sortable: true, width: '100'},
-                
+
+                {title: '角色编码', field: 'code', align: 'center', sortable: true, width: '100'},
+
+                {title: '创建时间', field: 'createTime', align: 'center', sortable: true, width: '100'},
+
                 {title: 'ID', field: 'id', align: 'center', width: '100'},
-                
+
                 {title: '名称', field: 'name', align: 'center', width: '100'},
-                
-                {title: '状态', field: 'state', align: 'center',sortable: true, width: '100'},
-                
-                {title: '更新时间', field: 'updateTime', align: 'center',sortable: true, width: '100'},
-                
+
+                {
+                    title: '状态',
+                    field: 'status',
+                    align: 'center',
+                    sortable: true,
+                    width: '80',
+                    formatter: function (index, row) {
+                        return anchor.getDictItemTextByValue(statusDict.list, row.status);
+                    }
+                },
+
+                {title: '更新时间', field: 'updateTime', align: 'center', sortable: true, width: '100'},
+
                 {
                     title: '操作', field: 'opt', align: 'center', width: '120', formatter: function (index, row) {
                     var opts = "";
-                    <shiro:hasPermission name="role:get">
-                        opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"detailRole(\'" + row.id + "\')\">查看</a>|";
+
+                    <shiro:hasPermission name="auth:role:edit">
+                    opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"editRole(\'" + row.id + "\')\">编辑</a>|";
                     </shiro:hasPermission>
-                    <shiro:hasPermission name="role:edit:index">
-                        opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"editRole(\'" + row.id + "\')\">编辑</a>|";
-                    </shiro:hasPermission>
-                    <shiro:hasPermission name="role:delete">
-                        opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"deleteRole(\'" + row.id + "\')\">删除</a>";
-                        opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"deleteRole(\'" + row.id + "\')\">删除</a>";
-                    </shiro:hasPermission>
+                    <shiro:hasPermission name="auth:role:setPermission">
                     opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"setRolePermission(\'" + row.id + "\')\">权限设置</a>";
+                    </shiro:hasPermission>
+
 
                     return opts;
                 }
@@ -157,22 +164,22 @@
             var addDialog = $.dialog({
                 title: '',
                 content: 'url:/role/add',
-                columnClass:'medium',
+                columnClass: 'medium',
                 draggable: true,
-                onContentReady:function(){
-                    var validateConfig =anchor.validFieldConfig(roleValidConfig,anchor.formField(addFormId));
-                    validateConfig['id']= addFormId;
+                onContentReady: function () {
+                    var validateConfig = anchor.validFieldConfig(roleValidConfig, anchor.formField(addFormId));
+                    validateConfig['id'] = addFormId;
                     var valid = anchor.validate(validateConfig);
                     $('#saveRole').click(function () {
-                        if(valid.form()){
+                        if (valid.form()) {
 
-                                anchor.request("/role/add", $('#'+addFormId).serializeObject(), function (data) {
-                                if(data.code==1){
+                            anchor.request("/role/add", $('#' + addFormId).serializeObject(), function (data) {
+                                if (data.code == 1) {
                                     bt.bootstrapTable('refresh');
                                     anchor.alert("保存成功");
                                     addDialog.close();
                                 }
-                                else{
+                                else {
                                     anchor.alert(data.message);
                                 }
                             }, null);
@@ -213,11 +220,11 @@
     function detailRole(roleId) {
         $.dialog({
             title: '',
-            content: 'url:/role/edit/'+roleId,
-            type:'blue',
-            columnClass:'medium',
+            content: 'url:/role/edit/' + roleId,
+            type: 'blue',
+            columnClass: 'medium',
             draggable: true,
-            onContentReady:function(){
+            onContentReady: function () {
 
             }
         });
@@ -227,7 +234,7 @@
      */
     function deleteRole(roleId) {
         anchor.confirm("确认要删除该用户么?", function () {
-            anchor.request("/role/delete/"+roleId, {}, function (data) {
+            anchor.request("/role/delete/" + roleId, {}, function (data) {
                 anchor.alert(data.message);
                 bt.bootstrapTable('refresh');
             }, null);
@@ -240,16 +247,16 @@
         var editFormId = "editRoleForm";
         var dialog = $.dialog({
             title: '',
-            content: 'url:/role/edit/'+roleId,
-            columnClass:'medium',
+            content: 'url:/role/edit/' + roleId,
+            columnClass: 'medium',
             draggable: true,
-            onContentReady:function(){
-                var validateConfig =anchor.validFieldConfig(roleValidConfig,anchor.formField(editFormId));
-                validateConfig['id']= editFormId;
+            onContentReady: function () {
+                var validateConfig = anchor.validFieldConfig(roleValidConfig, anchor.formField(editFormId));
+                validateConfig['id'] = editFormId;
                 var valid = anchor.validate(validateConfig);
                 $('#editRole').click(function () {
-                    if(valid.form()){
-                        anchor.request("/role/edit", $('#'+editFormId).serializeObject(), function (data) {
+                    if (valid.form()) {
+                        anchor.request("/role/edit", $('#' + editFormId).serializeObject(), function (data) {
                             bt.bootstrapTable('refresh');
                             anchor.alert("保存成功");
                             dialog.close();
@@ -260,13 +267,13 @@
         });
     }
 
-    function setRolePermission(roleId){
+    function setRolePermission(roleId) {
         var dialog = $.dialog({
             title: '权限设置',
-            content: 'url:/role/permission/'+roleId,
-            columnClass:'medium',
+            content: 'url:/role/permission/' + roleId,
+            columnClass: 'medium',
             draggable: true,
-            onContentReady:function(){
+            onContentReady: function () {
 
             }
         });

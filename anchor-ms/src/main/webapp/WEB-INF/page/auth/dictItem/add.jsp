@@ -21,6 +21,12 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label class="col-sm-2 control-label">排名：</label>
+                    <div class="col-sm-9">
+                        <input type="text" name="rank" class="form-control " placeholder="">
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-sm-2 control-label">状态：</label>
                     <div class="col-sm-9">
                         <input type="text" name="status" class="form-control " placeholder="">
@@ -32,7 +38,6 @@
             </div>
         </form>
     </div>
-
 
 
 </div>

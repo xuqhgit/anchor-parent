@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" import="com.anchor.ms.auth.model.Dict" language="java" %>
 <%@ page import="com.anchor.ms.auth.model.DictItem" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
@@ -30,9 +29,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="status">状态：</label>
+                        <label class="col-sm-2 control-label" >状态：</label>
                         <div class="col-sm-4">
-                            <input class="form-control" id="status" name="status" type="text" placeholder="状态"/>
+                            <select id="dictStatus" class="form-control" name="status"></select>
                         </div>
 
                         <div class="col-sm-1">
@@ -60,7 +59,7 @@
             <div class="span12">
                 <h3 id="dictItemTitle">字典元素列表</h3>
                 <form id="dictItemForm" class="form-horizontal" role="form">
-                    <input type="hidden" name="dictId" >
+                    <input type="hidden" name="dictId">
                 </form>
             </div>
             <div class="span12">
@@ -78,48 +77,47 @@
 </div>
 
 
-
-
-
 <%@include file="../../common_script.jsp" %>
 <script src="/static/bootstrap/ext/table/ext/treegrid.js"></script>
 
 <script>
 
     var bt;
-    var dictValidConfig={
-    
-        code:{
-            rule:{
-                required:true,
-                codeValid:true 
+    var dictValidConfig = {
+
+        code: {
+            rule: {
+                required: true,
+                codeValid: true
             },
-            message:{
-                required:'必填项'
+            message: {
+                required: '必填项'
             }
         },
-        name:{
-            rule:{
-                required:true,
-                nameValid:true 
+        name: {
+            rule: {
+                required: true,
+                nameValid: true
             },
-            message:{
-                required:'必填项'
+            message: {
+                required: '必填项'
             }
         },
     };
+    var statusDict;
     $(function () {
-    
-    jQuery.validator.addMethod("codeValid", function(value,element) {
-        var p =/<%=Dict.CODE_PATTERN%>/;
-        return p.test(value);
-    }, "<%=Dict.CODE_PATTERN_MESSAGE%>");
-    jQuery.validator.addMethod("nameValid", function(value,element) {
-        var p =/<%=Dict.NAME_PATTERN%>/;
-        return p.test(value);
-    }, "<%=Dict.NAME_PATTERN_MESSAGE%>");
+        statusDict = anchor.getDict("STATUS");
+        anchor.createFromGroupSelect("dictStatus",statusDict,"",['','==选择状态==']);
+        jQuery.validator.addMethod("codeValid", function (value, element) {
+            var p =/<%=Dict.CODE_PATTERN%>/;
+            return p.test(value);
+        }, "<%=Dict.CODE_PATTERN_MESSAGE%>");
+        jQuery.validator.addMethod("nameValid", function (value, element) {
+            var p =/<%=Dict.NAME_PATTERN%>/;
+            return p.test(value);
+        }, "<%=Dict.NAME_PATTERN_MESSAGE%>");
 
-    var params = {
+        var params = {
             url: '/dict/grid',
             queryParams: function (params) {
                 var temp = {
@@ -131,20 +129,22 @@
                 return $.extend(temp, $('#form').serializeObject());
             },
             columns: [
-                {title: '字典编码', field: 'code', align: 'center',sortable: true, width: '100'},
-                
+                {title: '字典编码', field: 'code', align: 'center', sortable: true, width: '100'},
+
                 {title: '创建时间', field: 'createTime', align: 'center', width: '100'},
-                
+
                 {title: '名称', field: 'name', align: 'center', width: '100'},
-                
-                {title: '状态', field: 'status', align: 'center', width: '100'},
-                
-                
+
+                {
+                    title: '状态', field: 'status', align: 'center', width: '100', formatter: function (index, row) {
+                    return anchor.getDictItemTextByValue(statusDict.list, row.status);
+                }
+                },
                 {
                     title: '操作', field: 'opt', align: 'center', width: '120', formatter: function (index, row) {
                     var opts = "";
                     <shiro:hasPermission name="auth:dict:edit">
-                        opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"editDict(\'" + row.id + "\')\">编辑</a>";
+                    opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"editDict(\'" + row.id + "\')\">编辑</a>";
                     </shiro:hasPermission>
                     opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"dictDetail(\'" + row.id + "\',\'" + row.name + "\',\'" + row.code + "\')\">查看</a>";
                     return opts;
@@ -169,21 +169,21 @@
             var addDialog = $.dialog({
                 title: '',
                 content: 'url:/dict/add',
-                columnClass:'medium',
-                onContentReady:function(){
-                    var validateConfig =anchor.validFieldConfig(dictValidConfig,anchor.formField(addFormId));
-                    validateConfig['id']= addFormId;
+                columnClass: 'medium',
+                onContentReady: function () {
+                    var validateConfig = anchor.validFieldConfig(dictValidConfig, anchor.formField(addFormId));
+                    validateConfig['id'] = addFormId;
                     var valid = anchor.validate(validateConfig);
                     $('#saveDict').click(function () {
-                        if(valid.form()){
+                        if (valid.form()) {
                             <shiro:hasPermission name="auth:dict:add">
-                                anchor.request("/dict/add", $('#'+addFormId).serializeObject(), function (data) {
-                                if(data.code==1){
+                            anchor.request("/dict/add", $('#' + addFormId).serializeObject(), function (data) {
+                                if (data.code == 1) {
                                     bt.bootstrapTable('refresh');
                                     anchor.alert("保存成功");
                                     addDialog.close();
                                 }
-                                else{
+                                else {
                                     anchor.alert(data.message);
                                 }
                             }, null);
@@ -223,9 +223,9 @@
     /**
      * 详情
      */
-    function dictDetail(id,name,code) {
+    function dictDetail(id, name, code) {
         $('#dictItemForm input[name=dictId]').val(id);
-        $("#dictItemTitle").text(name+"【"+code+"】");
+        $("#dictItemTitle").text(name + "【" + code + "】");
         dictItemLoad();
     }
     /**
@@ -233,7 +233,7 @@
      */
     function deleteDict(dictId) {
         anchor.confirm("确认要删除该用户么?", function () {
-            anchor.request("/dict/delete/"+dictId, {}, function (data) {
+            anchor.request("/dict/delete/" + dictId, {}, function (data) {
                 anchor.alert(data.message);
                 bt.bootstrapTable('refresh');
             }, null);
@@ -246,15 +246,15 @@
         var editFormId = "editDictForm";
         var dialog = $.dialog({
             title: '',
-            content: 'url:/dict/edit/'+dictId,
-            columnClass:'medium',
-            onContentReady:function(){
-                var validateConfig =anchor.validFieldConfig(dictValidConfig,anchor.formField(editFormId));
-                validateConfig['id']= editFormId;
+            content: 'url:/dict/edit/' + dictId,
+            columnClass: 'medium',
+            onContentReady: function () {
+                var validateConfig = anchor.validFieldConfig(dictValidConfig, anchor.formField(editFormId));
+                validateConfig['id'] = editFormId;
                 var valid = anchor.validate(validateConfig);
                 $('#editDict').click(function () {
-                    if(valid.form()){
-                        anchor.request("/dict/edit", $('#'+editFormId).serializeObject(), function (data) {
+                    if (valid.form()) {
+                        anchor.request("/dict/edit", $('#' + editFormId).serializeObject(), function (data) {
                             bt.bootstrapTable('refresh');
                             anchor.alert("保存成功");
                             dialog.close();
@@ -266,37 +266,35 @@
     }
 
 
-
-
     var dictItemBt;
-    var dictItemValidConfig={
-        value:{
-            rule:{
-                required:true,
-                valueValid:true
+    var dictItemValidConfig = {
+        value: {
+            rule: {
+                required: true,
+                valueValid: true
             },
-            message:{
-                required:'必填项'
+            message: {
+                required: '必填项'
             }
         },
-        text:{
-            rule:{
-                required:false,
-                textValid:true
+        text: {
+            rule: {
+                required: false,
+                textValid: true
             },
-            message:{
-                required:'必填项'
+            message: {
+                required: '必填项'
             }
         }
     };
 
     $(function () {
 
-        jQuery.validator.addMethod("valueValid", function(value,element) {
+        jQuery.validator.addMethod("valueValid", function (value, element) {
             var p =/<%=DictItem.VALUE_PATTERN%>/;
             return p.test(value);
         }, "<%=DictItem.VALUE_PATTERN_MESSAGE%>");
-        jQuery.validator.addMethod("textValid", function(value,element) {
+        jQuery.validator.addMethod("textValid", function (value, element) {
             var p =/<%=DictItem.TEXT_PATTERN%>/;
             return p.test(value);
         }, "<%=DictItem.TEXT_PATTERN_MESSAGE%>");
@@ -317,26 +315,25 @@
                 return $.extend(temp, $('#dictItemForm').serializeObject());
             },
             columns: [
-                {title: '名称', field: 'text', align: 'left', width: '100',formatter:function(index,row){
-                    var opts = row['text']+"<div style='float:right;margin-right: 5px;'>";
+                {
+                    title: '名称', field: 'text', align: 'left', width: '100', formatter: function (index, row) {
+                    var opts = row['text'] + "<div style='float:right;margin-right: 5px;'>";
                     <shiro:hasPermission name="auth:dictItem:add">
                     opts += " <a href='javascript:void(0);' class='glyphicon glyphicon-plus' onclick=\"addDictItem(\'" + row.id + "\')\"></a> ";
                     </shiro:hasPermission>
-                    return opts
-                }},
-                {title: '值', field: 'value', align: 'center', width: '100'},
-                {title: '状态', field: 'status', align: 'center', width: '100'},
-                {
-                    title: '操作', field: 'opt', align: 'center', width: '120', formatter: function (index, row) {
-                    var opts = "";
                     <shiro:hasPermission name="auth:dictItem:edit">
-                    opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"editDictItem(\'" + row.id + "\')\">编辑</a>|";
+                    opts += " <a href='javascript:void(0);' class='glyphicon glyphicon-pencil' onclick=\"editDictItem(\'" + row.id + "\')\"></a> ";
                     </shiro:hasPermission>
-                    <shiro:hasPermission name="auth:dictItem:delete">
-                    opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"deleteDictItem(\'" + row.id + "\')\">删除</a>";
-                    </shiro:hasPermission>
-                    return opts;
+                    return opts
                 }
+                },
+                {title: '值', field: 'value', align: 'center', width: '100'},
+                {title: '排序', field: 'rank', align: 'center', width: '100'},
+                {
+                    title: '状态', field: 'status', align: 'center', width: '100', formatter: function (index, row) {
+                    return anchor.getDictItemTextByValue(statusDict.list, row.status);
+                }
+
                 }
             ]
         };
@@ -380,9 +377,9 @@
     /**
      * 添加字典元素
      */
-    function addDictItem(id){
+    function addDictItem(id) {
         var dictItem = $('#dictItemForm input[name=dictId]').val();
-        if(!dictItem){
+        if (!dictItem) {
             anchor.alert("请选择需要添加的字典");
             return;
         }
@@ -390,23 +387,23 @@
         var addDialog = $.dialog({
             title: '',
             content: 'url:/dictItem/add',
-            columnClass:'medium',
-            onContentReady:function(){
-                $("#"+addFormId+" input[name=dictId]").val(dictItem);
-                $("#"+addFormId+" input[name=pid]").val(id);
-                var validateConfig =anchor.validFieldConfig(dictItemValidConfig,anchor.formField(addFormId));
-                validateConfig['id']= addFormId;
+            columnClass: 'medium',
+            onContentReady: function () {
+                $("#" + addFormId + " input[name=dictId]").val(dictItem);
+                $("#" + addFormId + " input[name=pid]").val(id);
+                var validateConfig = anchor.validFieldConfig(dictItemValidConfig, anchor.formField(addFormId));
+                validateConfig['id'] = addFormId;
                 var valid = anchor.validate(validateConfig);
                 $('#saveDictItem').click(function () {
-                    if(valid.form()){
+                    if (valid.form()) {
                         <shiro:hasPermission name="auth:dictItem:add">
-                        anchor.request("/dictItem/add", $('#'+addFormId).serializeObject(), function (data) {
-                            if(data.code==1){
+                        anchor.request("/dictItem/add", $('#' + addFormId).serializeObject(), function (data) {
+                            if (data.code == 1) {
                                 dictItemLoad();
                                 anchor.alert("保存成功");
                                 addDialog.close();
                             }
-                            else{
+                            else {
                                 anchor.alert(data.message);
                             }
                         }, null);
@@ -419,12 +416,12 @@
         });
     }
 
-    function dictItemLoad(){
+    function dictItemLoad() {
         var dictItem = $('#dictItemForm input[name=dictId]').val();
-        if(dictItem){
+        if (dictItem) {
             dictItemBt.bootstrapTable('refresh');
         }
-        else{
+        else {
             anchor.alert("请选择需要查询的字典");
         }
     }
@@ -436,15 +433,15 @@
         var editFormId = "editDictItemForm";
         var dialog = $.dialog({
             title: '',
-            content: 'url:/dictItem/edit/'+dictItemId,
-            columnClass:'medium',
-            onContentReady:function(){
-                var validateConfig =anchor.validFieldConfig(dictItemValidConfig,anchor.formField(editFormId));
-                validateConfig['id']= editFormId;
+            content: 'url:/dictItem/edit/' + dictItemId,
+            columnClass: 'medium',
+            onContentReady: function () {
+                var validateConfig = anchor.validFieldConfig(dictItemValidConfig, anchor.formField(editFormId));
+                validateConfig['id'] = editFormId;
                 var valid = anchor.validate(validateConfig);
                 $('#editDictItem').click(function () {
-                    if(valid.form()){
-                        anchor.request("/dictItem/edit", $('#'+editFormId).serializeObject(), function (data) {
+                    if (valid.form()) {
+                        anchor.request("/dictItem/edit", $('#' + editFormId).serializeObject(), function (data) {
                             dictItemLoad();
                             anchor.alert("保存成功");
                             dialog.close();

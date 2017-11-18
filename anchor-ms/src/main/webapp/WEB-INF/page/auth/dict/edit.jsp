@@ -11,19 +11,21 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">名称：</label>
                     <div class="col-sm-8">
-                        <input type="text" name="name" value="${ dict.name }" class="form-control " placeholder="长度不超过32个字符">
+                        <input type="text" name="name" value="${ dict.name }" class="form-control "
+                               placeholder="长度不超过32个字符">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">编码：</label>
                     <div class="col-sm-8">
-                         <input type="text" name="code" value="${ dict.code }" class="form-control " placeholder="只能包含数字、字母、下划线、减号长度不能超过32个字符">
+                        <input type="text" name="code" value="${ dict.code }" class="form-control "
+                               placeholder="只能包含数字、字母、下划线、减号长度不能超过32个字符">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">状态：</label>
                     <div class="col-sm-8">
-                         <input type="text" name="status" value="${ dict.status }" class="form-control " placeholder="">
+                        <input type="text" name="status" value="${ dict.status }" class="form-control " placeholder="">
                     </div>
                 </div>
             </div>

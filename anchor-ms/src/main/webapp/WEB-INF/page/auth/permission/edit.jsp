@@ -19,37 +19,42 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">名称：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="name" class="form-control " value="${ permission.name }" placeholder="长度1至16位字符">
+                        <input type="text" name="name" class="form-control " value="${ permission.name }"
+                               placeholder="长度1至16位字符">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">类型：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="type" class="form-control " value="${ permission.type }" placeholder="">
+                        <input type="text" name="type" class="form-control " value="${ permission.type }"
+                               placeholder="">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">URL：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="url" class="form-control " value="${ permission.url }" placeholder="格式为a-zA-Z0-9_-/长度不能超过128个字符">
+                        <input type="text" name="url" class="form-control " value="${ permission.url }"
+                               placeholder="格式为a-zA-Z0-9_-/长度不能超过128个字符">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">排名：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="rank" class="form-control " value="${ permission.rank }" placeholder="">
+                        <input type="text" name="rank" class="form-control " value="${ permission.rank }"
+                               placeholder="">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Target：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="targetType" class="form-control " placeholder="">
+                        <select name="targetType" class="form-control" data-value="${ permission.targetType }"></select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">图标：</label>
                     <div class="col-sm-9">
-                        <input type="text" name="icon" class="form-control " value="${ permission.icon }" placeholder="">
+                        <input type="text" name="icon" class="form-control " value="${ permission.icon }"
+                               placeholder="">
                     </div>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 package com.anchor.ms.auth.dto;
 
+import com.anchor.ms.auth.model.Role;
 import com.anchor.ms.auth.model.User;
 
 /**
@@ -21,7 +22,7 @@ public class UserDto {
     /**
      * 密码
      */
-    private int state;
+    private int status;
     /**
      * 手机号
      */
@@ -41,6 +42,8 @@ public class UserDto {
 
     private Long id;
 
+    private Role role;
+
 
     public void setEmail(String email){
         this.email = email;
@@ -55,13 +58,7 @@ public class UserDto {
         return this.name;
     }
 
-    public int getStatus() {
-        return state;
-    }
 
-    public void setStatus(int state) {
-        this.state = state;
-    }
 
     public void setPhone(String phone){
         this.phone = phone;
@@ -104,5 +101,21 @@ public class UserDto {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

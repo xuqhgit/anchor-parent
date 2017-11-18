@@ -3,6 +3,8 @@ package com.anchor.ms.auth.service;
 import com.anchor.core.common.base.BaseService;
 import com.anchor.ms.auth.model.Dict;
 
+import java.util.List;
+
 /**
  * @ClassName: IDictService
  * @Description: 字典
@@ -13,5 +15,5 @@ import com.anchor.ms.auth.model.Dict;
 public interface IDictService extends BaseService<Dict,Long> {
 
 
-
+    List<Dict> getDictMapList();
 }

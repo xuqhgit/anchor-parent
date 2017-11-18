@@ -34,6 +34,9 @@
 			<if test="text != null">
 				TEXT = #{ text },
 			</if>
+			<if test="rank != null">
+				RANK = #{ rank },
+			</if>
 			<if test="updateTime != null">
 				UPDATE_TIME = now(),
 			</if>
@@ -105,5 +108,10 @@
 				order by t.CREATE_TIME DESC
 			</otherwise>
 		</choose>
+	</select>
+	<select id="getAllDictItemTree"   resultType="dictItemTree">
+		select
+		<include refid="dictItemColumns" />
+		from SYS_DICT_ITEM t
 	</select>
 </mapper>

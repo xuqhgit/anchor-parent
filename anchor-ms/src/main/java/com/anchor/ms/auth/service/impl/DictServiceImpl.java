@@ -10,6 +10,7 @@ import com.anchor.ms.auth.mapper.DictMapper;
 import com.anchor.ms.auth.model.Dict;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @ClassName: DictServiceImpl
@@ -28,4 +29,15 @@ public class DictServiceImpl extends BaseServiceImpl<Dict,Long> implements IDict
 	public void setBaseMapper(BaseMapper baseMapper) {
 		this.baseMapper = baseMapper;
 	}
+
+	@Override
+	public List<Dict> getDictMapList() {
+		List<Dict> list =  dictMapper.getDictMapList();
+		list.forEach(d->{
+			d.setList(DictItemServiceImpl.createDictItemTree(d.getList()));
+		});
+		return list;
+	}
+
+
 }

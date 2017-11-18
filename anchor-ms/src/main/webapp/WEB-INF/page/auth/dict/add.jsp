@@ -6,7 +6,7 @@
         </div>
         <form id="addDictForm" class="form-horizontal" role="form">
             <div class="box-body">
-                
+
                 <div class="form-group">
                     <label class="col-sm-3 control-label">字典编码：</label>
                     <div class="col-sm-8">
@@ -25,7 +25,6 @@
             </div>
         </form>
     </div>
-
 
 
 </div>

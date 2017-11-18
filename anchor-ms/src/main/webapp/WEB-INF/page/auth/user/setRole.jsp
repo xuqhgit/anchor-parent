@@ -7,7 +7,7 @@
         </div>
         <div class="box-body">
             <form id="setRoleForm" class="form-horizontal" role="form">
-            <input type="hidden" name="userId" value="${user.id}">
+                <input type="hidden" name="userId" value="${user.id}">
                 <div class="form-group">
                     <div class="col-sm-10">
 
@@ -26,18 +26,19 @@
 
 
 <script>
-    $(document).ready(function(){
-
-        anchor.request("/role/list",null,function(data){
+    $(document).ready(function () {
+        var roleId<c:if test="${user.role!=null}"> = "${user.role.id}"</c:if>;
+        anchor.request("/role/list", null, function (data) {
             var a = $('#setRoleForm .form-group div');
-            data.data.forEach(function(val){
-                a.append("<label><input type='radio'  name='roleId' value='"+val.id+"'>"+val.name+"</label>");
+            data.data.forEach(function (val) {
+                a.append("<label><input type='radio'  name='roleId' value='" + val.id + "'  " + (val.status != '1' ? 'disabled' : '') + " " + (roleId && roleId == val.id ? 'checked' : '') + ">" +
+                        (val.status != '1' ? '<s>' + val.name + '</s>' : val.name) + "</label>");
             });
             $('#setRoleForm .form-group input').iCheck({
                 checkboxClass: 'icheckbox_flat-blue',
                 radioClass: 'iradio_flat-blue'
             });
-        },{filter:true})
+        }, {filter: true})
     });
 
 

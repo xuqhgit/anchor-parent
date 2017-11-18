@@ -43,7 +43,7 @@ public class DictItemServiceImpl extends BaseServiceImpl<DictItem,Long> implemen
 	}
 
 
-	private List<DictItemTree> createDictItemTree(List<DictItemTree> list){
+	public static List<DictItemTree> createDictItemTree(List<DictItemTree> list){
 
 		List<DictItemTree> resultList = new LinkedList<>();
 		Map<Long,List<DictItemTree>> map = new HashMap<>((int)Math.ceil(list.size()/0.75)+1);

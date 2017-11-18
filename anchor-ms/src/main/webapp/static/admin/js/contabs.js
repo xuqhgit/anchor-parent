@@ -24,7 +24,8 @@ $(function() {
             var child = d.child;
             var menuIcon = d.icon||DEFAULT_CONFIG[url=='#'?'menuIcon':'urlIcon'];
             var className = url=="#"?"":"T_menuItem";
-            var str = "<a href='"+url+"' class='"+className+"'><i class='fa "+menuIcon+"'></i> <span>"+name+"</span>"+(child&&child.length>0?"<i class='fa fa-angle-left pull-right'></i>":"")+" </a>";
+            var str = "<a href='"+url+"' class='"+className+"'" +(d.target?"target='"+d.target+"'":"")+
+                "><i class='fa "+menuIcon+"'></i> <span>"+name+"</span>"+(child&&child.length>0?"<i class='fa fa-angle-left pull-right'></i>":"")+" </a>";
             if(child&&child.length>0){
                 str +="<ul class='treeview-menu'>";
                 child.forEach(function(r){
@@ -129,6 +130,8 @@ $(function() {
     }
 
     function c() {
+        var target = $(this).attr('target');
+        if(target&&target!='default'){ return;}
         var o = $(this).attr("href"),
         m = $(this).data("index"),
         l = $.trim($(this).text()),

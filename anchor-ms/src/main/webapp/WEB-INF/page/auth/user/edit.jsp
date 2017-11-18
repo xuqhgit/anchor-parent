@@ -12,8 +12,9 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">名称：</label>
                     <div class="col-sm-10">
-                        <input type="text" name="name" class="form-control" value="${user.name}" placeholder="名称:1~10个字符">
-                        <span class="help-block m-b-none" ></span>
+                        <input type="text" name="name" class="form-control" value="${user.name}"
+                               placeholder="名称:1~10个字符">
+                        <span class="help-block m-b-none"></span>
 
                     </div>
                 </div>
@@ -21,6 +22,18 @@
                     <label class="col-sm-2 control-label">Email：</label>
                     <div class="col-sm-10">
                         <input type="text" name="email" value="${user.email}" class="form-control" placeholder="email">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">QQ：</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="qq" value="${user.qq}" class="form-control" >
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">手机号：</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="phone"  value="${user.phone}"class="form-control" >
                     </div>
                 </div>
             </div>
