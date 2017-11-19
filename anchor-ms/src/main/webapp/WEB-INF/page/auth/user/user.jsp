@@ -104,8 +104,8 @@
             },
             columns: [
                 {checkbox: true},
-                {title: '用户名', field: 'username', align: 'center', width: '100'},
                 {title: 'id', field: 'id', visible: false},
+                {title: '用户名', field: 'username', align: 'center', width: '100'},
                 {title: '名称', field: 'name', align: 'center', width: '100'},
                 {title: '角色', field: 'role.name', align: 'center', width: '80',
                     formatter: function (index, row, value) {

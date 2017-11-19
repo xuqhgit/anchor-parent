@@ -43,36 +43,52 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission,Long> impl
 
 	@Override
 	public List<PermissionTree> findPermissionTree(QueryPage<Permission> queryPage) {
-		return permissionMapper.getPermissionTree(queryPage);
+		return assemblePermissionTree(permissionMapper.getPermissionTree(queryPage));
 	}
 
 
 	@Override
 	public List<PermissionTree> findPermissionTreeAll(QueryPage<Map> queryPage) {
 		List<PermissionTree> list = permissionMapper.getRolePermissionTree(queryPage);
+		return assemblePermissionTree(list);
+	}
+
+	public List<PermissionTree> assemblePermissionTree(List<PermissionTree> list){
 		List<PermissionTree> resultList = new LinkedList<>();
-		Map<Long,List<PermissionTree>> map = new HashMap<>((int)Math.ceil(list.size()/0.75)+1);
+		Map<String,List<PermissionTree>> map = new HashMap<>((int)Math.ceil(list.size()/0.75)+1);
+		Set<String> nodeIds = new HashSet<>();
+		LinkedList<String> existNodeId = new LinkedList<>();
+
 		list.stream().forEach(p->{
-			List<PermissionTree> child = map.get(p.getId());
-			if(p.isExpandAble()&&child==null){
+			List<PermissionTree> child = map.get(p.getId().toString());
+			if(child==null){
 				child = p.getChild();
-				map.put(p.getId(),child);
+				map.put(p.getId().toString(),child);
 			}
 			if(p.getChild().size()==0&&CollectionUtils.isNotEmpty(child)){
 				p.setChild(child);
 			}
+			nodeIds.remove(p.getId().toString());
+			existNodeId.add(p.getId().toString());
 			if(p.getPid()==null){
 				resultList.add(p);
 			}
 			else{
-				List<PermissionTree> parentChild = map.get(p.getPid());
+				List<PermissionTree> parentChild = map.get(p.getPid().toString());
 				if(parentChild==null){
 					parentChild = new LinkedList<>();
-					map.put(p.getPid(), parentChild);
+					map.put(p.getPid().toString(), parentChild);
+					if(!existNodeId.contains(p.getPid())){
+						nodeIds.add(p.getPid().toString());
+					}
+
 				}
 				parentChild.add(p);
 			}
-
+		});
+		nodeIds.forEach(n->{
+			List<PermissionTree> noParentChild = map.get(n);
+			resultList.addAll(noParentChild);
 		});
 		return resultList;
 	}

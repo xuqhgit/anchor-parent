@@ -108,15 +108,9 @@
             },
             columns: [
                 {checkbox: true},
-
+                {title: 'ID', field: 'id', align: 'center', width: '100',visible: false},
                 {title: '角色编码', field: 'code', align: 'center', sortable: true, width: '100'},
-
-                {title: '创建时间', field: 'createTime', align: 'center', sortable: true, width: '100'},
-
-                {title: 'ID', field: 'id', align: 'center', width: '100'},
-
                 {title: '名称', field: 'name', align: 'center', width: '100'},
-
                 {
                     title: '状态',
                     field: 'status',
@@ -127,21 +121,17 @@
                         return anchor.getDictItemTextByValue(statusDict.list, row.status);
                     }
                 },
-
+                {title: '创建时间', field: 'createTime', align: 'center', sortable: true, width: '100'},
                 {title: '更新时间', field: 'updateTime', align: 'center', sortable: true, width: '100'},
-
                 {
                     title: '操作', field: 'opt', align: 'center', width: '120', formatter: function (index, row) {
                     var opts = "";
-
                     <shiro:hasPermission name="auth:role:edit">
                     opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"editRole(\'" + row.id + "\')\">编辑</a>|";
                     </shiro:hasPermission>
                     <shiro:hasPermission name="auth:role:setPermission">
                     opts += "<a href='javascript:void(0);' class='btn btn-xs' onclick=\"setRolePermission(\'" + row.id + "\')\">权限设置</a>";
                     </shiro:hasPermission>
-
-
                     return opts;
                 }
                 }

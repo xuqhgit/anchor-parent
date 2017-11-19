@@ -175,6 +175,7 @@ UserController extends BaseController{
 
         ModelAndView modelAndView = new ModelAndView();
         try {
+            user.setPassword(EncoderUtil.EncoderByMd5(user.getPassword()));
             user = TokenManager.login(user,rememberMe);
             resultMap.put("status", 200);
             resultMap.put("message", "登录成功");
@@ -208,6 +209,8 @@ UserController extends BaseController{
             modelAndView.addObject("errorMsg","帐号已经禁用");
         } catch (AccountException e) {
             modelAndView.addObject("errorMsg","帐号或密码错误");
+        }catch (Exception e) {
+            modelAndView.addObject("errorMsg","数据异常");
         }
 
         modelAndView.setViewName("login");
