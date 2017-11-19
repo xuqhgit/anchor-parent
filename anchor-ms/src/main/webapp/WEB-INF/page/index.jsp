@@ -10,7 +10,7 @@
 
     <!-- iCheck -->
     <link rel="stylesheet" href="/static/dist/css/skins/skin-blue.min.css">
-    <link rel="stylesheet" href="/static/plugins/iCheck/square/blue.css">
+    <link rel="stylesheet" href="/static/plugins/iCheck/flat/blue.css">
     <link rel="stylesheet" href="/static/admin/css/contabs.css">
 </head>
 

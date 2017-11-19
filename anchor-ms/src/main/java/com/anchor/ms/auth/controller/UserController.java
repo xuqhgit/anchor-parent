@@ -41,7 +41,10 @@ import java.util.Date;
  */
 @Controller
 @RequestMapping("user")
-public class UserController extends BaseController{
+public class
+
+
+UserController extends BaseController{
 
     @Autowired
 	private IUserService userService;
@@ -150,23 +153,29 @@ public class UserController extends BaseController{
         }
     }
     @RequestMapping(value = "/login",method = RequestMethod.GET)
-    public String login(HttpServletRequest request){
-
+    public ModelAndView login(ModelAndView modelAndView){
         User user = TokenManager.getToken();
-        System.out.println(JSONObject.toJSONString(user));
-        return "login";
+        if(user!=null){
+            modelAndView.setViewName("redirect:/index");
+        }
+        else{
+            modelAndView.setViewName("login");
+        }
+        return modelAndView;
     }
     @RequestMapping(value = "/logout",method = RequestMethod.GET)
-    public String logout(){
-        return "login";
+    public ModelAndView logout(ModelAndView modelAndView){
+        TokenManager.logout();
+        modelAndView.setViewName("redirect:login");
+        return modelAndView;
     }
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public ModelAndView login(User user,Boolean rememberMe,HttpServletRequest request){
+    public ModelAndView login(User user,boolean rememberMe,HttpServletRequest request){
 
         ModelAndView modelAndView = new ModelAndView();
         try {
-            user = TokenManager.login(user,true);
+            user = TokenManager.login(user,rememberMe);
             resultMap.put("status", 200);
             resultMap.put("message", "登录成功");
             /**

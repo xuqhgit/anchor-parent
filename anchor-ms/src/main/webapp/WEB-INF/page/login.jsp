@@ -36,9 +36,9 @@
             </c:if>
             <div class="row">
                 <div class="col-xs-8">
-                    <div class="checkbox icheck">
+                    <div >
                         <label>
-                            <input type="checkbox"> 记住我
+                            <input type="checkbox" name="rememberMe" value="1"> 记住我
                         </label>
                     </div>
                 </div>
@@ -56,9 +56,9 @@
 <%@include file="common_script.jsp" %>
 <script>
     $(function () {
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_square-blue',
-            radioClass: 'iradio_square-blue',
+        $('.checkbox input').iCheck({
+            checkboxClass: 'icheckbox_flat-blue',
+            radioClass: 'iradio_flat-blue',
             increaseArea: '20%' // optional
         });
         if (window != top) {

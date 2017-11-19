@@ -275,6 +275,21 @@
             draggable: true,
             onContentReady: function () {
 
+            },
+            buttons: {
+                confirm: {
+                    text:"确认",
+                    btnClass: 'btn-blue',
+                    action:function () {
+
+                    }
+                }
+                ,
+                cancel: {
+                    text:"取消",
+                    action:function () {
+                    }
+                }
             }
         });
     }

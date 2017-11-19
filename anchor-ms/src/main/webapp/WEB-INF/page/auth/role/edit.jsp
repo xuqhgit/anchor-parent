@@ -10,8 +10,8 @@
             <div class="box-body">
 
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">角色编码：</label>
-                    <div class="col-sm-10">
+                    <label class="col-sm-3 control-label">角色编码：</label>
+                    <div class="col-sm-8">
                         <input type="text" name="code" class="form-control" value="${ role.code }"
                                placeholder="请输入英文大小写、数字、下划线、减号1到16位字符">
                         <span class="help-block m-b-none"></span>
@@ -21,8 +21,8 @@
 
 
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">名称：</label>
-                    <div class="col-sm-10">
+                    <label class="col-sm-3 control-label">名称：</label>
+                    <div class="col-sm-8">
                         <input type="text" name="name" class="form-control" value="${ role.name }"
                                placeholder="请输入1到16位字符">
                         <span class="help-block m-b-none"></span>

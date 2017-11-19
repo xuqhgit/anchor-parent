@@ -60,7 +60,6 @@
 
     var getItemField = function (item, field) {
         var value = item;
-
         if (typeof field !== 'string' || item.hasOwnProperty(field)) {
             return item[field];
         }
@@ -229,6 +228,7 @@
                     sprintf(' id="%s"', $.isArray(item) ? undefined : item._id),
                     sprintf(' class="%s"', style.classes || ($.isArray(item) ? undefined : item._class)),
                     sprintf(' data-index="%s"', item._index),
+                    sprintf(' data-id="%s"', item[that.options.treeId]),
                     sprintf(' data-uniqueid="%s"', item[that.options.uniqueId]),
                     sprintf('%s', data_),
                     '>'
@@ -376,7 +376,7 @@
         this.$body.find('> tr[data-index] > td').off('click dblclick').on('click dblclick', function (e) {
             var $td = $(this),
                 $tr = $td.parent(),
-                item = that.data[$tr.data('index')],
+                item = getNodeData(that.data,$tr.attr('data-id')),
                 index = $td[0].cellIndex,
                 field = that.header.fields[that.options.detailView && !that.options.cardView ? index - 1 : index],
                 column = that.columns[getFieldIndex(that.columns, field)],

@@ -130,16 +130,12 @@
             },
             columns: [
                 {title: '字典编码', field: 'code', align: 'center', sortable: true, width: '100'},
-
-                {title: '创建时间', field: 'createTime', align: 'center', width: '100'},
-
                 {title: '名称', field: 'name', align: 'center', width: '100'},
-
                 {
                     title: '状态', field: 'status', align: 'center', width: '100', formatter: function (index, row) {
                     return anchor.getDictItemTextByValue(statusDict.list, row.status);
-                }
-                },
+                }},
+                {title: '创建时间', field: 'createTime', align: 'center', width: '100'},
                 {
                     title: '操作', field: 'opt', align: 'center', width: '120', formatter: function (index, row) {
                     var opts = "";
@@ -339,13 +335,7 @@
         };
 
         dictItemBt = anchor.bootstrapTable("dictItemTable", dictItemParams);
-        //回车事件绑定
-//        document.onkeydown = function (event) {
-//            var e = event || window.event || arguments.callee.caller.arguments[0];
-//            if (e && e.keyCode == 13) {
-//                $('#dictItemSearch').click();
-//            }
-//        };
+
 
         $('#addDictItem').click(function () {
             addDictItem();
@@ -396,7 +386,6 @@
                 var valid = anchor.validate(validateConfig);
                 $('#saveDictItem').click(function () {
                     if (valid.form()) {
-                        <shiro:hasPermission name="auth:dictItem:add">
                         anchor.request("/dictItem/add", $('#' + addFormId).serializeObject(), function (data) {
                             if (data.code == 1) {
                                 dictItemLoad();
@@ -407,8 +396,6 @@
                                 anchor.alert(data.message);
                             }
                         }, null);
-                        </shiro:hasPermission>
-
                     }
                 });
             }

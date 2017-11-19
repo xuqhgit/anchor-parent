@@ -186,10 +186,10 @@ $(function() {
         if(defaultShow){
             options+="<option value='"+defaultShow[0]+"'>"+defaultShow[1]+"</option>"
         }
-        selectValue = selectValue | $('#'+id).attr("data-value");
+        selectValue = selectValue?selectValue:$('#'+id).attr("data-value");
         dict.list.forEach(function(val){
             options+="<option value='"+val.value+"' "+(selectValue&&selectValue==val.value?"selected":"")+">"+val.text+"</option>"
-        })
+        });
         $('#'+id).html(options);
     };
     anchor.bootstrapTable=function(id,setting){
