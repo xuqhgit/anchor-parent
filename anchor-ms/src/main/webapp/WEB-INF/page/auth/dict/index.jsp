@@ -18,7 +18,7 @@
                 <form id="form" class="form-horizontal" role="form">
                     <div class="form-group">
 
-                        <label class="col-sm-2 control-label" for="code">字典编码：</label>
+                        <label class="col-sm-2 control-label" for="code">编码：</label>
                         <div class="col-sm-4">
                             <input class="form-control" id="code" name="code" type="text" placeholder="字典编码"/>
                         </div>

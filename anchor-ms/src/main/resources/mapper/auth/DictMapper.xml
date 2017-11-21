@@ -35,7 +35,7 @@
 
 	<!-- 修改 -->
 	<update id="update" parameterType="dict">
-		update SYS_DICT
+		update sys_dict
 		<set>
 			
 			<if test="code != null">
@@ -66,7 +66,7 @@
 
 
 	<insert id="insert" parameterType="dict" useGeneratedKeys="true" keyProperty="id"   >
-		INSERT INTO SYS_DICT(
+		INSERT INTO sys_dict(
 			CODE,CREATE_TIME,CREATOR_ID,ID,NAME,STATUS,UPDATE_TIME
 		)
 		VALUES(
@@ -79,7 +79,7 @@
 	<select id="get" parameterType="java.lang.Long" resultType="dict">
 		SELECT
 		<include refid="dictColumns" />
-		FROM  SYS_DICT d
+		FROM  sys_dict d
 		where id = #{ id }
 	</select>
 
@@ -87,13 +87,13 @@
 	<select id="getList"  resultType="dict">
 		select
 		<include refid="dictColumns" />
-		from SYS_DICT d
+		from sys_dict d
 	</select>
 
 	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage"  resultType="dict">
 		select
 		<include refid="dictColumns" />
-		from SYS_DICT d
+		from sys_dict d
         <where>
 
 			<if test="t.code!=null and t.code!=''">
@@ -122,7 +122,7 @@
 		select
 		<include refid="dictColumns" />,
 		<include refid="dictItemColumns" />
-		from SYS_DICT d left join SYS_DICT_ITEM t on d.id = t.dict_id
+		from sys_dict d left join sys_dict_item t on d.id = t.dict_id
 		order by t.rank;
 	</select>
 

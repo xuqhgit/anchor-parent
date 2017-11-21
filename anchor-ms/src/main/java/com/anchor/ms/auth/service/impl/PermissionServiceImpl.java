@@ -3,6 +3,8 @@ package com.anchor.ms.auth.service.impl;
 import com.anchor.core.common.base.BaseMapper;
 import com.anchor.core.common.base.BaseServiceImpl;
 import com.anchor.core.common.query.QueryPage;
+import com.anchor.core.common.tree.ITree;
+import com.anchor.core.common.tree.TreeUtil;
 import com.anchor.ms.auth.dto.Menu;
 import com.anchor.ms.auth.mapper.PermissionMapper;
 import com.anchor.ms.auth.model.Permission;
@@ -49,8 +51,8 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission,Long> impl
 
 	@Override
 	public List<PermissionTree> findPermissionTreeAll(QueryPage<Map> queryPage) {
-		List<PermissionTree> list = permissionMapper.getRolePermissionTree(queryPage);
-		return assemblePermissionTree(list);
+		List list = permissionMapper.getRolePermissionTree(queryPage);
+		return TreeUtil.assembleTree((List<ITree>)list);
 	}
 
 	public List<PermissionTree> assemblePermissionTree(List<PermissionTree> list){

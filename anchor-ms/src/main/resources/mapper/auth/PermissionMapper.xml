@@ -12,7 +12,7 @@
 
 	<!-- 修改 -->
 	<update id="update" parameterType="permission">
-		update SYS_PERMISSION
+		update sys_permission
 		<set>
 			
 			<if test="code != null">
@@ -60,7 +60,7 @@
 
 
 	<insert id="insert" parameterType="permission">
-		INSERT INTO SYS_PERMISSION(
+		INSERT INTO sys_permission(
 			CODE,CREATE_TIME,CREATOR_ID,NAME,PID,RANK,STATUS,TYPE,UPDATE_TIME,URL,TARGET_TYPE
 		)
 		VALUES(
@@ -70,7 +70,7 @@
 
 
 	<delete id="delete" parameterType="java.lang.Long">
-			DELETE FROM SYS_PERMISSION where id = #{id}
+			DELETE FROM sys_permission where id = #{id}
 	</delete>
 
 
@@ -78,7 +78,7 @@
 	<select id="get" parameterType="java.lang.Long" resultType="permission">
 		SELECT
 		<include refid="permissionColumns" />
-		FROM  SYS_PERMISSION p
+		FROM  sys_permission p
 		where id = #{ id }
 	</select>
 
@@ -86,22 +86,22 @@
 	<select id="getList"  resultType="permission">
 		select
 		<include refid="permissionColumns" />
-		from SYS_PERMISSION p
+		from sys_permission p
 	</select>
 
 	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage" resultType="permission">
 		select
 		<include refid="permissionColumns" />
-		from SYS_PERMISSION p
+		from sys_permission p
 	</select>
 	<!-- 获取列表 -->
 	<select id="getPermissionByUserId"  resultType="permission">
 		select
 		<include refid="permissionColumns" />
-		from SYS_PERMISSION p
-		join SYS_ROLE_PERMISSION rp on rp.PERMISSION_ID = p.id
-		join SYS_ROLE r on r.ID = rp.ROLE_id
-		join SYS_USER_ROLE ur on r.ID =ur.ROLE_ID
+		from sys_permission p
+		join sys_role_permission rp on rp.PERMISSION_ID = p.id
+		join sys_role r on r.ID = rp.ROLE_id
+		join sys_user_role ur on r.ID =ur.ROLE_ID
 		where ur.USER_ID=#{userId} and p.status='1' and r.status='1'
 		order by p.RANK asc
 	</select>
@@ -109,10 +109,10 @@
 	<select id="getPermissionCodeByUserId"  resultType="string">
 		select
 		p.code
-		from SYS_PERMISSION p
-		join SYS_ROLE_PERMISSION rp on rp.PERMISSION_ID = p.id
-		join SYS_ROLE r on r.ID = rp.ROLE_id
-		join SYS_USER_ROLE ur on r.ID =ur.ROLE_ID
+		from sys_permission p
+		join sys_role_permission rp on rp.PERMISSION_ID = p.id
+		join sys_role r on r.ID = rp.ROLE_id
+		join sys_user_role ur on r.ID =ur.ROLE_ID
 		where ur.USER_ID=#{userId} and p.status='1' and r.status='1'
 		order by p.RANK asc
 	</select>
@@ -124,7 +124,7 @@
 		<include refid="permissionColumns" />
 		,
 		IF(p.TYPE='0', true,false) as expandAble
-		from SYS_PERMISSION p
+		from sys_permission p
 		<where >
 			<if test="t.code!=null and t.code!=''">
 				and instr(p.CODE,#{ t.code })>0
@@ -166,8 +166,8 @@
 		<include refid="permissionColumns" />
 		,IF(p.TYPE='0', true,false) as expandAble
 		,IF(rp.role_id is null, false,true) as checked
-		from SYS_PERMISSION p
-		left join  SYS_ROLE_PERMISSION rp on rp.role_id = #{t.roleId} and rp.PERMISSION_ID = p.id
+		from sys_permission p
+		left join  sys_role_permission rp on rp.role_id = #{t.roleId} and rp.PERMISSION_ID = p.id
 		where  p.status = '1'
 		<choose>
 			<when test="sort!=null and sortOrder!=null">

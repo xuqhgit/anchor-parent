@@ -69,7 +69,7 @@
 	</resultMap>
 	<!-- 修改 -->
 	<update id="update" parameterType="user">
-		update SYS_USER
+		update sys_user
 		<set>
 			
 			<if test="createTime != null">
@@ -109,7 +109,7 @@
 
 
 	<insert id="insert" parameterType="user" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO SYS_USER(
+		INSERT INTO sys_user(
 			CREATE_TIME,CREATOR_ID,EMAIL,ID,NAME,PASSWORD,PHONE,QQ,UPDATE_TIME,USERNAME
 		)
 		VALUES(
@@ -119,7 +119,7 @@
 
 
 	<delete id="delete" parameterType="java.lang.Long">
-			DELETE FROM SYS_USER where id = #{id}
+			DELETE FROM sys_user where id = #{id}
 	</delete>
 
 
@@ -128,7 +128,7 @@
 		SELECT
 		<include refid="userColumns" />,
 		<include refid="userRoleColumns" />
-		FROM  SYS_USER user left join SYS_USER_ROLE ur on ur.user_id = user.id left join SYS_ROLE r on r.id = ur.role_id
+		FROM  sys_user user left join sys_user_role ur on ur.user_id = user.id left join sys_role r on r.id = ur.role_id
 		where user.id = #{ id }
 	</select>
 
@@ -136,14 +136,14 @@
 	<select id="getList"  resultType="user">
 		select
 		<include refid="userColumns" />
-		from SYS_USER user
+		from sys_user user
 	</select>
 
 	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage" resultMap="userDtoMap">
 		select
 		<include refid="userDtoColumns" />,
 		<include refid="userRoleColumns" />
-		from SYS_USER user left join SYS_USER_ROLE ur on ur.user_id = user.id left join SYS_ROLE r on r.id = ur.role_id
+		from sys_user user left join sys_user_role ur on ur.user_id = user.id left join sys_role r on r.id = ur.role_id
 		<where>
 			<if test="t.username!=null and t.username!=''">
 				and instr(user.username,#{t.username})>0
@@ -171,13 +171,13 @@
 	<select id="findUserByUsername" parameterType="java.lang.String" resultType="user">
 		SELECT
 		<include refid="userColumns" />
-		FROM  SYS_USER user
+		FROM  sys_user user
 		where username = #{username}
 	</select>
 	<select id="login"  resultType="user">
 		SELECT
 		<include refid="userColumns" />
-		FROM  SYS_USER user
+		FROM  sys_user user
 		where username = #{username} and password = #{password}
 	</select>
 	<select id="deleteRole" parameterType="java.lang.Long" >

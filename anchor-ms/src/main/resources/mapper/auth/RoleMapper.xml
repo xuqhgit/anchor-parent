@@ -9,7 +9,7 @@
 
 	<!-- 修改 -->
 	<update id="update" parameterType="role">
-		update SYS_ROLE
+		update sys_role
 		<set>
 
 			<if test="code != null">
@@ -40,7 +40,7 @@
 
 
 	<insert id="insert" parameterType="role"    >
-		INSERT INTO SYS_ROLE(
+		INSERT INTO sys_role(
 		CODE,CREATE_TIME,CREATOR_ID,NAME,STATUS,UPDATE_TIME
 		)
 		VALUES(
@@ -50,14 +50,14 @@
 
 	<insert id="insertRolePermissionBatch">
 
-		INSERT INTO SYS_ROLE_PERMISSION(ROLE_ID,PERMISSION_ID,CREATE_TIME,CREATOR_ID)
+		INSERT INTO sys_role_permission(ROLE_ID,permission_ID,CREATE_TIME,CREATOR_ID)
 		VALUES
 		<foreach collection="permissionIds" item="permissionId" index="index" separator="," >
 			(#{ roleId } ,  #{permissionId},  now(),#{ creatorId })
 		</foreach>
 	</insert>
 	<delete id="deleteRolePermission">
-		delete from SYS_ROLE_PERMISSION where role_id = #{roleId}
+		delete from sys_role_permission where role_id = #{roleId}
 	</delete>
 
 
@@ -65,7 +65,7 @@
 	<select id="get" parameterType="java.lang.Long" resultType="role">
 		SELECT
 		<include refid="roleColumns" />
-		FROM  SYS_ROLE r
+		FROM  sys_role r
 		where id = #{ id }
 	</select>
 
@@ -73,13 +73,13 @@
 	<select id="getList"  resultType="role">
 		select
 		<include refid="roleColumns" />
-		from SYS_ROLE r
+		from sys_role r
 	</select>
 
 	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage"  resultType="role">
 		select
 		<include refid="roleColumns" />
-		from SYS_ROLE r
+		from sys_role r
 		<where>
 			<if test="t.code!=null and t.code!=''">
 				and instr(r.CODE,#{ t.code })>0

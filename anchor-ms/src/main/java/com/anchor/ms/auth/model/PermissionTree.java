@@ -1,6 +1,7 @@
 package com.anchor.ms.auth.model;
 
 import com.anchor.core.common.base.BaseModel;
+import com.anchor.core.common.tree.ITree;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * @date 2017/10/27 14:16
  * @since 1.0.1
  */
-public class PermissionTree extends Permission{
+public class PermissionTree extends Permission implements ITree{
     private boolean expandAble = true;
     private boolean checked = false;
     private List<PermissionTree> child = new LinkedList<>();
@@ -36,8 +37,29 @@ public class PermissionTree extends Permission{
         this.expandAble = expandAble;
     }
 
+
     public List<PermissionTree> getChild() {
         return child;
+    }
+
+    @Override
+    public String getPidString() {
+        return null==getPid()?null:getPid().toString();
+    }
+
+    @Override
+    public String getIdString() {
+        return getId().toString();
+    }
+
+    @Override
+    public List getChildTree() {
+        return getChild();
+    }
+
+    @Override
+    public void setChildTree(List child) {
+        setChild((List<PermissionTree>)child);
     }
 
     public void setChild(List<PermissionTree> child) {

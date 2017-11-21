@@ -10,7 +10,7 @@
 
 	<!-- 修改 -->
 	<update id="update" parameterType="dictItem">
-		update SYS_DICT_ITEM
+		update sys_dict_item
 		<set>
 			
 			<if test="createTime != null">
@@ -47,7 +47,7 @@
 
 
 	<insert id="insert" parameterType="dictItem" useGeneratedKeys="true" keyProperty="id"   >
-		INSERT INTO SYS_DICT_ITEM(
+		INSERT INTO sys_dict_item(
 			CREATE_TIME,CREATOR_ID,DICT_ID,PID,ID,VALUE,STATUS,TEXT,UPDATE_TIME
 		)
 		VALUES(
@@ -60,7 +60,7 @@
 	<select id="get" parameterType="java.lang.Long" resultType="dictItem">
 		SELECT
 		<include refid="dictItemColumns" />
-		FROM  SYS_DICT_ITEM t
+		FROM  sys_dict_item t
 		where id = #{ id }
 	</select>
 
@@ -68,13 +68,13 @@
 	<select id="getList"  resultType="dictItem">
 		select
 		<include refid="dictItemColumns" />
-		from SYS_DICT_ITEM t
+		from sys_dict_item t
 	</select>
 
 	<select id="getListByPage" parameterType="com.anchor.core.common.query.QueryPage"  resultType="dictItem">
 		select
 		<include refid="dictItemColumns" />
-		from SYS_DICT_ITEM t
+		from sys_dict_item t
         <where>
             <if test="t.text!=null and t.text!=''">
 				and instr(t.TEXT,#{ t.text })>0
@@ -93,7 +93,7 @@
 	<select id="getDictItemTree" parameterType="com.anchor.core.common.query.QueryPage"  resultType="dictItemTree">
 		select
 		<include refid="dictItemColumns" />
-		from SYS_DICT_ITEM t
+		from sys_dict_item t
 		<where>
 			<if test="t.text!=null and t.text!=''">
 				and instr(t.TEXT,#{ t.text })>0
@@ -112,6 +112,6 @@
 	<select id="getAllDictItemTree"   resultType="dictItemTree">
 		select
 		<include refid="dictItemColumns" />
-		from SYS_DICT_ITEM t
+		from sys_dict_item t
 	</select>
 </mapper>
