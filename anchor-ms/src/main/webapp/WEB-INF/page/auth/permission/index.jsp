@@ -290,7 +290,6 @@
                 var valid = anchor.validate(validateConfig);
                 $('#savePermission').click(function () {
                     if (valid.form()) {
-                        <shiro:hasPermission name="auth:permission:add">
                         anchor.request("/permission/add", $('#' + addFormId).serializeObject(), function (data) {
                             if (data.code == 1) {
                                 if (!pid) {
@@ -306,8 +305,6 @@
                                 anchor.alert(data.message);
                             }
                         }, null);
-                        </shiro:hasPermission>
-
                     }
                 });
             }

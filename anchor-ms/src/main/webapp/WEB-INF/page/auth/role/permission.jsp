@@ -32,7 +32,6 @@
                 anchor.request("/permission/tree/${role.id}", {}, function (data) {
                     handleRows(data.rows, 0);
                     var tree = data.rows;
-                    console.info(tree);
                     var optionLevel = -1;
                     var $this = $("#rolePermissionTree").treeview({
                         data: tree,// 赋值
