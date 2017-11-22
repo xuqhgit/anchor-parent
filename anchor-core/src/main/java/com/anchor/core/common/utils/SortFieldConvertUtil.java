@@ -14,6 +14,7 @@ public class SortFieldConvertUtil {
     private final static Map<String,String> sortMap = new HashMap<String,String>(32);
     static{
         sortMap.put("rank","rank");
+        sortMap.put("state","state");
     }
     public static String  getSortField(String field){
         return sortMap.get(field);
