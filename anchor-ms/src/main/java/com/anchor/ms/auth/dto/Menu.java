@@ -19,7 +19,7 @@ public class Menu implements ITree {
     private String target;
     private Long id;
     private Long pid;
-    private List child = new LinkedList<Menu>();
+    private List children = new LinkedList<Menu>();
 
     public String getText() {
         return text;
@@ -45,12 +45,12 @@ public class Menu implements ITree {
         this.icon = icon;
     }
 
-    public List getChild() {
-        return child;
+    public List getChildren() {
+        return children;
     }
 
-    public void setChild(List child) {
-        this.child = child;
+    public void setChildren(List children) {
+        this.children = children;
     }
 
     public String getTarget() {

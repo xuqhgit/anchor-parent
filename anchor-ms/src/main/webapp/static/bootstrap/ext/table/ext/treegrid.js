@@ -77,8 +77,8 @@
         });
         $.each(items, function (index, item) {
             data.splice(0, 0, item);
-            var child = getParent(item, source, field);
-            $.each(child, function (i, n) {
+            var children = getParent(item, source, field);
+            $.each(children, function (i, n) {
                 data.splice(0, 0, n);
             });
         });
@@ -92,8 +92,8 @@
            if(p.id == id){
                return p;
            }
-           if(p.child&&p.child.length>0){
-               var v = getNodeData(p.child,id);
+           if(p.children&&p.children.length>0){
+               var v = getNodeData(p.children,id);
                if(v)return v;
            }
        }
@@ -107,9 +107,9 @@
             data.forEach(function(val,i){
                 if(val['hidden']==undefined)val.hidden = false;
                 val._index = index++;
-                if(val.child&&val.child.length>0){
+                if(val.children&&val.children.length>0){
                     val.expandAble = true;
-                    initData(val.child);
+                    initData(val.children);
                 }
             });
         }
@@ -143,7 +143,7 @@
             traditional: true,
             success: function (data) {
                 if(data.rows.length>0){
-                    nodeData.child = data.rows;
+                    nodeData.children = data.rows;
                     nodeData.expandAble=true;
                     initData(that.getData());
                     that.initSort();
@@ -328,7 +328,7 @@
                         var  indent,icon;
                         if (that.options.treeView && column.field == that.options.treeField) {
                             indent = sprintf('<span style="margin-left: %spx;"></span>', layerCount * indentSize);
-                            var expandFlag = item.child.length > 0?!item.child[0].hidden:false;
+                            var expandFlag = item.children.length > 0?!item.children[0].hidden:false;
                             icon = sprintf('<span class="tree-icon %s" data-id="%s" style="cursor: pointer; margin: 0px 5px;"></span>',
                                 item.expandAble?(expandFlag ? that.options.expandIcon : that.options.collapseIcon):"",item.id);
                         }
@@ -354,9 +354,9 @@
                     html.push('</td>');
                 }
                 html.push('</tr>');
-                if(val.child&&val.child.length>0){
+                if(val.children&&val.children.length>0){
                     val.expandAble =true;
-                    val.child.forEach(function(cVal,cIndex){
+                    val.children.forEach(function(cVal,cIndex){
                         createHtml(cVal,cIndex,layerCount+1);
                     })
                 }
@@ -423,8 +423,8 @@
                 icon = $(this);
             var id = $this.attr("data-id");
             var nodeData = getNodeData(that.getData(),id);
-            if(nodeData.child.length>0){
-                $.each(nodeData.child, function (i, c) {
+            if(nodeData.children.length>0){
+                $.each(nodeData.children, function (i, c) {
                     c.hidden = icon.hasClass(that.options.expandIcon);
                 });
                 if (icon.hasClass(that.options.expandIcon)) {

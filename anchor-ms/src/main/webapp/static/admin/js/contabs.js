@@ -21,14 +21,14 @@ $(function() {
         function createTree(d){
             var url = d.url||'#';
             var name = d.text;
-            var child = d.child;
+            var children = d.children;
             var menuIcon = d.icon||DEFAULT_CONFIG[url=='#'?'menuIcon':'urlIcon'];
             var className = url=="#"?"":"T_menuItem";
             var str = "<a href='"+url+"' class='"+className+"'" +(d.target?"target='"+d.target+"'":"")+
-                "><i class='fa "+menuIcon+"'></i> <span>"+name+"</span>"+(child&&child.length>0?"<i class='fa fa-angle-left pull-right'></i>":"")+" </a>";
-            if(child&&child.length>0){
+                "><i class='fa "+menuIcon+"'></i> <span>"+name+"</span>"+(children&&children.length>0?"<i class='fa fa-angle-left pull-right'></i>":"")+" </a>";
+            if(children&&children.length>0){
                 str +="<ul class='treeview-menu'>";
-                child.forEach(function(r){
+                children.forEach(function(r){
                     str += "<li>"+createTree(r)+"</li>";
                 });
                 str +='</ul>';

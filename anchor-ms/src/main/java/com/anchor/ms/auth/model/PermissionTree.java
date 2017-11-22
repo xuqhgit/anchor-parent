@@ -16,7 +16,7 @@ import java.util.List;
 public class PermissionTree extends Permission implements ITree{
     private boolean expandAble = true;
     private boolean checked = false;
-    private List<PermissionTree> child = new LinkedList<>();
+    private List<PermissionTree> children = new LinkedList<>();
 
 
 
@@ -38,13 +38,13 @@ public class PermissionTree extends Permission implements ITree{
     }
 
 
-    public List<PermissionTree> getChild() {
-        return child;
+    public List<PermissionTree> getChildren() {
+        return children;
     }
 
 
-    public void setChild(List child) {
-        this.child = child;
+    public void setChildren(List children) {
+        this.children = children;
     }
 
 

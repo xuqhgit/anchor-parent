@@ -24,11 +24,11 @@ public class TreeUtil {
         list.stream().forEach(p->{
             List<ITree> child = map.get(p.getId());
             if(child==null){
-                child = p.getChild();
+                child = p.getChildren();
                 map.put(p.getId(),child);
             }
-            if(p.getChild().size()==0&& CollectionUtils.isNotEmpty(child)){
-                p.setChild(child);
+            if(p.getChildren().size()==0&& CollectionUtils.isNotEmpty(child)){
+                p.setChildren(child);
             }
 
             nodeIds.remove(p.getId());

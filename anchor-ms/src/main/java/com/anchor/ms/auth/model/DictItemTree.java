@@ -13,13 +13,13 @@ import java.util.List;
  * @since 1.0.1
  */
 public class DictItemTree extends  DictItem implements ITree{
-    private List<DictItemTree> child = new LinkedList<>();
-    public List getChild() {
-        return child;
+    private List<DictItemTree> children = new LinkedList<>();
+    public List getChildren() {
+        return children;
     }
 
 
-    public void setChild(List child) {
-        this.child = child;
+    public void setChildren(List children) {
+        this.children = children;
     }
 }

@@ -20,12 +20,12 @@
                     var lev = level + 1;
                     rows.forEach(function (val, index) {
                         val['text'] = val.name;
-                        val['nodes'] = val.child;
+                        val['nodes'] = val.children;
                         val['icon'] = undefined;
                         val['level'] = lev;
                         val["state"] = {};
                         val["state"]["checked"] = val.checked;
-                        handleRows(val.child, lev);
+                        handleRows(val.children, lev);
                     });
                 }
 

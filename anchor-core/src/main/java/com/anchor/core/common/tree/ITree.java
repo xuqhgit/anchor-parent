@@ -18,9 +18,9 @@ public interface ITree {
 
     Object getId();
 
-    <T>List<T> getChild();
+    <T>List<T> getChildren();
 
-    void setChild(List child);
+    void setChildren(List children);
 
 
 }
