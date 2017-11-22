@@ -42,27 +42,10 @@ public class PermissionTree extends Permission implements ITree{
         return child;
     }
 
-    @Override
-    public String getPidString() {
-        return null==getPid()?null:getPid().toString();
-    }
 
-    @Override
-    public String getIdString() {
-        return getId().toString();
-    }
-
-    @Override
-    public List getChildTree() {
-        return getChild();
-    }
-
-    @Override
-    public void setChildTree(List child) {
-        setChild((List<PermissionTree>)child);
-    }
-
-    public void setChild(List<PermissionTree> child) {
+    public void setChild(List child) {
         this.child = child;
     }
+
+
 }

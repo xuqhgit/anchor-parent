@@ -1,5 +1,7 @@
 package com.anchor.ms.auth.model;
 
+import com.anchor.core.common.tree.ITree;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,13 +12,14 @@ import java.util.List;
  * @date 2017/11/15 17:50
  * @since 1.0.1
  */
-public class DictItemTree extends  DictItem{
+public class DictItemTree extends  DictItem implements ITree{
     private List<DictItemTree> child = new LinkedList<>();
-    public List<DictItemTree> getChild() {
+    public List getChild() {
         return child;
     }
 
-    public void setChild(List<DictItemTree> child) {
+
+    public void setChild(List child) {
         this.child = child;
     }
 }

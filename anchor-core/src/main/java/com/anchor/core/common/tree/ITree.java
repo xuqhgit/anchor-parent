@@ -14,13 +14,13 @@ import java.util.List;
  */
 public interface ITree {
 
-    String getPidString();
+    Object getPid();
 
-    String getIdString();
+    Object getId();
 
-    <T>List<T> getChildTree();
+    <T>List<T> getChild();
 
-    void setChildTree(List child);
+    void setChild(List child);
 
 
 }

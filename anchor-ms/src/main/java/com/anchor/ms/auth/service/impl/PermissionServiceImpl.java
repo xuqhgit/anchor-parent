@@ -39,13 +39,14 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission,Long> impl
 		return permissionMapper.getPermissionCodeByUserId(userId);
 	}
 
-	public List<Permission> findPermissionByUserId(Long userId) {
-		return permissionMapper.getPermissionByUserId(userId);
+	public List<Permission> findPermissionByUserId(Long userId,String permissionType) {
+		return permissionMapper.getPermissionByUserId(userId,permissionType);
 	}
 
 	@Override
 	public List<PermissionTree> findPermissionTree(QueryPage<Permission> queryPage) {
-		return assemblePermissionTree(permissionMapper.getPermissionTree(queryPage));
+		List list = permissionMapper.getPermissionTree(queryPage);
+		return TreeUtil.assembleTree(list);
 	}
 
 
@@ -55,73 +56,54 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission,Long> impl
 		return TreeUtil.assembleTree((List<ITree>)list);
 	}
 
-	public List<PermissionTree> assemblePermissionTree(List<PermissionTree> list){
-		List<PermissionTree> resultList = new LinkedList<>();
-		Map<String,List<PermissionTree>> map = new HashMap<>((int)Math.ceil(list.size()/0.75)+1);
-		Set<String> nodeIds = new HashSet<>();
-		LinkedList<String> existNodeId = new LinkedList<>();
-
-		list.stream().forEach(p->{
-			List<PermissionTree> child = map.get(p.getId().toString());
-			if(child==null){
-				child = p.getChild();
-				map.put(p.getId().toString(),child);
-			}
-			if(p.getChild().size()==0&&CollectionUtils.isNotEmpty(child)){
-				p.setChild(child);
-			}
-			nodeIds.remove(p.getId().toString());
-			existNodeId.add(p.getId().toString());
-			if(p.getPid()==null){
-				resultList.add(p);
-			}
-			else{
-				List<PermissionTree> parentChild = map.get(p.getPid().toString());
-				if(parentChild==null){
-					parentChild = new LinkedList<>();
-					map.put(p.getPid().toString(), parentChild);
-					if(!existNodeId.contains(p.getPid())){
-						nodeIds.add(p.getPid().toString());
-					}
-
-				}
-				parentChild.add(p);
-			}
-		});
-		nodeIds.forEach(n->{
-			List<PermissionTree> noParentChild = map.get(n);
-			resultList.addAll(noParentChild);
-		});
-		return resultList;
-	}
+//	public List<PermissionTree> assemblePermissionTree(List<PermissionTree> list){
+//		List<PermissionTree> resultList = new LinkedList<>();
+//		Map<String,List<PermissionTree>> map = new HashMap<>((int)Math.ceil(list.size()/0.75)+1);
+//		Set<String> nodeIds = new HashSet<>();
+//		LinkedList<String> existNodeId = new LinkedList<>();
+//
+//		list.stream().forEach(p->{
+//			List<PermissionTree> child = map.get(p.getId().toString());
+//			if(child==null){
+//				child = p.getChild();
+//				map.put(p.getId().toString(),child);
+//			}
+//			if(p.getChild().size()==0&&CollectionUtils.isNotEmpty(child)){
+//				p.setChild(child);
+//			}
+//			nodeIds.remove(p.getId().toString());
+//			existNodeId.add(p.getId().toString());
+//			if(p.getPid()==null){
+//				resultList.add(p);
+//			}
+//			else{
+//				List<PermissionTree> parentChild = map.get(p.getPid().toString());
+//				if(parentChild==null){
+//					parentChild = new LinkedList<>();
+//					map.put(p.getPid().toString(), parentChild);
+//					if(!existNodeId.contains(p.getPid())){
+//						nodeIds.add(p.getPid().toString());
+//					}
+//
+//				}
+//				parentChild.add(p);
+//			}
+//		});
+//		nodeIds.forEach(n->{
+//			List<PermissionTree> noParentChild = map.get(n);
+//			resultList.addAll(noParentChild);
+//		});
+//		return resultList;
+//	}
 
 	public List<Menu> findMenu(Long userId) {
-		List<Permission> list = findPermissionByUserId(userId);
-		List<Menu> menuList = new LinkedList<>();
-		Map<Long,List<Menu>> map = new HashMap<>((int)Math.ceil(list.size()/0.75)+1);
-		//组装树结构
+		List<Permission> list = findPermissionByUserId(userId,Permission.PermissionType.menu.getCode());
+		List menuList = new LinkedList<>();
 		list.stream().forEach(p->{
-			if(Permission.PermissionType.menu.getCode().equals(p.getType())){
-				Menu menu = permissin2Menu(p);
-				if(p.getPid()==null)menuList.add(menu);
-				if(p.getPid()!=null){
-
-					List<Menu> pList = map.get(p.getPid());
-					if(pList==null){
-						pList = new LinkedList<>();
-						map.put(p.getPid(),pList);
-					}
-					pList.add(menu);
-				}
-				List<Menu> mList = map.get(p.getId());
-				if(mList==null){
-					mList =  menu.getChild();
-					map.put(p.getId(),mList);
-				}
-				menu.setChild(mList);
-			}
+			Menu menu = permissin2Menu(p);
+			menuList.add(menu);
 		});
-		return menuList;
+		return TreeUtil.assembleTree(menuList);
 	}
 	private Menu permissin2Menu(Permission permission){
 		Menu menu = new Menu();
@@ -129,6 +111,8 @@ public class PermissionServiceImpl extends BaseServiceImpl<Permission,Long> impl
 		menu.setText(permission.getName());
 		menu.setUrl(permission.getUrl());
 		menu.setTarget(permission.getTargetType());
+		menu.setId(permission.getId());
+		menu.setPid(permission.getPid());
 		return menu;
 	}
 

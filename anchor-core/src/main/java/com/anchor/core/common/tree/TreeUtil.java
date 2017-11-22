@@ -17,31 +17,32 @@ import java.util.*;
 public class TreeUtil {
     public static  <T>List<T> assembleTree(List<ITree> list){
         List<ITree> resultList = new LinkedList<>();
-        Map<String,List<ITree>> map = new HashMap<>((int)Math.ceil(list.size()/0.75)+1);
-        Set<String> nodeIds = new HashSet<>();
-        LinkedList<String> existNodeId = new LinkedList<>();
+        Map<Object,List<ITree>> map = new HashMap<>((int)Math.ceil(list.size()/0.75)+1);
+        ArrayList<Object> nodeIds = new ArrayList<>();
+        LinkedList<Object> existNodeId = new LinkedList<>();
 
         list.stream().forEach(p->{
-            List<ITree> child = map.get(p.getIdString());
+            List<ITree> child = map.get(p.getId());
             if(child==null){
-                child = p.getChildTree();
-                map.put(p.getIdString(),child);
+                child = p.getChild();
+                map.put(p.getId(),child);
             }
-            if(p.getChildTree().size()==0&& CollectionUtils.isNotEmpty(child)){
-                p.setChildTree(child);
+            if(p.getChild().size()==0&& CollectionUtils.isNotEmpty(child)){
+                p.setChild(child);
             }
-            nodeIds.remove(p.getIdString());
-            existNodeId.add(p.getIdString());
-            if(p.getPidString()==null){
+
+            nodeIds.remove(p.getId());
+            existNodeId.add(p.getId());
+            if(p.getPid()==null){
                 resultList.add(p);
             }
             else{
-                List<ITree> parentChild = map.get(p.getPidString());
+                List<ITree> parentChild = map.get(p.getPid());
                 if(parentChild==null){
                     parentChild = new LinkedList<>();
-                    map.put(p.getPidString(), parentChild);
-                    if(!existNodeId.contains(p.getPidString())){
-                        nodeIds.add(p.getPidString());
+                    map.put(p.getPid(), parentChild);
+                    if(!existNodeId.contains(p.getPid())){
+                        nodeIds.add(p.getPid());
                     }
 
                 }

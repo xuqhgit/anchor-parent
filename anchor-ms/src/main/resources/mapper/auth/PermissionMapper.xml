@@ -103,6 +103,9 @@
 		join sys_role r on r.ID = rp.ROLE_id
 		join sys_user_role ur on r.ID =ur.ROLE_ID
 		where ur.USER_ID=#{userId} and p.status='1' and r.status='1'
+		<if test="type!=null and type!=''">
+			and p.type = #{type}
+		</if>
 		order by p.RANK asc
 	</select>
 	<!-- 获取列表 -->

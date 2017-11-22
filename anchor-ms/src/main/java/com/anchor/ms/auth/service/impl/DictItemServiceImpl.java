@@ -3,6 +3,7 @@ package com.anchor.ms.auth.service.impl;
 import com.anchor.core.common.base.BaseMapper;
 import com.anchor.core.common.base.BaseServiceImpl;
 import com.anchor.core.common.query.QueryPage;
+import com.anchor.core.common.tree.TreeUtil;
 import com.anchor.ms.auth.mapper.DictItemMapper;
 import com.anchor.ms.auth.model.DictItem;
 import com.anchor.ms.auth.model.DictItemTree;
@@ -38,38 +39,7 @@ public class DictItemServiceImpl extends BaseServiceImpl<DictItem,Long> implemen
 
 	@Override
 	public List<DictItemTree> getDictItemTree(QueryPage<DictItem> queryPage) {
-		List<DictItemTree> list = dictItemMapper.getDictItemTree(queryPage);
-		return createDictItemTree(list);
-	}
-
-
-	public static List<DictItemTree> createDictItemTree(List<DictItemTree> list){
-
-		List<DictItemTree> resultList = new LinkedList<>();
-		Map<Long,List<DictItemTree>> map = new HashMap<>((int)Math.ceil(list.size()/0.75)+1);
-		list.stream().forEach(p->{
-
-			List<DictItemTree> child = map.get(p.getId());
-			if(child==null){
-				child = p.getChild();
-				map.put(p.getId(),child);
-			}
-			if(p.getChild().size()==0&& CollectionUtils.isNotEmpty(child)){
-				p.setChild(child);
-			}
-			if(p.getPid()==null){
-				resultList.add(p);
-			}
-			else{
-				List<DictItemTree> parentChild = map.get(p.getPid());
-				if(parentChild==null){
-					parentChild = new LinkedList<>();
-					map.put(p.getPid(), parentChild);
-				}
-				parentChild.add(p);
-			}
-
-		});
-		return resultList;
+		List list = dictItemMapper.getDictItemTree(queryPage);
+		return TreeUtil.assembleTree(list);
 	}
 }

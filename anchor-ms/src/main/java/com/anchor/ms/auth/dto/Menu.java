@@ -1,5 +1,7 @@
 package com.anchor.ms.auth.dto;
 
+import com.anchor.core.common.tree.ITree;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,12 +12,14 @@ import java.util.List;
  * @date 2017/10/14 11:15
  * @since 1.0.1
  */
-public class Menu {
+public class Menu implements ITree {
     private String text;
     private String url;
     private String icon;
     private String target;
-    private List<Menu> child = new LinkedList<Menu>();
+    private Long id;
+    private Long pid;
+    private List child = new LinkedList<Menu>();
 
     public String getText() {
         return text;
@@ -41,11 +45,11 @@ public class Menu {
         this.icon = icon;
     }
 
-    public List<Menu> getChild() {
+    public List getChild() {
         return child;
     }
 
-    public void setChild(List<Menu> child) {
+    public void setChild(List child) {
         this.child = child;
     }
 
@@ -55,5 +59,23 @@ public class Menu {
 
     public void setTarget(String target) {
         this.target = target;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public Long getPid() {
+        return pid;
+    }
+
+    public void setPid(Long pid) {
+        this.pid = pid;
     }
 }

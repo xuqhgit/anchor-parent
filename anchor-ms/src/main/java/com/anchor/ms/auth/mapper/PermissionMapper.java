@@ -21,7 +21,7 @@ import java.util.Set;
  */
 public interface PermissionMapper extends BaseMapper<Permission,Long> {
 
-    public List<Permission> getPermissionByUserId(@Param("userId") Long userId);
+    public List<Permission> getPermissionByUserId(@Param("userId") Long userId,@Param("type")String type);
     public Set<String> getPermissionCodeByUserId(@Param("userId") Long userId);
     public List<PermissionTree> getPermissionTree(QueryPage<Permission> queryPage);
     public List<PermissionTree> getRolePermissionTree(QueryPage<Map> queryPage);

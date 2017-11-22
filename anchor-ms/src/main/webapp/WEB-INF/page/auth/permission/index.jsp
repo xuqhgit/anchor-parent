@@ -27,9 +27,9 @@
                         <input class="form-control" id="name" name="name" type="text" placeholder="名称"/>
                     </div>
 
-                    <label class="col-sm-1 control-label" for="type">类型：</label>
+                    <label class="col-sm-1 control-label" >类型：</label>
                     <div class="col-sm-2">
-                        <input class="form-control" id="type" name="type" type="text" placeholder="类型"/>
+                        <select class="form-control" id="permissionType"  name="type" /></select>
                     </div>
 
                 </div>
@@ -99,11 +99,14 @@
             message: {}
         }
     };
-    var targetTypeDict
+    var targetTypeDict;
     $(function () {
         targetTypeDict = anchor.getDict("TARGET_TYPE");
         var statusDict = anchor.getDict("STATUS");
+        var permissionTypeDict = anchor.getDict("PERMISSION_TYPE");
         anchor.createFromGroupSelect("permissionStatus",statusDict,"",['','==选择状态==']);
+        anchor.createFromGroupSelect("permissionType",permissionTypeDict,null,['','==选择类型==']);
+
         jQuery.validator.addMethod("codeValid", function (value, element) {
             var p =/<%=Permission.CODE_PATTERN%>/;
             return p.test(value);
@@ -156,13 +159,16 @@
                 {title: '编码', field: 'code', align: 'left', width: '120'},
                 {title: '路径', field: 'url', align: 'left', width: '120'},
                 {title: '排序', field: 'rank', align: 'center', width: '50'},
-                {title: 'Target', field: 'targetType', align: 'center', width: '50', formatter: function (index, row) {
-                        return anchor.getDictItemTextByValue(targetTypeDict.list, row.targetType);
-                    }
-                },
+                {title: '类型', field: 'type', align: 'center', width: '50',formatter:function (index,row) {
+                    return anchor.getDictItemTextByValue(permissionTypeDict.list,row.type);
+                }},
                 {
                     title: '状态', field: 'status', align: 'center', width: '50', formatter: function (index, row) {
                     return anchor.getDictItemTextByValue(statusDict.list, row.status);
+                }
+                },
+                {title: 'Target', field: 'targetType', align: 'center', width: '50', formatter: function (index, row) {
+                    return anchor.getDictItemTextByValue(targetTypeDict.list, row.targetType);
                 }
                 },
                 {

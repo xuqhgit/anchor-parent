@@ -21,7 +21,7 @@ public interface IPermissionService extends BaseService<Permission,Long> {
 
     public Set<String> findPermissionCodeByUserId(Long userId);
 
-    public List<Permission> findPermissionByUserId(Long userId);
+    public List<Permission> findPermissionByUserId(Long userId,String permissionType);
 
     public List<Menu> findMenu(Long userId);
 

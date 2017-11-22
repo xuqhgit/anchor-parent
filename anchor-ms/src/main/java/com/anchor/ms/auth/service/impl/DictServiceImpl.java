@@ -2,6 +2,8 @@ package com.anchor.ms.auth.service.impl;
 
 import com.anchor.core.common.base.BaseMapper;
 import com.anchor.core.common.base.BaseServiceImpl;
+import com.anchor.core.common.tree.ITree;
+import com.anchor.core.common.tree.TreeUtil;
 import com.anchor.ms.auth.service.IDictService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +36,7 @@ public class DictServiceImpl extends BaseServiceImpl<Dict,Long> implements IDict
 	public List<Dict> getDictMapList() {
 		List<Dict> list =  dictMapper.getDictMapList();
 		list.forEach(d->{
-			d.setList(DictItemServiceImpl.createDictItemTree(d.getList()));
+			d.setList(TreeUtil.assembleTree((List)d.getList()));
 		});
 		return list;
 	}

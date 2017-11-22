@@ -113,7 +113,8 @@ function loadDictData(){
     }
     return _dictData;
 }
-$(function() {
+(function ($) {
+    'use strict';
     var DEFAULT_TYPE = 'blue';
     var DEFAULT_BOOTSTRAP_TABLE_SETTING = {
         method:"post",
@@ -288,4 +289,4 @@ $(function() {
         }
         return arr;
     }
-});
+})(jQuery);
