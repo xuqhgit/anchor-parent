@@ -48,10 +48,10 @@
 
 	<insert id="insert" parameterType="dictItem" useGeneratedKeys="true" keyProperty="id"   >
 		INSERT INTO sys_dict_item(
-			CREATE_TIME,CREATOR_ID,DICT_ID,PID,ID,VALUE,STATUS,TEXT,UPDATE_TIME
+			CREATE_TIME,CREATOR_ID,DICT_ID,PID,ID,VALUE,STATUS,TEXT,UPDATE_TIME,RANK
 		)
 		VALUES(
-			  now() ,  #{ creatorId } ,  #{ dictId } , #{ pid } , #{ id } ,  #{ value } ,  #{ status } ,  #{ text } ,  now()
+			  now() ,  #{ creatorId } ,  #{ dictId } , #{ pid } , #{ id } ,  #{ value } ,  #{ status } ,  #{ text } ,  now() ,#{ rank }
 		)
 	</insert>
 
