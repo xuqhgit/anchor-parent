@@ -15,30 +15,23 @@
     <div class="row-fluid ">
         <div class="col-md-5">
             <div class="span12 search-form">
-                <form id="form" class="form-horizontal" role="form">
+                <form id="form" class="form-inline" role="form">
                     <div class="form-group">
-
-                        <label class="col-sm-2 control-label" for="code">编码：</label>
-                        <div class="col-sm-4">
-                            <input class="form-control" id="code" name="code" type="text" placeholder="字典编码"/>
-                        </div>
-
-                        <label class="col-sm-2 control-label" for="name">名称：</label>
-                        <div class="col-sm-4">
-                            <input class="form-control" id="name" name="name" type="text" placeholder="名称"/>
-                        </div>
+                        <label  for="code">编码：</label>
+                        <input class="form-control" id="code" name="code" type="text" placeholder="字典编码"/>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" >状态：</label>
-                        <div class="col-sm-4">
-                            <select id="dictStatus" class="form-control" name="status"></select>
-                        </div>
-
-                        <div class="col-sm-1">
-                            <button type="button" class="btn btn-primary" id="search"
-                                    data-toggle="button"><span class="glyphicon glyphicon-search"></span>搜索
-                            </button>
-                        </div>
+                        <label for="name">名称：</label>
+                        <input class="form-control" id="name" name="name" type="text" placeholder="名称"/>
+                    </div>
+                    <div class="form-group">
+                        <label  >状态：</label>
+                        <select id="dictStatus" class="form-control" name="status"></select>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" id="search"
+                                data-toggle="button"><span class="glyphicon glyphicon-search"></span>搜索
+                        </button>
                     </div>
                 </form>
             </div>

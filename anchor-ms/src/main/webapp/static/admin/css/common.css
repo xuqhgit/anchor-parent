@@ -1,6 +1,6 @@
 
 .search-form{
-    padding-top: 15px;
+    padding:  10px 6px;
     position: relative;
     border-width: 1px;
     border-style: solid;
@@ -9,7 +9,7 @@
     border-radius: 4px;
 }
 .fixed-table-container thead th .th-inner {
-    line-height: 24px;
+    line-height: 22px;
     vertical-align: top;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -39,4 +39,8 @@
 }
 :-ms-input-placeholder { /* Internet Explorer 10+ */
     font-size:12px;
+}
+.form-group{
+    margin-top: 5px;
+    margin-left: 5px;
 }

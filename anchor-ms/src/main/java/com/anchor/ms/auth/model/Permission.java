@@ -19,8 +19,8 @@ public class Permission extends BaseModel {
     public static final String CODE_REQUIRED_MESSAGE = "必填项";
     public static final String NAME_PATTERN = ".{1,16}$";
     public static final String NAME_PATTERN_MESSAGE = "长度1至16位字符";
-    public static final String URL_PATTERN = "^[a-zA-Z0-9_/-//]{1,128}$";
-    public static final String URL_PATTERN_MESSAGE = "格式为a-zA-Z0-9_-/长度不能超过128个字符";
+    public static final String URL_PATTERN = ".{1,200}$";
+    public static final String URL_PATTERN_MESSAGE = "长度不能超过200个字符";
     public static final String URL_REQUIRED_MESSAGE = "请填写URL";
 
     /**
@@ -31,10 +31,7 @@ public class Permission extends BaseModel {
     private String code;
 
 
-    /**
-     * 创建者ID
-     */
-    private Long creatorId;
+
 
     /**
      * 图标
@@ -86,14 +83,6 @@ public class Permission extends BaseModel {
 
     public String getCode() {
         return this.code;
-    }
-
-    public void setCreatorId(Long creatorId) {
-        this.creatorId = creatorId;
-    }
-
-    public Long getCreatorId() {
-        return this.creatorId;
     }
 
     public void setIcon(String icon) {

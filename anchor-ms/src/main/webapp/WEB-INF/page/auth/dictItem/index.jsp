@@ -13,19 +13,15 @@
 
     <div class="row-fluid ">
         <div class="span12 search-form">
-            <form id="form" class="form-horizontal" role="form">
+            <form id="form" class="form-inline" role="form">
                 <div class="form-group">
-
-                    <label class="col-sm-1 control-label" for="text">名称：</label>
-                    <div class="col-sm-2">
-                        <input class="form-control" id="text" name="text" type="text" placeholder="名称"/>
-                    </div>
-
-                    <div class="col-sm-1">
-                        <button type="button" class="btn btn-primary" id="search"
-                                data-toggle="button"><span class="glyphicon glyphicon-search"></span>搜索
-                        </button>
-                    </div>
+                    <label  for="text">名称：</label>
+                    <input class="form-control" id="text" name="text" type="text" placeholder="名称"/>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" id="search"
+                            data-toggle="button"><span class="glyphicon glyphicon-search"></span>搜索
+                    </button>
                 </div>
             </form>
         </div>
